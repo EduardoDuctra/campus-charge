@@ -1,6 +1,7 @@
 // This widget is the root of your application.
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:projeto_integrador/screens/HomeScreen.dart';
 import 'package:projeto_integrador/screens/LoginScreen.dart';
 
 
@@ -15,7 +16,7 @@ Widget build(BuildContext context) {
 
       colorScheme: .fromSeed(seedColor: Colors.deepPurple),
     ),
-    home: LoginScreen(),
+    home: HomeScreen(),
   );
 }
 }
