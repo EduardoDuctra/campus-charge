@@ -9,6 +9,9 @@ class CadastroUsuarioScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: SingleChildScrollView(
@@ -30,27 +33,27 @@ class CadastroUsuarioScreen extends StatelessWidget {
 
 
                 Padding(
-                    padding: const EdgeInsets.only(top: 60, bottom: 10),
+                    padding: EdgeInsets.only(top: width * 0.12, bottom: width * 0.02),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         SvgPicture.asset(
                           'assets/icons/material-symbols_ev-charger-rounded.svg',
-                          width: 150,
+                          width: width * 0.25,
                           colorFilter: ColorFilter.mode(
                               Colors.white,
                               BlendMode.srcIn)
 
                         ),
 
-                        SizedBox(width: 24),
+                        SizedBox(width: width * 0.04),
 
                         Text(
                           'Campus Charge',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 40,
+                            fontSize: width * 0.08,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -67,95 +70,136 @@ class CadastroUsuarioScreen extends StatelessWidget {
                     fontWeight: FontWeight.bold
                   ),
                 ),
-                //nome
+
+
+
                 Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 60, vertical: 15),
-                    child: TextFormField(
 
-                      style: TextStyle(color: Colors.black),
+                  padding: EdgeInsets.symmetric( horizontal: width * 0.1, vertical: 15),
 
-                      validator: (value) {
-                        if(value != null && value.isNotEmpty){
-                          return null;
-                        } else {
-                          return 'Nome de usuário obrigatório';
-                        }
-                      },
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
 
-                      decoration: InputDecoration(
+                    children: [
 
-                          filled: true,
-                          fillColor: Colors.white,
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30)
+                      Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Container(
+                          width: 120,
+                          height: 120,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
                           ),
-                          labelText: "Nome",
-                          hintText: "Insira um nome válido"
+                          child: Center(child: Text("Foto")),
+                        ),
                       ),
-                    )
-                ),
 
 
-                //cpf
-                Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 60, vertical: 15),
-                    child: TextFormField(
+                      SizedBox(width: 10),
 
-                      style: TextStyle(color: Colors.black),
 
-                      validator: (value) {
-                        if(value != null && value.isNotEmpty){
-                          return null;
-                        } else {
-                          return 'CPF obrigatório';
-                        }
-                      },
 
-                      decoration: InputDecoration(
+                      Expanded(
+                        child: Column(
+                          children: [
 
-                          filled: true,
-                          fillColor: Colors.white,
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30)
-                          ),
-                          labelText: "CPF",
-                          hintText: "Insira um CPF válido"
+                            //nome
+                            Padding(
+                                padding: EdgeInsets.symmetric(vertical: 15),                              child: TextFormField(
+
+                                  style: TextStyle(color: Colors.black),
+
+                                  validator: (value) {
+                                    if(value != null && value.isNotEmpty){
+                                      return null;
+                                    } else {
+                                      return 'Nome de usuário obrigatório';
+                                    }
+                                  },
+
+                                  decoration: InputDecoration(
+
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(30)
+                                      ),
+                                      labelText: "Nome",
+                                      hintText: "Insira um nome válido"
+                                  ),
+                                )
+                            ),
+
+
+                            //cpf
+                            Padding(
+                                padding: EdgeInsets.symmetric(vertical: 15),                              child: TextFormField(
+
+                                  style: TextStyle(color: Colors.black),
+
+                                  validator: (value) {
+                                    if(value != null && value.isNotEmpty){
+                                      return null;
+                                    } else {
+                                      return 'CPF obrigatório';
+                                    }
+                                  },
+
+                                  decoration: InputDecoration(
+
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(30)
+                                      ),
+                                      labelText: "CPF",
+                                      hintText: "Insira um CPF válido"
+                                  ),
+                                )
+                            ),
+
+
+
+                          ],
+                        ),
                       ),
-                    )
+                    ],
+                  ),
                 ),
 
 
                 //fone
                 Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 60, vertical: 15),
+                    padding: EdgeInsets.symmetric( horizontal: width * 0.1, vertical: 15),
                     child: TextFormField(
 
-                      style: TextStyle(color: Colors.black),
+                  style: TextStyle(color: Colors.black),
 
-                      validator: (value) {
-                        if(value != null && value.isNotEmpty){
-                          return null;
-                        } else {
-                          return 'Telefone obrigatório';
-                        }
-                      },
+                  validator: (value) {
+                    if(value != null && value.isNotEmpty){
+                      return null;
+                    } else {
+                      return 'Telefone obrigatório';
+                    }
+                  },
 
-                      decoration: InputDecoration(
+                  decoration: InputDecoration(
 
-                          filled: true,
-                          fillColor: Colors.white,
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30)
-                          ),
-                          labelText: "Telefone",
-                          hintText: "Insira um telefone válido"
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30)
                       ),
-                    )
+                      labelText: "Telefone",
+                      hintText: "Insira um telefone válido"
+                  ),
+                )
                 ),
 
                 //email
                 Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 60, vertical: 15),
+                    padding: EdgeInsets.symmetric( horizontal: width * 0.1, vertical: 15),
                     child: TextFormField(
 
                       style: TextStyle(color: Colors.black),
@@ -183,7 +227,7 @@ class CadastroUsuarioScreen extends StatelessWidget {
 
                 //senha
                 Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 60, vertical: 15),
+                    padding: EdgeInsets.symmetric( horizontal: width * 0.1, vertical: 15),
                     child: TextFormField(
 
                       style: TextStyle(color: Colors.black),
@@ -211,7 +255,7 @@ class CadastroUsuarioScreen extends StatelessWidget {
 
                 //senha
                 Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 60, vertical: 15),
+                    padding: EdgeInsets.symmetric( horizontal: width * 0.1, vertical: 15),
                     child: TextFormField(
 
                       style: TextStyle(color: Colors.black),
@@ -240,7 +284,7 @@ class CadastroUsuarioScreen extends StatelessWidget {
                 SizedBox(height: 40),
 
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 60, vertical: 15),
+                  padding: EdgeInsets.symmetric( horizontal: width * 0.1, vertical: 15),
                   child: SizedBox(
                     width: double.infinity,
                     height: 45,
