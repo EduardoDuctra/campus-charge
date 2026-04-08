@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:projeto_integrador/shared/CarregadorCard.dart';
+import 'package:projeto_integrador/shared/SaldoCard.dart';
 
+import '../shared/ConectorCard.dart';
 import '../theme/colors.dart';
 
 class CadastroUsuarioScreen extends StatelessWidget {
@@ -30,7 +33,6 @@ class CadastroUsuarioScreen extends StatelessWidget {
                 mainAxisAlignment: .center,
 
               children: [
-
 
                 Padding(
                     padding: EdgeInsets.only(top: width * 0.12, bottom: width * 0.02),

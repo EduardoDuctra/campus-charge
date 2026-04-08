@@ -2,8 +2,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_integrador/screens/CadastroUsuarioScreen.dart';
+import 'package:projeto_integrador/screens/CarregandoScreen.dart';
+import 'package:projeto_integrador/screens/ConectoresScreen.dart';
 import 'package:projeto_integrador/screens/HomeScreen.dart';
 import 'package:projeto_integrador/screens/LoginScreen.dart';
+import 'package:projeto_integrador/screens/VeiculoScreen.dart';
 
 
 class MyApp extends StatelessWidget {
@@ -17,7 +20,7 @@ Widget build(BuildContext context) {
 
       colorScheme: .fromSeed(seedColor: Colors.deepPurple),
     ),
-    home: CadastroUsuarioScreen(),
+    home: VeiculoScreen(),
   );
 }
 }

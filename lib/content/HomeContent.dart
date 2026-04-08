@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:projeto_integrador/shared/CarregadorCard.dart';
+import 'package:projeto_integrador/shared/SaldoCard.dart';
 
 import '../shared/TopBarWidget.dart';
 
@@ -23,31 +25,41 @@ class _HomecontentState extends State<Homecontent> {
 
             TopBarWidget(),
 
+            SaldoCard(
+                saldo: 20,
+                onPressed: () {
+                print("Carregar");
+              },
+            ),
 
             Expanded(
               child: Container(
-                margin: const EdgeInsets.all(20),
-                padding: const EdgeInsets.all(20),
-
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                ),
 
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
 
-                    Text(
-                      "Dashboard",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+
+                    SizedBox(height: 20),
+
+                    Expanded(
+                      child: CardCarregador(
+                        carregador: "Carregador 01",
+                        onPressed: () {
+                          print("Carregar");
+                        },
                       ),
                     ),
 
+                    SizedBox(height: 20),
 
-
+                    Expanded(
+                      child: CardCarregador(
+                        carregador: "Carregador 02",
+                        onPressed: () {
+                          print("Carregar");
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ),
