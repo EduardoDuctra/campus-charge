@@ -28,12 +28,12 @@ class CardFinalizar extends StatelessWidget {
 
         child: Container(
 
-          height: altura * 0.2,
+          height: altura * 0.15,
           width: largura * 0.425,
 
           padding: const EdgeInsets.all(0),
           decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.vermelho,
               borderRadius: BorderRadius.circular(32)
           ),
 
@@ -51,13 +51,14 @@ class CardFinalizar extends StatelessWidget {
 
                   const Icon(
                     Icons.close_rounded,
-                    size: 120,
+                    size: 100,
                     color: Colors.black,
                   ),
                   Text(
                     'Finalizar recarga',
                     style: const TextStyle(
                       fontSize: 24,
+                      color: Colors.black,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:projeto_integrador/screens/ConectoresScreen.dart';
 import 'package:projeto_integrador/shared/CarregadorCard.dart';
 import 'package:projeto_integrador/shared/SaldoCard.dart';
 
@@ -13,6 +14,22 @@ class Homecontent extends StatefulWidget {
 }
 
 class _HomecontentState extends State<Homecontent> {
+
+  final List<String> carregadores = [
+    "Carregador 01",
+    "Carregador 02",
+  ];
+
+
+  void irParaConectores() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Conectoresscreen(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -34,32 +51,32 @@ class _HomecontentState extends State<Homecontent> {
 
             Expanded(
               child: Container(
-
                 child: Column(
                   children: [
 
-
                     SizedBox(height: 20),
 
                     Expanded(
-                      child: CardCarregador(
-                        carregador: "Carregador 01",
-                        onPressed: () {
-                          print("Carregar");
-                        },
+                      child: Column(
+                        children: carregadores.asMap().entries.map((entry) {
+                          int index = entry.key;
+                          String carregador = entry.value;
+
+                          return Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                bottom: index != carregadores.length - 1 ? 20 : 0,
+                              ),
+                              child: CardCarregador(
+                                carregador: carregador,
+                                onPressed: irParaConectores,
+                              ),
+                            ),
+                          );
+                        }).toList(),
                       ),
                     ),
 
-                    SizedBox(height: 20),
-
-                    Expanded(
-                      child: CardCarregador(
-                        carregador: "Carregador 02",
-                        onPressed: () {
-                          print("Carregar");
-                        },
-                      ),
-                    ),
                   ],
                 ),
               ),

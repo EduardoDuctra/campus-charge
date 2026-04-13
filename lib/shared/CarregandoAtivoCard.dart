@@ -32,28 +32,31 @@ class CarregandoAtivoCard extends StatelessWidget {
             crossAxisAlignment: .center,
 
             children: [
-              Column(
-
-                mainAxisAlignment: MainAxisAlignment.center,
-
-                children: [
-
-                  SvgPicture.asset(
-                      'assets/icons/material-symbols_ev-charger-rounded.svg',
-                      width: largura * 0.50,
-                      colorFilter: ColorFilter.mode(
-                          Colors.black,
-                          BlendMode.srcIn)
-
-                  ),
-                  Text(
-                    'Seu veículo está carregando',
-                    style: const TextStyle(
-                      fontSize: 34,
-                      fontWeight: FontWeight.bold,
+              Expanded(
+                child: Column(
+                
+                  mainAxisAlignment: MainAxisAlignment.center,
+                
+                  children: [
+                
+                    SvgPicture.asset(
+                        'assets/icons/material-symbols_ev-charger-rounded.svg',
+                        width: largura * 0.25,
+                        colorFilter: ColorFilter.mode(
+                            Colors.black,
+                            BlendMode.srcIn)
+                
                     ),
-                  ),
-                ],
+                    Text(
+                      'Seu veículo está 50% carregado',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 34,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
               ),
 
             ],

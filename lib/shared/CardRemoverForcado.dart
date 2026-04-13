@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:projeto_integrador/theme/colors.dart';
 
 class CardRemoverForcado extends StatelessWidget {
 
@@ -26,12 +27,12 @@ class CardRemoverForcado extends StatelessWidget {
 
         child: Container(
 
-          height: altura * 0.2,
+          height: altura * 0.15,
           width: largura * 0.425,
 
           padding: const EdgeInsets.all(0),
           decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.cinza,
               borderRadius: BorderRadius.circular(32)
           ),
 
@@ -49,7 +50,7 @@ class CardRemoverForcado extends StatelessWidget {
 
                   SvgPicture.asset(
                       'assets/icons/remover_icon.svg',
-                      width: 120,
+                      width: 100,
                       colorFilter: ColorFilter.mode(
                           Colors.black,
                           BlendMode.srcIn)

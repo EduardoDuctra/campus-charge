@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:projeto_integrador/screens/CarregandoScreen.dart';
 import 'package:projeto_integrador/shared/ConectorCard.dart';
 
 import '../shared/CarregadorCard.dart';
@@ -14,6 +15,22 @@ class Conectorescontent extends StatefulWidget {
 }
 
 class _ConectorescontentState extends State<Conectorescontent> {
+
+  final List<String> conectores = [
+    "Conector Rápido",
+    "Conector Rápido",
+    "Conector Alternado",
+  ];
+
+  void irParaCarregando() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CarregandoScreen(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -23,7 +40,6 @@ class _ConectorescontentState extends State<Conectorescontent> {
         child: Column(
           children: [
 
-
             TopBarWidget(),
 
             SaldoCard(
@@ -32,7 +48,6 @@ class _ConectorescontentState extends State<Conectorescontent> {
                 print("Carregar");
               },
             ),
-
 
             SizedBox(height: 40),
 
@@ -49,41 +64,27 @@ class _ConectorescontentState extends State<Conectorescontent> {
 
             Expanded(
               child: Container(
-
                 child: Column(
                   children: [
 
-
-                   
-
                     Expanded(
-                      child: ConectorCard(
-                          conector: "Conector Rápido",
-                        onPressed: () {
-                          print("Conector");
-                        },
-                      )
-                    ),
+                      child: Column(
+                        children: conectores.asMap().entries.map((entry) {
+                          int index = entry.key;
+                          String conector = entry.value;
 
-                    SizedBox(height: 20),
-
-                    Expanded(
-                      child: ConectorCard(
-                        conector: "Conector Rápido",
-                        onPressed: () {
-                          print("Conector");
-                        },
-                      ),
-                    ),
-
-                    SizedBox(height: 20),
-
-                    Expanded(
-                      child: ConectorCard(
-                        conector: "Conector Alternado",
-                        onPressed: () {
-                          print("Conector");
-                        },
+                          return Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                bottom: index != conectores.length - 1 ? 20 : 0,
+                              ),
+                              child: ConectorCard(
+                                conector: conector,
+                                onPressed: irParaCarregando,
+                              ),
+                            ),
+                          );
+                        }).toList(),
                       ),
                     ),
 
@@ -91,6 +92,7 @@ class _ConectorescontentState extends State<Conectorescontent> {
                 ),
               ),
             ),
+
           ],
         ),
       ),

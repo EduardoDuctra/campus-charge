@@ -1,26 +1,26 @@
 import 'package:flutter/cupertino.dart';
-import 'package:projeto_integrador/content/HistoricoTransacoesContent.dart';
 
 import '../content/HistoricoRecargasContent.dart';
-import '../content/HomeContent.dart';
+import '../content/HistoricoTransacoesContent.dart';
 import '../shared/NavegationBar.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class HistoricoTransacoesScreen extends StatefulWidget {
+  const HistoricoTransacoesScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<HistoricoTransacoesScreen> createState() => _HistoricoTransacoesScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  
-  int currentIndex = 0;
+class _HistoricoTransacoesScreenState extends State<HistoricoTransacoesScreen> {
+
+  int currentIndex = 1;
 
   final List<Widget> pages = [
-    Homecontent(),
+    HistoricoTransacoesContent(),
     HistoricoTransacoesContent(),
     HistoricoRecargasContent(),
   ];
+
 
   @override
   Widget build(BuildContext context) {

@@ -4,6 +4,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:projeto_integrador/screens/CadastroUsuarioScreen.dart';
 import 'package:projeto_integrador/theme/colors.dart';
 
+import 'HomeScreen.dart';
+
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
 
@@ -121,9 +123,15 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        bool valido = _formKey.currentState!.validate();
+                        bool valido = true;
           
-                        if (valido) {}
+                        if (valido) {
+                          Navigator.push(
+                            context, 
+                            MaterialPageRoute(
+                                builder: (context) => HomeScreen())
+                          );
+                        }
           
                         print("screen após login");
                       },

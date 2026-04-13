@@ -20,7 +20,7 @@ Widget build(BuildContext context) {
 
       colorScheme: .fromSeed(seedColor: Colors.deepPurple),
     ),
-    home: VeiculoScreen(),
+    home: LoginScreen(),
   );
 }
 }

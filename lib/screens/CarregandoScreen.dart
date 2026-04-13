@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 
 import '../content/CarregandoContent.dart';
+import '../content/HistoricoRecargasContent.dart';
+import '../content/HistoricoTransacoesContent.dart';
 import '../shared/NavegationBar.dart';
 
 class CarregandoScreen extends StatefulWidget {
@@ -17,8 +19,8 @@ class _CarregandoScreenState extends State<CarregandoScreen> {
 
   final List<Widget> pages = [
     Carregandocontent(),
-    Center(child: Text("Tela Carteira")),
-    Center(child: Text("Tela Histórico")),
+    HistoricoTransacoesContent(),
+    HistoricoRecargasContent(),
   ];
 
 

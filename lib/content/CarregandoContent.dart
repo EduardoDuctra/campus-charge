@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:projeto_integrador/shared/CardFinalizar.dart';
 import 'package:projeto_integrador/shared/CardRemoverForcado.dart';
 import 'package:projeto_integrador/shared/CarregandoAtivoCard.dart';
+import 'package:projeto_integrador/shared/ValorRecargaCard.dart';
 
 import '../shared/ConectorCard.dart';
 import '../shared/SaldoCard.dart';
@@ -35,7 +36,14 @@ class _CarregandocontentState extends State<Carregandocontent> {
               },
             ),
 
+            SizedBox(height: 20,),
 
+            Valorrecargacard(
+              valor: 10,
+              onPressed: () {
+                print("Carregar");
+              },
+            ),
 
             Expanded(
               child: Container(

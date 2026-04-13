@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 
 import '../content/ConectoresContent.dart';
+import '../content/HistoricoRecargasContent.dart';
+import '../content/HistoricoTransacoesContent.dart';
 import '../shared/NavegationBar.dart';
 
 class Conectoresscreen extends StatefulWidget {
@@ -16,8 +18,8 @@ class _ConectoresscreenState extends State<Conectoresscreen> {
 
   final List<Widget> pages = [
     Conectorescontent(),
-    Center(child: Text("Tela Carteira")),
-    Center(child: Text("Tela Histórico")),
+    HistoricoTransacoesContent(),
+    HistoricoRecargasContent(),
   ];
 
 
