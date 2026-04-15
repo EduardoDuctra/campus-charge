@@ -13,8 +13,12 @@ class TopBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      height: 80,
+      padding: EdgeInsets.only(
+        left: 20,
+        top: 40,
+        bottom: 16),
+
+
 
       child: Row(
         mainAxisAlignment: .spaceBetween,
@@ -28,8 +32,12 @@ class TopBarWidget extends StatelessWidget {
               },
               child: CircleAvatar(
                 radius: 30,
-                backgroundImage: NetworkImage(
-                  "https://via.placeholder.com/150",
+                backgroundColor: Colors.white,
+
+                child: Icon(
+                  Icons.person,
+                  size: 40,
+                  color: Colors.black,
                 ),
               ),
             ),

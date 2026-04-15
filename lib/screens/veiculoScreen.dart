@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_integrador/content/VeiculoContent.dart';
-import '../shared/NavegationBar.dart';
+import 'package:projeto_integrador/content/veiculoContent.dart';
+import '../shared/navegationBar.dart';
 
 class VeiculoScreen extends StatefulWidget {
   const VeiculoScreen({super.key});

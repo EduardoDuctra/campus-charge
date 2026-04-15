@@ -98,7 +98,7 @@ class CadastroUsuarioScreen extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: width * 0.1),
               child: SizedBox(
                 width: double.infinity,
-                height: height * 0.06,
+                height: height * 0.05,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.principal,
@@ -114,6 +114,35 @@ class CadastroUsuarioScreen extends StatelessWidget {
                     style: TextStyle(
                       fontSize: height * 0.02,
                       color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+            SizedBox(height: height * 0.02),
+
+            // BOTÃO
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: width * 0.1),
+              child: SizedBox(
+                width: double.infinity,
+                height: height * 0.05,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    "Cancelar",
+                    style: TextStyle(
+                      fontSize: height * 0.02,
+                      color: Colors.black,
                     ),
                   ),
                 ),

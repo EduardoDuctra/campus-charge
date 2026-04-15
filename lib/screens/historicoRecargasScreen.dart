@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
-import '../content/HistoricoRecargasContent.dart';
-import '../content/HistoricoTransacoesContent.dart';
+import '../content/historicoRecargasContent.dart';
+import '../content/historicoTransacoesContent.dart';
 
 class HistoricoRecargasScreen extends StatefulWidget {
   const HistoricoRecargasScreen({super.key});

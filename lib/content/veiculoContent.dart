@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../shared/TopBarWidget.dart';
+import '../shared/topBarWidget.dart';
 import '../theme/colors.dart';
 
 class Veiculocontent extends StatefulWidget {
@@ -35,9 +35,7 @@ class _VeiculocontentState extends State<Veiculocontent> {
                   /// MARCA
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                    child: DropdownButtonFormField<String>(
-                      value: marcaSelecionada,
-                      dropdownColor: Colors.white,
+                    child: TextFormField(
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
@@ -46,26 +44,13 @@ class _VeiculocontentState extends State<Veiculocontent> {
                         ),
                         labelText: "Marca",
                       ),
-                      items: ["Toyota", "Honda", "Tesla"]
-                          .map((marca) => DropdownMenuItem(
-                        value: marca,
-                        child: Text(marca),
-                      ))
-                          .toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          marcaSelecionada = value;
-                        });
-                      },
                     ),
                   ),
 
                   /// MODELO
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                    child: DropdownButtonFormField<String>(
-                      value: modeloSelecionado,
-                      dropdownColor: Colors.white,
+                    child: TextFormField(
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
@@ -73,18 +58,7 @@ class _VeiculocontentState extends State<Veiculocontent> {
                           borderRadius: BorderRadius.circular(30),
                         ),
                         labelText: "Modelo",
-                      ),
-                      items: ["Modelo A", "Modelo B"]
-                          .map((modelo) => DropdownMenuItem(
-                        value: modelo,
-                        child: Text(modelo),
-                      ))
-                          .toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          modeloSelecionado = value;
-                        });
-                      },
+                      )
                     ),
                   ),
                 ],

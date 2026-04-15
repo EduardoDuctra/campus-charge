@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:projeto_integrador/screens/CadastroUsuarioScreen.dart';
+import 'package:projeto_integrador/screens/cadastroUsuarioScreen.dart';
 import 'package:projeto_integrador/theme/colors.dart';
 
-import 'HomeScreen.dart';
+import 'homeScreen.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
@@ -35,16 +35,16 @@ class LoginScreen extends StatelessWidget {
                   children: [
                     SvgPicture.asset(
                       'assets/icons/material-symbols_ev-charger-rounded.svg',
-                      width: 150,
+                      width: 80,
                     ),
           
-                    SizedBox(width: 24),
+                    SizedBox(width: 12),
           
                     Text(
                       'Campus Charge',
                       style: TextStyle(
                         color: AppColors.principal,
-                        fontSize: 40,
+                        fontSize: 30,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

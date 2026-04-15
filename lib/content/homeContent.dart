@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:projeto_integrador/screens/ConectoresScreen.dart';
-import 'package:projeto_integrador/shared/CarregadorCard.dart';
-import 'package:projeto_integrador/shared/SaldoCard.dart';
+import 'package:projeto_integrador/screens/conectoresScreen.dart';
+import 'package:projeto_integrador/shared/carregadorCard.dart';
+import 'package:projeto_integrador/shared/saldoCard.dart';
 
-import '../shared/TopBarWidget.dart';
+import '../shared/topBarWidget.dart';
 
 class Homecontent extends StatefulWidget {
   const Homecontent({super.key});

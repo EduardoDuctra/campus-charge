@@ -13,7 +13,10 @@ class CarregandoAtivoCard extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     double largura = size.width;
 
+    double porcentagemRecarga = 0.5;
+
     return Padding(
+
       padding: EdgeInsets.symmetric(horizontal: largura * 0.05),
 
         child: Container(
@@ -47,11 +50,24 @@ class CarregandoAtivoCard extends StatelessWidget {
                             BlendMode.srcIn)
                 
                     ),
+
+                    ClipRRect(
+
+                      borderRadius: BorderRadius.circular(20),
+
+                      child: LinearProgressIndicator(
+                        value: porcentagemRecarga,
+                        color: Colors.black,
+                        backgroundColor: Colors.white,
+                        minHeight: 8,
+                      ),
+                    ),
+
                     Text(
                       'Seu veículo está 50% carregado',
                       textAlign: TextAlign.center,
                       style: const TextStyle(
-                        fontSize: 34,
+                        fontSize: 28,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:projeto_integrador/screens/CarregandoScreen.dart';
-import 'package:projeto_integrador/shared/ConectorCard.dart';
+import 'package:projeto_integrador/screens/carregandoScreen.dart';
+import 'package:projeto_integrador/shared/conectorCard.dart';
 
-import '../shared/CarregadorCard.dart';
-import '../shared/SaldoCard.dart';
-import '../shared/TopBarWidget.dart';
+import '../shared/carregadorCard.dart';
+import '../shared/saldoCard.dart';
+import '../shared/topBarWidget.dart';
 
 class Conectorescontent extends StatefulWidget {
   const Conectorescontent({super.key});
@@ -80,6 +80,7 @@ class _ConectorescontentState extends State<Conectorescontent> {
                               ),
                               child: ConectorCard(
                                 conector: conector,
+                                nome: "Type 2",
                                 onPressed: irParaCarregando,
                               ),
                             ),

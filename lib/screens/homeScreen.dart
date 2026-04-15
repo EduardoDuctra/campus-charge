@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
-import 'package:projeto_integrador/content/HistoricoTransacoesContent.dart';
+import 'package:projeto_integrador/content/historicoTransacoesContent.dart';
 
-import '../content/HistoricoRecargasContent.dart';
-import '../content/HomeContent.dart';
-import '../shared/NavegationBar.dart';
+import '../content/historicoRecargasContent.dart';
+import '../content/homeContent.dart';
+import '../shared/navegationBar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

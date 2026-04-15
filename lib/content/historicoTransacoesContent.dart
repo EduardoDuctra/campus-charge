@@ -1,29 +1,32 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../shared/CardHistoricoRecargas.dart';
-import '../shared/TopBarWidget.dart';
+import '../shared/cardHistoricoTransacoes.dart';
+import '../shared/saldoCard.dart';
+import '../shared/topBarWidget.dart';
 
-class HistoricoRecargasContent extends StatefulWidget {
-  const HistoricoRecargasContent({super.key});
+class HistoricoTransacoesContent extends StatefulWidget {
+  const HistoricoTransacoesContent({super.key});
 
   @override
-  State<HistoricoRecargasContent> createState() => _HistoricoRecargasContentState();
+  State<HistoricoTransacoesContent> createState() => _HistoricoTransacoesContentState();
 }
 
-class _HistoricoRecargasContentState extends State<HistoricoRecargasContent> {
+class _HistoricoTransacoesContentState extends State<HistoricoTransacoesContent> {
 
 
   final List<Map<String, dynamic>> historico = [
-    {"tipo": "Débito", "potencia": 25, "valor": 25.0, "data": "10/04/2026"},
-    {"tipo": "Débito", "potencia": 30, "valor": 30.0, "data": "09/04/2026"},
-    {"tipo": "Débito", "potencia": 18.5, "valor": 18.5, "data": "08/04/2026"},
-    {"tipo": "Débito", "potencia": 42, "valor": 42.0, "data": "07/04/2026"},
-    {"tipo": "Débito", "potencia": 15, "valor": 15.0, "data": "06/04/2026"},
+    {"tipo": "Crédito", "valor": 25.0, "data": "10/04/2026"},
+    {"tipo": "Crédito", "valor": 30.0, "data": "09/04/2026"},
+    {"tipo": "Crédito", "valor": 18.5, "data": "08/04/2026"},
+    {"tipo": "Crédito", "valor": 42.0, "data": "07/04/2026"},
+    {"tipo": "Crédito", "valor": 15.0, "data": "06/04/2026"},
   ];
+
 
   @override
   Widget build(BuildContext context) {
+
 
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
@@ -39,11 +42,17 @@ class _HistoricoRecargasContentState extends State<HistoricoRecargasContent> {
 
               TopBarWidget(),
 
+              SaldoCard(
+                saldo: 20,
+                onPressed: () {
+                  print("Carregar");
+                },
+              ),
 
-              SizedBox(height: 20),
+              SizedBox(height: 40),
 
               Text(
-                "Histórico de Recargas",
+                "Histórico de Transações",
                 style: TextStyle(
                   fontSize: height * 0.03,
                   color: Colors.white,
@@ -65,7 +74,6 @@ class _HistoricoRecargasContentState extends State<HistoricoRecargasContent> {
                       ),
                       child: CardHistoricoRecargas(
                         tipo: item["tipo"],
-                        potencia: item["potencia"],
                         valor: item["valor"],
                         data: item["data"],
                       ),

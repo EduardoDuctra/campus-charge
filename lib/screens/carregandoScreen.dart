@@ -1,23 +1,24 @@
 import 'package:flutter/cupertino.dart';
 
-import '../content/ConectoresContent.dart';
-import '../content/HistoricoRecargasContent.dart';
-import '../content/HistoricoTransacoesContent.dart';
-import '../shared/NavegationBar.dart';
+import '../content/carregandoContent.dart';
+import '../content/historicoRecargasContent.dart';
+import '../content/historicoTransacoesContent.dart';
+import '../shared/navegationBar.dart';
 
-class Conectoresscreen extends StatefulWidget {
-  const Conectoresscreen({super.key});
+class CarregandoScreen extends StatefulWidget {
+  const CarregandoScreen({super.key});
 
   @override
-  State<Conectoresscreen> createState() => _ConectoresscreenState();
+  State<CarregandoScreen> createState() => _CarregandoScreenState();
 }
 
-class _ConectoresscreenState extends State<Conectoresscreen> {
+class _CarregandoScreenState extends State<CarregandoScreen> {
+
 
   int currentIndex = 0;
 
   final List<Widget> pages = [
-    Conectorescontent(),
+    Carregandocontent(),
     HistoricoTransacoesContent(),
     HistoricoRecargasContent(),
   ];
