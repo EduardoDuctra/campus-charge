@@ -20,6 +20,8 @@ class Homecontent extends StatefulWidget {
 
 class _HomecontentState extends State<Homecontent> {
 
+
+
   final List<String> carregadores = [
     "Carregador 01",
     "Carregador 02",
@@ -45,10 +47,10 @@ class _HomecontentState extends State<Homecontent> {
           children: [
 
 
-            TopBarWidget(),
+            TopBarWidget(usuario: widget.usuario),
 
             SaldoCard(
-                saldo: 20,
+                saldo: widget.usuario.saldo ?? 0,
                 onPressed: () {
                 print("Carregar");
               },

@@ -41,7 +41,7 @@ class _HistoricoRecargasContentState extends State<HistoricoRecargasContent> {
 
             children: [
 
-              TopBarWidget(),
+              TopBarWidget(usuario: widget.usuario),
 
 
               SizedBox(height: 20),

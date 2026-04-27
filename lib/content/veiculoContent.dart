@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_integrador/DTO/UsuarioDTO.dart';
 
 import '../shared/topBarWidget.dart';
 import '../theme/colors.dart';
 
 class Veiculocontent extends StatefulWidget {
-  const Veiculocontent({super.key});
+  final UsuarioDTO usuario;
+
+  const Veiculocontent({super.key, required this.usuario});
 
   @override
   State<Veiculocontent> createState() => _VeiculocontentState();
@@ -24,7 +27,7 @@ class _VeiculocontentState extends State<Veiculocontent> {
         child: Column(
           children: [
 
-            TopBarWidget(),
+            TopBarWidget(usuario: widget.usuario),
 
             /// PARTE CENTRAL
             Expanded(

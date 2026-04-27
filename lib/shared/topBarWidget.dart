@@ -1,22 +1,31 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../DTO/UsuarioDTO.dart';
+
 class TopBarWidget extends StatelessWidget {
+
+  final UsuarioDTO usuario;
+
 
 
 
 
   const TopBarWidget({
-    super.key,
+    super.key, required this.usuario,
   });
 
   @override
   Widget build(BuildContext context) {
+
+    final fotoUrl=usuario.fotoUrl;
+    final temFoto = fotoUrl != null && fotoUrl.isNotEmpty;
+
     return Container(
       padding: EdgeInsets.only(
         left: 20,
         top: 40,
-        bottom: 16),
+        bottom: 30),
 
 
 
@@ -34,11 +43,15 @@ class TopBarWidget extends StatelessWidget {
                 radius: 30,
                 backgroundColor: Colors.white,
 
-                child: Icon(
+                backgroundImage: temFoto ? NetworkImage(fotoUrl) : null,
+
+                child: !temFoto
+                    ? Icon(
                   Icons.person,
                   size: 40,
                   color: Colors.black,
-                ),
+                )
+                    : null,
               ),
             ),
           ),

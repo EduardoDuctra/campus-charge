@@ -18,15 +18,15 @@ class _VeiculoScreenState extends State<VeiculoScreen> {
   int currentIndex = 0;
 
 
-  final List<Widget> pages = [
-    Veiculocontent(),
-    Center(child: Text("Tela Carteira")),
-    Center(child: Text("Tela Histórico")),
-  ];
-
-
   @override
   Widget build(BuildContext context) {
+
+    final List<Widget> pages = [
+      Veiculocontent(usuario: widget.usuario),
+      Center(child: Text("Tela Carteira")),
+      Center(child: Text("Tela Histórico")),
+    ];
+
     return NavigationBarWidget(
       usuario: widget.usuario,
       currentIndex: currentIndex,

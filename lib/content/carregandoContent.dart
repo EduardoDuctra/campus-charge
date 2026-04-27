@@ -31,10 +31,10 @@ class _CarregandocontentState extends State<Carregandocontent> {
           children: [
 
 
-            TopBarWidget(),
+            TopBarWidget(usuario: widget.usuario),
 
             SaldoCard(
-              saldo: 20,
+              saldo: widget.usuario.saldo ?? 0,
               onPressed: () {
                 print("Carregar");
               },

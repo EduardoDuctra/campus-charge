@@ -41,10 +41,13 @@ class _NavigationBarWidgetState extends State<NavigationBarWidget> {
           children: [
             UserAccountsDrawerHeader(
               decoration: BoxDecoration(color: Colors.black),
-              accountName: Text("Olá ${widget.usuario.nome}."),
+              accountName: Text("Olá ${widget.usuario.nome}"),
                 accountEmail: null,
               currentAccountPicture: CircleAvatar(
-                backgroundImage: NetworkImage("https://via.placeholder.com/150"),
+
+              backgroundImage:
+                NetworkImage(widget.usuario.fotoUrl !=null && widget.usuario.fotoUrl!.isNotEmpty ?
+                widget.usuario.fotoUrl! : "https://via.placeholder.com/150"),
               ),
 
             ),

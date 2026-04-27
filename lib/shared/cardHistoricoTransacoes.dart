@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class CardHistoricoRecargas extends StatelessWidget {
   final String tipo;
   final double valor;
-  final String data;
+  final DateTime data;
 
   const CardHistoricoRecargas({
     super.key,
@@ -13,11 +13,19 @@ class CardHistoricoRecargas extends StatelessWidget {
     required this.data,
   });
 
+  String formatarData(DateTime data) {
+    return "${data.day.toString().padLeft(2, '0')}/"
+        "${data.month.toString().padLeft(2, '0')}/"
+        "${data.year}";
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     double largura = size.width;
     double altura = size.height;
+
+
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: largura * 0.05),
@@ -54,7 +62,7 @@ class CardHistoricoRecargas extends StatelessWidget {
                 ],
               ),
               Text(
-                data,
+                formatarData(data),
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,

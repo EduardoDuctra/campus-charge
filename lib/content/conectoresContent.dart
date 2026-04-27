@@ -44,10 +44,10 @@ class _ConectorescontentState extends State<Conectorescontent> {
         child: Column(
           children: [
 
-            TopBarWidget(),
+            TopBarWidget(usuario: widget.usuario),
 
             SaldoCard(
-              saldo: 20,
+              saldo: widget.usuario.saldo ?? 0,
               onPressed: () {
                 print("Carregar");
               },

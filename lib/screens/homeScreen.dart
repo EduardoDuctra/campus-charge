@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:projeto_integrador/content/historicoTransacoesContent.dart';
 
 import '../DTO/UsuarioDTO.dart';
 import '../content/historicoRecargasContent.dart';
+import '../content/historicoTransacoesContent.dart';
 import '../content/homeContent.dart';
 import '../services/usuarioService.dart';
+import '../services/websocket_service.dart';
 import '../shared/navegationBar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -16,7 +17,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  
+
+  final WebSocketService webSocketService = WebSocketService();
+
+
   int currentIndex = 0;
 
   UsuarioDTO? usuario;
@@ -58,11 +62,37 @@ class _HomeScreenState extends State<HomeScreen> {
     carregarUsuario();
   }
 
+  //desconectar ws
+  @override
+  void dispose() {
+    webSocketService.desconectar();
+    super.dispose();
+  }
+
+  //busca usuario e atualiza WS sempre que tem mudança
   Future<void> carregarUsuario() async {
     final user = await Usuarioservice().buscarUsuarioLogado();
 
     setState(() {
       usuario = user;
     });
+
+
+    if (usuario?.idUsuario != null) {
+      webSocketService.conectar(
+        userId: usuario!.idUsuario.toString(),
+        onMensagem: (msg) async {
+          print("WS HOME: $msg");
+
+
+          final usuarioAtualizado =
+          await Usuarioservice().buscarUsuarioLogado();
+
+          setState(() {
+            usuario = usuarioAtualizado;
+          });
+        },
+      );
+    }
   }
 }

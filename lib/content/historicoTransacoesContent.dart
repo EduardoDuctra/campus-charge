@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:projeto_integrador/DTO/TransacaoCreditoDTO.dart';
+import 'package:projeto_integrador/services/transacaoService.dart';
+import 'package:projeto_integrador/services/websocket_service.dart';
 
 import '../DTO/UsuarioDTO.dart';
 import '../shared/cardHistoricoTransacoes.dart';
@@ -10,6 +13,9 @@ class HistoricoTransacoesContent extends StatefulWidget {
   final UsuarioDTO usuario;
 
 
+
+
+
   const HistoricoTransacoesContent({super.key, required this.usuario});
 
   @override
@@ -18,19 +24,54 @@ class HistoricoTransacoesContent extends StatefulWidget {
 
 class _HistoricoTransacoesContentState extends State<HistoricoTransacoesContent> {
 
+  final TransacaoService transacaoService = TransacaoService();
+  final WebSocketService webSocketService = WebSocketService();
 
-  final List<Map<String, dynamic>> historico = [
-    {"tipo": "Crédito", "valor": 25.0, "data": "10/04/2026"},
-    {"tipo": "Crédito", "valor": 30.0, "data": "09/04/2026"},
-    {"tipo": "Crédito", "valor": 18.5, "data": "08/04/2026"},
-    {"tipo": "Crédito", "valor": 42.0, "data": "07/04/2026"},
-    {"tipo": "Crédito", "valor": 15.0, "data": "06/04/2026"},
-  ];
+  @override
+  void initState() {
+    super.initState();
 
+    carregarTransacoes();
+
+
+    if (widget.usuario.idUsuario == null) {
+      throw Exception("Usuário sem ID");
+    }
+
+    webSocketService.conectar(
+      userId: widget.usuario.idUsuario!.toString(),
+      onMensagem: (msg) async {
+        print("Recebeu WS: $msg");
+
+
+        await carregarTransacoes();
+
+        setState(() {
+
+        });
+      },
+    );
+  }
+
+  List<TransacaoCreditoDTO>historico = [];
+
+
+  Future<void>carregarTransacoes() async {
+
+    try{
+
+      final lista = await transacaoService.listarTransacoesCredito();
+
+      setState(() {
+        historico = lista;
+      });
+    } catch (e){
+      print("Erro: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-
 
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
@@ -44,10 +85,10 @@ class _HistoricoTransacoesContentState extends State<HistoricoTransacoesContent>
 
             children: [
 
-              TopBarWidget(),
+              TopBarWidget(usuario: widget.usuario),
 
               SaldoCard(
-                saldo: 20,
+                saldo: widget.usuario.saldo ?? 0,
                 onPressed: () {
                   print("Carregar");
                 },
@@ -77,9 +118,9 @@ class _HistoricoTransacoesContentState extends State<HistoricoTransacoesContent>
                         bottom: index != historico.length - 1 ? 16 : 0,
                       ),
                       child: CardHistoricoRecargas(
-                        tipo: item["tipo"],
-                        valor: item["valor"],
-                        data: item["data"],
+                        tipo: "Crédito",
+                        valor: item.valorRecarga,
+                        data: item.dataInicio,
                       ),
                     );
                   }).toList(),

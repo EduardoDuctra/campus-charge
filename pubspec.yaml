@@ -47,6 +47,8 @@ dependencies:
 
   image_picker: ^1.0.7
 
+  stomp_dart_client: ^0.4.4
+
 
 
 
