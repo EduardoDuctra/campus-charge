@@ -5,12 +5,16 @@ import 'package:projeto_integrador/shared/carregandoAtivoCard.dart';
 import 'package:projeto_integrador/shared/valorRecargaCard.dart';
 import 'package:projeto_integrador/theme/colors.dart';
 
+import '../DTO/UsuarioDTO.dart';
 import '../shared/conectorCard.dart';
 import '../shared/saldoCard.dart';
 import '../shared/topBarWidget.dart';
 
 class Carregandocontent extends StatefulWidget {
-  const Carregandocontent({super.key});
+
+  final UsuarioDTO usuario;
+
+  const Carregandocontent({super.key, required this.usuario});
 
   @override
   State<Carregandocontent> createState() => _CarregandocontentState();

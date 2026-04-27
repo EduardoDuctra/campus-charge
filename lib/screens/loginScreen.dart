@@ -2,14 +2,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:projeto_integrador/screens/cadastroUsuarioScreen.dart';
+import 'package:projeto_integrador/screens/esqueciSenhaScreen.dart';
 import 'package:projeto_integrador/theme/colors.dart';
 
+import '../DTO/DadosAutenticacaoDTO.dart';
+import '../services/loginService.dart';
 import 'homeScreen.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
 
+  final emailController = TextEditingController();
+  final senhaController = TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
+  final loginService = LoginService();
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +63,7 @@ class LoginScreen extends StatelessWidget {
                 Padding(
                     padding: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
                     child: TextFormField(
-          
+                      controller: emailController,
                       style: TextStyle(color: Colors.black),
           
                       validator: (value) {
@@ -85,6 +92,7 @@ class LoginScreen extends StatelessWidget {
                 Padding(
                     padding: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
                     child: TextFormField(
+                      controller: senhaController,
                       style: TextStyle(color: Colors.black),
           
                       validator: (value) {
@@ -122,18 +130,25 @@ class LoginScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(30),
                         ),
                       ),
-                      onPressed: () {
-                        bool valido = true;
+                      onPressed: () async {
+
+                        final resultado = await loginService.efetuarLogin(
+
+                          DadosAutenticacaoDTO(
+                            email: emailController.text,
+                            senha: senhaController.text,
+                          ),
+                        );
+
           
-                        if (valido) {
+                        if (resultado != null) {
                           Navigator.push(
                             context, 
                             MaterialPageRoute(
                                 builder: (context) => HomeScreen())
                           );
                         }
-          
-                        print("screen após login");
+
                       },
                       child: Text(
                         "Login",
@@ -156,16 +171,36 @@ class LoginScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(30),
                         ),
                       ),
-                      onPressed: () {
-                        bool valido = _formKey.currentState!.validate();
-          
-                        if (valido) {}
-          
-                        print("screen após login");
+                      onPressed: ()  async {
+
+                        final resultado = await loginService.loginGoogle();
+
+
+                        if (resultado != null) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomeScreen())
+                          );
+                        }
+
                       },
-                      child: Text(
-                        "Login com google",
-                        style: TextStyle(fontSize: 18, color: Colors.black),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+
+                          SvgPicture.asset(
+                            'assets/icons/icon_google.svg',
+                            width: 20,
+                          ),
+
+                          SizedBox(width: 10),
+
+                          Text(
+                            "Login com google",
+                            style: TextStyle(fontSize: 18, color: Colors.black),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -195,6 +230,11 @@ class LoginScreen extends StatelessWidget {
           
                 TextButton(
                   onPressed: () {
+
+                    Navigator.push(context, MaterialPageRoute(
+
+                        builder: (context) => EsqueciSenhaScreen())
+                    );
           
                   },
                   child: const Text(

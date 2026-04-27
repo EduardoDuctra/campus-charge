@@ -1,12 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../DTO/UsuarioDTO.dart';
 import '../shared/cardHistoricoTransacoes.dart';
 import '../shared/saldoCard.dart';
 import '../shared/topBarWidget.dart';
 
 class HistoricoTransacoesContent extends StatefulWidget {
-  const HistoricoTransacoesContent({super.key});
+  final UsuarioDTO usuario;
+
+
+  const HistoricoTransacoesContent({super.key, required this.usuario});
 
   @override
   State<HistoricoTransacoesContent> createState() => _HistoricoTransacoesContentState();

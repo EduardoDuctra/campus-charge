@@ -1,19 +1,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:projeto_integrador/DTO/UsuarioDTO.dart';
 import 'package:projeto_integrador/theme/colors.dart';
+
+import '../screens/cadastroUsuarioScreen.dart';
 
 class NavigationBarWidget extends StatefulWidget {
   final int currentIndex;
   final Widget child;
   final Function(int) onItemSelecionado;
 
-  final nomeUsuario;
+  final UsuarioDTO usuario;
 
   const NavigationBarWidget({
     super.key,
     required this.currentIndex,
     required this.child,
-    required this.onItemSelecionado, this.nomeUsuario,
+    required this.onItemSelecionado,
+    required this.usuario,
   });
 
   @override
@@ -37,7 +41,7 @@ class _NavigationBarWidgetState extends State<NavigationBarWidget> {
           children: [
             UserAccountsDrawerHeader(
               decoration: BoxDecoration(color: Colors.black),
-              accountName: Text("Olá ${widget.nomeUsuario}."),
+              accountName: Text("Olá ${widget.usuario.nome}."),
                 accountEmail: null,
               currentAccountPicture: CircleAvatar(
                 backgroundImage: NetworkImage("https://via.placeholder.com/150"),
@@ -49,7 +53,23 @@ class _NavigationBarWidgetState extends State<NavigationBarWidget> {
             ListTile(
               leading: Icon(Icons.person, color: Colors.white),
               title: Text("Meus dados", style: TextStyle(color: Colors.white)),
-              onTap: () {},
+              onTap: () async {
+
+                final usuarioAtualizado = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CadastroUsuarioScreen(
+                      usuario: widget.usuario,),
+                  ),
+                );
+
+                if(usuarioAtualizado !=null){
+                  setState(() {
+                    widget.usuario.nome = usuarioAtualizado.nome;
+                  });
+                }
+
+              },
             ),
 
             ListTile(

@@ -3,12 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:projeto_integrador/screens/carregandoScreen.dart';
 import 'package:projeto_integrador/shared/conectorCard.dart';
 
+import '../DTO/UsuarioDTO.dart';
 import '../shared/carregadorCard.dart';
 import '../shared/saldoCard.dart';
 import '../shared/topBarWidget.dart';
 
 class Conectorescontent extends StatefulWidget {
-  const Conectorescontent({super.key});
+  final UsuarioDTO usuario;
+
+
+  const Conectorescontent({super.key, required this.usuario});
 
   @override
   State<Conectorescontent> createState() => _ConectorescontentState();
@@ -26,7 +30,7 @@ class _ConectorescontentState extends State<Conectorescontent> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => CarregandoScreen(),
+        builder: (context) => CarregandoScreen(usuario: widget.usuario,),
       ),
     );
   }

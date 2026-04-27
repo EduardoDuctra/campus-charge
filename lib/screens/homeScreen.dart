@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:projeto_integrador/content/historicoTransacoesContent.dart';
 
+import '../DTO/UsuarioDTO.dart';
 import '../content/historicoRecargasContent.dart';
 import '../content/homeContent.dart';
+import '../services/usuarioService.dart';
 import '../shared/navegationBar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -16,16 +19,27 @@ class _HomeScreenState extends State<HomeScreen> {
   
   int currentIndex = 0;
 
-  final List<Widget> pages = [
-    Homecontent(),
-    HistoricoTransacoesContent(),
-    HistoricoRecargasContent(),
-  ];
+  UsuarioDTO? usuario;
+
 
   @override
   Widget build(BuildContext context) {
+
+    if (usuario == null) {
+      return Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    final List<Widget> pages = [
+      Homecontent(usuario: usuario!),
+      HistoricoTransacoesContent(usuario: usuario!),
+      HistoricoRecargasContent(usuario: usuario!),
+    ];
+
+
     return NavigationBarWidget(
-      nomeUsuario: "Eduardo",
+      usuario: usuario!,
       currentIndex: currentIndex,
 
       onItemSelecionado: (index) {
@@ -36,5 +50,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
       child: pages[currentIndex],
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    carregarUsuario();
+  }
+
+  Future<void> carregarUsuario() async {
+    final user = await Usuarioservice().buscarUsuarioLogado();
+
+    setState(() {
+      usuario = user;
+    });
   }
 }

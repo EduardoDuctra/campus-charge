@@ -1,25 +1,42 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_picker/image_picker.dart';
 import '../DTO/UsuarioDTO.dart';
 import '../services/usuarioService.dart';
 import '../theme/colors.dart';
 import 'package:br_validators/br_validators.dart';
 
-class CadastroUsuarioScreen extends StatelessWidget {
-  const CadastroUsuarioScreen({super.key});
+class CadastroUsuarioScreen extends StatefulWidget {
+  final UsuarioDTO? usuario;
+
+  const CadastroUsuarioScreen({super.key, this.usuario});
+
+  @override
+  State<CadastroUsuarioScreen> createState() => _CadastroUsuarioScreenState();
+}
+
+class _CadastroUsuarioScreenState extends State<CadastroUsuarioScreen> {
 
   @override
   Widget build(BuildContext context) {
 
-    final nomeController = TextEditingController();
-    final cpfController  = TextEditingController();
-    final telefoneController  = TextEditingController();
-    final emailController  = TextEditingController();
+    final nomeController = TextEditingController(text: widget.usuario?.nome ?? "");
+    final cpfController  = TextEditingController(text: widget.usuario?.cpf ?? "");
+    final telefoneController  = TextEditingController(text: widget.usuario?.telefone ?? "");
+    final emailController  = TextEditingController(text: widget.usuario?.email ?? "");
     final senhaController  = TextEditingController();
     final confirmarSenhaController  = TextEditingController();
 
     final _formKey = GlobalKey<FormState>();
+
+    bool modoEdicao;
+
+    if(widget.usuario != null){
+      modoEdicao = true;
+    } else{
+      modoEdicao = false;
+    }
 
 
     final width = MediaQuery.of(context).size.width;
@@ -80,24 +97,55 @@ class CadastroUsuarioScreen extends StatelessWidget {
               ),
           
               SizedBox(height: height * 0.02),
-          
-              // FOTO
-              InkWell(
-                onTap: () {
-                  print("clicou na foto");
+
+              if(modoEdicao)...[
+
+                // FOTO
+                InkWell(onTap: () async  {
+
+                  final picker = ImagePicker();
+                  final imagem = await picker.pickImage(source: ImageSource.gallery);
+
+                  if(imagem == null){
+                    return;
+                  }
+
+                  final url = await Usuarioservice().uploadFoto(imagem);
+
+                  if (url != null) {
+                    setState(() {
+                      widget.usuario?.fotoUrl = url;
+                    });
+                  }
+
                 },
-                borderRadius: BorderRadius.circular(100),
-                child: Container(
-                  width: height * 0.15,
-                  height: height * 0.15,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
+
+                  borderRadius: BorderRadius.circular(100),
+                  child: Container(
+                    width: height * 0.15,
+                    height: height * 0.15,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                    child: widget.usuario?.fotoUrl != null
+                        ? ClipOval(
+                      child: Image.network(
+                        widget.usuario!.fotoUrl!,
+                        width: height * 0.15,
+                        height: height * 0.15,
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                        : Icon(Icons.person, size: 50),
+
                   ),
-                  child: Center(child: Text("Foto")),
                 ),
-              ),
-          
+
+
+              ],
+
+
               SizedBox(height: height * 0.015),
           
               // CAMPOS
@@ -113,8 +161,13 @@ class CadastroUsuarioScreen extends StatelessWidget {
               ),
           
               buildInput(width, "CPF", cpfController,
-          
+                enabled: !modoEdicao,
                 validator: (value) {
+
+                  if (modoEdicao) {
+                    return null;
+                  }
+
                   if (value == null || value.isEmpty) {
                     return "CPF obrigatório";
                   }
@@ -138,7 +191,7 @@ class CadastroUsuarioScreen extends StatelessWidget {
                 },),
 
               buildInput(width, "Email", emailController,
-
+                enabled: !modoEdicao,
                 validator: (value) {
 
                   if (value == null || value.isEmpty) {
@@ -151,32 +204,41 @@ class CadastroUsuarioScreen extends StatelessWidget {
                 },
               ),
 
-              buildInput(width, "Senha", senhaController,
-          
-                isPassword: true,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Senha obrigatória";
-                  }
-                  if (value.length < 6) {
-                    return "Mínimo 6 caracteres";
-                  }
-                  return null;
-                },
-              ),
-          
-              buildInput(width, "Confirmar senha", confirmarSenhaController,
-          
-                isPassword: true,
-                validator: (value) {
-                  if (value != senhaController.text) {
-                    return "Senhas não conferem";
-                  }
-                  return null;
-                },
-              ),
-          
+              //só vai aparecer se for cadastrar
+              if(!modoEdicao) ... [
+
+                buildInput(width, "Senha", senhaController,
+
+
+                  isPassword: true,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Senha obrigatória";
+                    }
+                    if (value.length < 6) {
+                      return "Mínimo 6 caracteres";
+                    }
+                    return null;
+                  },
+                ),
+
+                buildInput(width, "Confirmar senha", confirmarSenhaController,
+
+                  isPassword: true,
+                  validator: (value) {
+                    if (value != senhaController.text) {
+                      return "Senhas não conferem";
+                    }
+                    return null;
+                  },
+                ),
+
+
+
+              ],
+
               SizedBox(height: height * 0.02),
+
           
               // BOTÃO
               Padding(
@@ -205,19 +267,27 @@ class CadastroUsuarioScreen extends StatelessWidget {
                         email: emailController.text,
                         senha: senhaController.text,
                       );
-          
-                      bool sucesso = await Usuarioservice().cadastrar(usuario);
+
+                      bool sucesso;
+
+                      if(modoEdicao){
+                        sucesso = await Usuarioservice().atualizar(usuario);
+                      } else{
+                        sucesso = await Usuarioservice().cadastrar(usuario);
+                      }
+
           
                      if(sucesso){
-                       Navigator.pop(context);
+                       Navigator.pop(context, usuario);
                      }else {
                        print("Erro ao cadastrar");
                      }
           
           
                     },
+
                     child: Text(
-                      "Cadastrar",
+                    modoEdicao ? "Atualizar" : "Cadastrar",
                       style: TextStyle(
                         fontSize: height * 0.02,
                         color: Colors.white,
@@ -263,12 +333,13 @@ class CadastroUsuarioScreen extends StatelessWidget {
   }
 
   Widget buildInput(double width, String label, TextEditingController controller,
-      {bool isPassword = false, String? Function(String?)? validator}) {
+      {bool isPassword = false, bool enabled = true, String? Function(String?)? validator}) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: width * 0.1, vertical: 4),
       child: TextFormField(
         controller: controller,
         obscureText: isPassword,
+        enabled: enabled,
         validator: validator,
         decoration: InputDecoration(
           filled: true,

@@ -4,10 +4,15 @@ import 'package:projeto_integrador/screens/conectoresScreen.dart';
 import 'package:projeto_integrador/shared/carregadorCard.dart';
 import 'package:projeto_integrador/shared/saldoCard.dart';
 
+import '../DTO/UsuarioDTO.dart';
 import '../shared/topBarWidget.dart';
 
 class Homecontent extends StatefulWidget {
-  const Homecontent({super.key});
+
+  final UsuarioDTO usuario;
+
+  const Homecontent({super.key,
+    required this.usuario});
 
   @override
   State<Homecontent> createState() => _HomecontentState();
@@ -25,7 +30,7 @@ class _HomecontentState extends State<Homecontent> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => Conectoresscreen(),
+        builder: (context) => Conectoresscreen(usuario: widget.usuario,),
       ),
     );
   }

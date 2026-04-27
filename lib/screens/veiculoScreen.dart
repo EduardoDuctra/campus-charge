@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_integrador/content/veiculoContent.dart';
+import '../DTO/UsuarioDTO.dart';
 import '../shared/navegationBar.dart';
 
 class VeiculoScreen extends StatefulWidget {
-  const VeiculoScreen({super.key});
+
+  final UsuarioDTO usuario;
+
+  const VeiculoScreen({super.key,
+    required this.usuario});
 
   @override
   State<VeiculoScreen> createState() => _VeiculoScreenState();
@@ -11,6 +16,7 @@ class VeiculoScreen extends StatefulWidget {
 
 class _VeiculoScreenState extends State<VeiculoScreen> {
   int currentIndex = 0;
+
 
   final List<Widget> pages = [
     Veiculocontent(),
@@ -22,7 +28,7 @@ class _VeiculoScreenState extends State<VeiculoScreen> {
   @override
   Widget build(BuildContext context) {
     return NavigationBarWidget(
-      nomeUsuario: "Eduardo",
+      usuario: widget.usuario,
       currentIndex: currentIndex,
 
       onItemSelecionado: (index) {
