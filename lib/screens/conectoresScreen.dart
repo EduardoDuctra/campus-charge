@@ -1,14 +1,18 @@
 import 'package:flutter/cupertino.dart';
 
+import '../DTO/TransacaoAtivaDTO.dart';
 import '../DTO/UsuarioDTO.dart';
+import '../content/carregandoContent.dart';
 import '../content/conectoresContent.dart';
 import '../content/historicoRecargasContent.dart';
 import '../content/historicoTransacoesContent.dart';
+import '../content/homeContent.dart';
 import '../shared/navegationBar.dart';
 
 class Conectoresscreen extends StatefulWidget {
 
   final UsuarioDTO usuario;
+
 
 
   const Conectoresscreen({super.key, required this.usuario});
@@ -27,11 +31,19 @@ class _ConectoresscreenState extends State<Conectoresscreen> {
   @override
   Widget build(BuildContext context) {
 
-    final List<Widget> pages = [
-      Conectorescontent(usuario: widget.usuario),
-      HistoricoTransacoesContent(usuario: widget.usuario),
-      HistoricoRecargasContent(usuario: widget.usuario),
-    ];
+    Widget getPage() {
+      switch (currentIndex) {
+        case 0:
+          return Conectorescontent(usuario: widget.usuario);
+
+        case 1:
+          return HistoricoTransacoesContent(usuario: widget.usuario);
+        case 2:
+          return HistoricoRecargasContent(usuario: widget.usuario);
+        default:
+          return Homecontent(usuario: widget.usuario);
+      }
+    }
 
     return NavigationBarWidget(
       usuario: widget.usuario,
@@ -43,7 +55,7 @@ class _ConectoresscreenState extends State<Conectoresscreen> {
         });
       },
 
-      child: pages[currentIndex],
+      child: getPage(),
     );
   }
 }

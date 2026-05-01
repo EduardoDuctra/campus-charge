@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_integrador/screens/carregandoScreen.dart';
+import 'package:projeto_integrador/services/transacaoService.dart';
 import 'package:projeto_integrador/shared/conectorCard.dart';
 
+import '../DTO/TransacaoAtivaDTO.dart';
 import '../DTO/UsuarioDTO.dart';
 import '../shared/carregadorCard.dart';
 import '../shared/saldoCard.dart';
@@ -10,6 +12,8 @@ import '../shared/topBarWidget.dart';
 
 class Conectorescontent extends StatefulWidget {
   final UsuarioDTO usuario;
+
+
 
 
   const Conectorescontent({super.key, required this.usuario});
@@ -20,19 +24,28 @@ class Conectorescontent extends StatefulWidget {
 
 class _ConectorescontentState extends State<Conectorescontent> {
 
+  final TransacaoService transacaoService = TransacaoService();
+
   final List<String> conectores = [
     "Conector Rápido",
     "Conector Rápido",
     "Conector Alternado",
   ];
 
-  void irParaCarregando() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => CarregandoScreen(usuario: widget.usuario,),
-      ),
-    );
+  Future<void> irParaCarregando() async {
+
+    final transacao = await transacaoService.listarTransacoesAtiva();
+
+    if(transacao!= null){
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CarregandoScreen(
+              usuario: widget.usuario, transacaoAtiva: transacao),
+        ),
+      );
+    }
   }
 
   @override

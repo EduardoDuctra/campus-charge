@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:projeto_integrador/DTO/TransacaoAtivaDTO.dart';
 import 'package:projeto_integrador/screens/conectoresScreen.dart';
 import 'package:projeto_integrador/shared/carregadorCard.dart';
 import 'package:projeto_integrador/shared/saldoCard.dart';
@@ -10,6 +11,8 @@ import '../shared/topBarWidget.dart';
 class Homecontent extends StatefulWidget {
 
   final UsuarioDTO usuario;
+
+
 
   const Homecontent({super.key,
     required this.usuario});
@@ -32,7 +35,8 @@ class _HomecontentState extends State<Homecontent> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => Conectoresscreen(usuario: widget.usuario,),
+        builder: (context) => Conectoresscreen(
+          usuario: widget.usuario,),
       ),
     );
   }

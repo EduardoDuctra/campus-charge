@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:projeto_integrador/DTO/TransacaoAtivaDTO.dart';
+import 'package:projeto_integrador/services/transacaoService.dart';
 
 import '../DTO/UsuarioDTO.dart';
+import '../content/carregandoContent.dart';
 import '../content/historicoRecargasContent.dart';
 import '../content/historicoTransacoesContent.dart';
 import '../content/homeContent.dart';
@@ -19,6 +22,10 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
 
   final WebSocketService webSocketService = WebSocketService();
+  final TransacaoService transacaoService = TransacaoService();
+  final Usuarioservice usuarioservice = Usuarioservice();
+
+  TransacaoAtivaDTO?transacaoAtiva;
 
 
   int currentIndex = 0;
@@ -38,7 +45,14 @@ class _HomeScreenState extends State<HomeScreen> {
     Widget getPage() {
       switch (currentIndex) {
         case 0:
-          return Homecontent(usuario: usuario!);
+          if (transacaoAtiva != null) {
+            return Carregandocontent(
+              usuario: usuario!,
+              transacaoAtiva: transacaoAtiva!,
+            );
+          } else {
+            return Homecontent(usuario: usuario!);
+          }
         case 1:
           return HistoricoTransacoesContent(usuario: usuario!);
         case 2:
@@ -67,6 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     carregarUsuario();
+    carregarTransacaoAtiva();
   }
 
   //desconectar ws
@@ -78,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   //busca usuario e atualiza WS sempre que tem mudança
   Future<void> carregarUsuario() async {
-    final user = await Usuarioservice().buscarUsuarioLogado();
+    final user = await usuarioservice.buscarUsuarioLogado();
 
     setState(() {
       usuario = user;
@@ -98,11 +113,33 @@ class _HomeScreenState extends State<HomeScreen> {
           print("SALDO NOVO: ${usuarioAtualizado?.saldo}");
           print("SALDO ANTIGO: ${usuario?.saldo}");
 
+          if (!mounted) return;
+
+          final transacao =
+          await transacaoService.listarTransacoesAtiva();
+
+
+          if (transacaoAtiva != null && transacao == null) {
+            Navigator.popUntil(context, (route) => route.isFirst);
+          }
+
           setState(() {
             usuario = usuarioAtualizado;
+            transacaoAtiva = transacao;
           });
         },
       );
     }
+  }
+
+  Future<void>carregarTransacaoAtiva() async {
+
+    final transacao = await transacaoService.listarTransacoesAtiva();
+
+
+    setState(() {
+      transacaoAtiva = transacao;
+    });
+
   }
 }

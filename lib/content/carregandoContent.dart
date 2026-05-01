@@ -16,8 +16,11 @@ import '../shared/topBarWidget.dart';
 class Carregandocontent extends StatefulWidget {
 
   final UsuarioDTO usuario;
+  final TransacaoAtivaDTO transacaoAtiva;
 
-  const Carregandocontent({super.key, required this.usuario});
+  const Carregandocontent({super.key,
+    required this.usuario,
+    required this.transacaoAtiva});
 
   @override
   State<Carregandocontent> createState() => _CarregandocontentState();
@@ -26,53 +29,19 @@ class Carregandocontent extends StatefulWidget {
 class _CarregandocontentState extends State<Carregandocontent> {
 
   final TransacaoService transacaoService = TransacaoService();
-  final WebSocketService webSocketService = WebSocketService();
 
-  TransacaoAtivaDTO? transacaoAtiva;
 
   @override
   void initState() {
     super.initState();
 
-    carregarTransacaoAtiva();
-
-
     if (widget.usuario.idUsuario == null) {
       throw Exception("Usuário sem ID");
     }
 
-    webSocketService.conectar(
-      userId: widget.usuario.idUsuario!.toString(),
-      onMensagem: (msg) async {
-        print("Recebeu WS: $msg");
-
-
-        await carregarTransacaoAtiva();
-
-      },
-    );
   }
 
 
-
-  Future<void>carregarTransacaoAtiva() async {
-
-    try{
-
-      final transacao = await transacaoService.listarTransacoesAtiva();
-
-      setState(() {
-        transacaoAtiva = transacao;
-      });
-    } catch (e){
-      print("Erro: $e");
-
-      setState(() {
-        transacaoAtiva = null;
-      });
-
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +66,7 @@ class _CarregandocontentState extends State<Carregandocontent> {
 
             Valorrecargacard(
 
-              valor: transacaoAtiva?.valorRecarga ?? 0,
+              valor: widget.transacaoAtiva.valorRecarga,
 
               //modal valor
               onPressed: () {
@@ -169,20 +138,10 @@ class _CarregandocontentState extends State<Carregandocontent> {
                     SizedBox(height: 20),
 
                     Expanded(
-                      child: transacaoAtiva == null
-                          ? Center(child: Text("Nenhuma transação ativa",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24
-                      ),))
-                          : CarregandoAtivoCard(transacao: transacaoAtiva!,
-                      ),
+                      child:CarregandoAtivoCard(  transacao: widget.transacaoAtiva),
                     ),
 
                     SizedBox(height: 20),
-
-
-                    transacaoAtiva == null ? SizedBox():
 
                     Row(
                       children: [

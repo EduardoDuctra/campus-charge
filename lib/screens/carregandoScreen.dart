@@ -1,15 +1,21 @@
 import 'package:flutter/cupertino.dart';
 
+import '../DTO/TransacaoAtivaDTO.dart';
 import '../DTO/UsuarioDTO.dart';
 import '../content/carregandoContent.dart';
 import '../content/historicoRecargasContent.dart';
 import '../content/historicoTransacoesContent.dart';
+import '../content/homeContent.dart';
 import '../shared/navegationBar.dart';
 
 class CarregandoScreen extends StatefulWidget {
   final UsuarioDTO usuario;
+  final TransacaoAtivaDTO transacaoAtiva;
 
-  const CarregandoScreen({super.key, required this.usuario});
+
+  const CarregandoScreen({super.key,
+    required this.usuario,
+    required this.transacaoAtiva});
 
   @override
   State<CarregandoScreen> createState() => _CarregandoScreenState();
@@ -24,11 +30,22 @@ class _CarregandoScreenState extends State<CarregandoScreen> {
   @override
   Widget build(BuildContext context) {
 
-    final List<Widget> pages = [
-      Carregandocontent(usuario: widget.usuario),
-      HistoricoTransacoesContent(usuario: widget.usuario),
-      HistoricoRecargasContent(usuario: widget.usuario),
-    ];
+    Widget getPage() {
+      switch (currentIndex) {
+        case 0:
+          return Carregandocontent(
+            usuario: widget.usuario,
+            transacaoAtiva: widget.transacaoAtiva,
+          );
+
+        case 1:
+          return HistoricoTransacoesContent(usuario: widget.usuario);
+        case 2:
+          return HistoricoRecargasContent(usuario: widget.usuario);
+        default:
+          return Homecontent(usuario: widget.usuario);
+      }
+    }
 
     return NavigationBarWidget(
       usuario: widget.usuario,
@@ -40,7 +57,7 @@ class _CarregandoScreenState extends State<CarregandoScreen> {
         });
       },
 
-      child: pages[currentIndex],
+      child: getPage(),
     );
   }
 }

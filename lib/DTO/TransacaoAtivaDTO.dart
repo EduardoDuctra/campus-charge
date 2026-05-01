@@ -26,8 +26,15 @@ class TransacaoAtivaDTO {
       id: json["id"],
       idTransacao: int.parse(json["idTransacao"].toString()),
       statusTransacao: json["statusTransacao"],
-      valorRecarga: (json["valorRecarga"] as num).toDouble(),
-      valorMaximo: json["valorMaximo"] != null ? (json["valorMaximo"] as num).toDouble() : 0.0,
+
+      valorRecarga: json["valorRecarga"] != null
+          ? (json["valorRecarga"] as num).toDouble()
+          : 0.0,
+
+      valorMaximo: json["valorMaximo"] != null
+          ? (json["valorMaximo"] as num).toDouble()
+          : 0.0,
+
       dataInicio: DateTime.parse(json["dataInicio"]),
       socAtual: (json["socAtual"] as num).toDouble(),
       connectorId: json["connectorId"],
