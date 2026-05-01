@@ -9,7 +9,7 @@ class TransacaoCreditoDTO {
 
   factory TransacaoCreditoDTO.fromJson(Map<String, dynamic> json) {
     return TransacaoCreditoDTO(
-      valorRecarga: json['valorRecarga'],
+      valorRecarga: (json["valorRecarga"] as num).toDouble(),
       dataInicio: DateTime.parse(json['dataInicio']),
     );
   }

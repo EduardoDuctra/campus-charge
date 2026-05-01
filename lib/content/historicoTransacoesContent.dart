@@ -46,9 +46,6 @@ class _HistoricoTransacoesContentState extends State<HistoricoTransacoesContent>
 
         await carregarTransacoes();
 
-        setState(() {
-
-        });
       },
     );
   }

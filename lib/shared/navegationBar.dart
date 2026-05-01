@@ -30,7 +30,10 @@ class _NavigationBarWidgetState extends State<NavigationBarWidget> {
     return Scaffold(
 
 
-      body: widget.child,
+      body: KeyedSubtree(
+        key: ValueKey(widget.usuario.saldo),
+        child: widget.child,
+      ),
 
       //menu lateral
       drawer: Drawer(

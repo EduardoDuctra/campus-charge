@@ -5,14 +5,24 @@ class CardHistoricoRecargas extends StatelessWidget {
   final String tipo;
   final double potencia;
   final double valor;
-  final String data;
+  final DateTime data;
+  final String modelo;
+
 
   const CardHistoricoRecargas({
     super.key,
     required this.tipo,
     required this.potencia,
-    required this.data, required this.valor,
+    required this.data,
+    required this.valor,
+    required this.modelo
   });
+
+  String formatarData(DateTime data) {
+    return "${data.day.toString().padLeft(2, '0')}/"
+        "${data.month.toString().padLeft(2, '0')}/"
+        "${data.year}";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +34,7 @@ class CardHistoricoRecargas extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: largura * 0.05),
       child: InkWell(
         child: Container(
-          height: altura * 0.15,
+          height: altura * 0.25,
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: Colors.white,
@@ -49,6 +59,20 @@ class CardHistoricoRecargas extends StatelessWidget {
                     ),
                   ),
                   Text(
+                    formatarData(data),
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    'Veículo: $modelo',
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
                     tipo,
                     style: const TextStyle(
                       fontSize: 18,
@@ -67,14 +91,6 @@ class CardHistoricoRecargas extends StatelessWidget {
                     'R\$ ${valor.toStringAsFixed(2)}',
                     style: const TextStyle(
                       fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-
-                  Text(
-                    data,
-                    style: const TextStyle(
-                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

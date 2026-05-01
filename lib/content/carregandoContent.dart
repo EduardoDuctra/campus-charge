@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:projeto_integrador/DTO/TransacaoAtivaDTO.dart';
 import 'package:projeto_integrador/shared/cardFinalizar.dart';
 import 'package:projeto_integrador/shared/carregandoAtivoCard.dart';
 import 'package:projeto_integrador/shared/valorRecargaCard.dart';
 import 'package:projeto_integrador/theme/colors.dart';
 
 import '../DTO/UsuarioDTO.dart';
+import '../services/transacaoService.dart';
+import '../services/websocket_service.dart';
 import '../shared/conectorCard.dart';
 import '../shared/saldoCard.dart';
 import '../shared/topBarWidget.dart';
@@ -21,6 +24,56 @@ class Carregandocontent extends StatefulWidget {
 }
 
 class _CarregandocontentState extends State<Carregandocontent> {
+
+  final TransacaoService transacaoService = TransacaoService();
+  final WebSocketService webSocketService = WebSocketService();
+
+  TransacaoAtivaDTO? transacaoAtiva;
+
+  @override
+  void initState() {
+    super.initState();
+
+    carregarTransacaoAtiva();
+
+
+    if (widget.usuario.idUsuario == null) {
+      throw Exception("Usuário sem ID");
+    }
+
+    webSocketService.conectar(
+      userId: widget.usuario.idUsuario!.toString(),
+      onMensagem: (msg) async {
+        print("Recebeu WS: $msg");
+
+
+        await carregarTransacaoAtiva();
+
+      },
+    );
+  }
+
+
+
+  Future<void>carregarTransacaoAtiva() async {
+
+    try{
+
+      final transacao = await transacaoService.listarTransacoesAtiva();
+
+      setState(() {
+        transacaoAtiva = transacao;
+      });
+    } catch (e){
+      print("Erro: $e");
+
+      setState(() {
+        transacaoAtiva = null;
+      });
+
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -43,10 +96,8 @@ class _CarregandocontentState extends State<Carregandocontent> {
             SizedBox(height: 20,),
 
             Valorrecargacard(
-              valor: 10,
 
-
-
+              valor: transacaoAtiva?.valorRecarga ?? 0,
 
               //modal valor
               onPressed: () {
@@ -118,24 +169,32 @@ class _CarregandocontentState extends State<Carregandocontent> {
                     SizedBox(height: 20),
 
                     Expanded(
-                        child: CarregandoAtivoCard()
+                      child: transacaoAtiva == null
+                          ? Center(child: Text("Nenhuma transação ativa",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24
+                      ),))
+                          : CarregandoAtivoCard(transacao: transacaoAtiva!,
+                      ),
                     ),
 
                     SizedBox(height: 20),
+
+
+                    transacaoAtiva == null ? SizedBox():
 
                     Row(
                       children: [
                         Expanded(
                           child: CardFinalizar(
                             onPressed: () {
-                            print("Finalizar");
-                          },
+                              print("Finalizar");
+                              },
                           ),
                         ),
-
                       ],
-                    )
-
+                    ),
 
 
                   ],

@@ -37,7 +37,7 @@ class ConectorCard extends StatelessWidget {
                   child: Container(
 
                     height: altura * 0.1,
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                     decoration: BoxDecoration(
                         color: AppColors.principal,
                         borderRadius: BorderRadius.only(
@@ -65,7 +65,7 @@ class ConectorCard extends StatelessWidget {
 
                                 SvgPicture.asset(
                                     'assets/icons/rapido.svg',
-                                    width: largura * 0.1,
+                                    width: largura * 0.10,
                                     colorFilter: ColorFilter.mode(
                                         Colors.black,
                                         BlendMode.srcIn)
@@ -76,7 +76,7 @@ class ConectorCard extends StatelessWidget {
 
                                 SvgPicture.asset(
                                     'assets/icons/iconoir_ev-plug.svg',
-                                    width: largura * 0.1,
+                                    width: largura * 0.10,
                                     colorFilter: ColorFilter.mode(
                                         Colors.black,
                                         BlendMode.srcIn)
@@ -121,7 +121,7 @@ class ConectorCard extends StatelessWidget {
 
                         const Icon(
                           Icons.arrow_forward_ios,
-                          size: 80,
+                          size: 60,
                           color: Colors.black,
                         ),
                       ],
@@ -138,7 +138,7 @@ class ConectorCard extends StatelessWidget {
 
                   child: Container(
 
-                    height: altura * 0.05,
+                    // height: altura * 0.05,
                     width: double.infinity,
 
 

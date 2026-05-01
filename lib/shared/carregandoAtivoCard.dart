@@ -1,11 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:projeto_integrador/DTO/TransacaoAtivaDTO.dart';
 
 import '../theme/colors.dart';
 
 class CarregandoAtivoCard extends StatelessWidget {
-  const CarregandoAtivoCard({super.key});
+  final TransacaoAtivaDTO transacao;
+
+
+  const CarregandoAtivoCard({super.key,
+    required this.transacao});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +18,7 @@ class CarregandoAtivoCard extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     double largura = size.width;
 
-    double porcentagemRecarga = 0.5;
+    double porcentagemRecarga = transacao.socAtual/100;
 
     return Padding(
 
@@ -64,10 +69,10 @@ class CarregandoAtivoCard extends StatelessWidget {
                     ),
 
                     Text(
-                      'Seu veículo está 50% carregado',
+                      'Seu veículo está ${transacao.socAtual}% carregado',
                       textAlign: TextAlign.center,
                       style: const TextStyle(
-                        fontSize: 28,
+                        fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

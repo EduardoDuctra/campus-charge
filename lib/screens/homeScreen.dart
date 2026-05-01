@@ -35,11 +35,18 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
 
-    final List<Widget> pages = [
-      Homecontent(usuario: usuario!),
-      HistoricoTransacoesContent(usuario: usuario!),
-      HistoricoRecargasContent(usuario: usuario!),
-    ];
+    Widget getPage() {
+      switch (currentIndex) {
+        case 0:
+          return Homecontent(usuario: usuario!);
+        case 1:
+          return HistoricoTransacoesContent(usuario: usuario!);
+        case 2:
+          return HistoricoRecargasContent(usuario: usuario!);
+        default:
+          return Homecontent(usuario: usuario!);
+      }
+    }
 
 
     return NavigationBarWidget(
@@ -52,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
         });
       },
 
-      child: pages[currentIndex],
+        child: getPage(),
     );
   }
 
@@ -87,6 +94,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
           final usuarioAtualizado =
           await Usuarioservice().buscarUsuarioLogado();
+
+          print("SALDO NOVO: ${usuarioAtualizado?.saldo}");
+          print("SALDO ANTIGO: ${usuario?.saldo}");
 
           setState(() {
             usuario = usuarioAtualizado;

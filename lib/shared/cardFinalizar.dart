@@ -30,7 +30,7 @@ class CardFinalizar extends StatelessWidget {
 
         child: Container(
 
-          height: altura * 0.15,
+          height: altura * 0.1,
 
           padding: const EdgeInsets.all(0),
           decoration: BoxDecoration(
@@ -44,7 +44,7 @@ class CardFinalizar extends StatelessWidget {
             crossAxisAlignment: .center,
 
             children: [
-              Column(
+              Row(
 
                 mainAxisAlignment: MainAxisAlignment.center,
 
@@ -52,9 +52,10 @@ class CardFinalizar extends StatelessWidget {
 
                   const Icon(
                     Icons.close_rounded,
-                    size: 100,
+                    size: 60,
                     color: Colors.black,
                   ),
+                  SizedBox(width: 20),
                   Text(
                     'Finalizar recarga',
                     style: const TextStyle(

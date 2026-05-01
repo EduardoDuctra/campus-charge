@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:projeto_integrador/services/tokenService.dart';
@@ -7,7 +8,10 @@ import 'package:http_parser/http_parser.dart';
 
 class Apiservice {
   
-  static const String urlBase = "http://localhost:8080/projeto-integrador";
+  // static const String urlBase = "http://localhost:8080/projeto-integrador";
+  static String get urlBase => dotenv.env['URL_BASE']!;
+  static String get wsBase  => dotenv.env['WS_URL']!;
+
   final TokenService tokenService = TokenService();
 
 

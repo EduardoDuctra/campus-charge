@@ -10,6 +10,8 @@ class UsuarioDTO {
   String? fotoUrl;
   double? saldo;
   String? senha;
+  int? idVeiculoPrincipal;
+  String? modeloVeiculoPrincipal;
 
 
   UsuarioDTO({
@@ -21,6 +23,8 @@ class UsuarioDTO {
     this.fotoUrl,
     this.saldo,
     this.senha,
+    this.idVeiculoPrincipal,
+    this.modeloVeiculoPrincipal
   });
 
   factory UsuarioDTO.fromJson(Map<String, dynamic> json) {
@@ -33,6 +37,8 @@ class UsuarioDTO {
       fotoUrl: json['fotoUrl'],
       saldo: json['saldo'],
       senha: json['senha'],
+      idVeiculoPrincipal: json['idVeiculoPrincipal'],
+      modeloVeiculoPrincipal: json['modeloVeiculoPrincipal'],
     );
   }
 

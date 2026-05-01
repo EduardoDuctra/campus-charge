@@ -3,6 +3,7 @@ import 'package:stomp_dart_client/stomp.dart';
 import 'package:stomp_dart_client/stomp_config.dart';
 import 'package:stomp_dart_client/stomp_frame.dart';
 
+
 class WebSocketService {
 
 
@@ -15,10 +16,10 @@ class WebSocketService {
 
     stompClient = StompClient(
       config: StompConfig.SockJS(
-        url: "${Apiservice.urlBase}/ws",
+          url: "${Apiservice.urlBase}/ws",
 
-        onConnect: (StompFrame frame) {
-          print('Conectado WS');
+        onConnect: (frame) {
+          print("Conectado WS");
 
           stompClient!.subscribe(
             destination: '/topic/usuario/$userId',
@@ -31,11 +32,7 @@ class WebSocketService {
         },
 
         onWebSocketError: (error) {
-          print('Erro WS: $error');
-        },
-
-        onStompError: (frame) {
-          print('Erro STOMP: ${frame.body}');
+          print("Erro WS: $error");
         },
       ),
     );
