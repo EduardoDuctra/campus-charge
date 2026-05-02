@@ -1,11 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:projeto_integrador/DTO/ConectorDTO.dart';
 import 'package:projeto_integrador/screens/carregandoScreen.dart';
+import 'package:projeto_integrador/services/conectorService.dart';
 import 'package:projeto_integrador/services/transacaoService.dart';
 import 'package:projeto_integrador/shared/conectorCard.dart';
 
 import '../DTO/TransacaoAtivaDTO.dart';
 import '../DTO/UsuarioDTO.dart';
+import '../services/websocket_service.dart';
+import '../shared/BotaoRemover.dart';
 import '../shared/carregadorCard.dart';
 import '../shared/saldoCard.dart';
 import '../shared/topBarWidget.dart';
@@ -25,12 +29,62 @@ class Conectorescontent extends StatefulWidget {
 class _ConectorescontentState extends State<Conectorescontent> {
 
   final TransacaoService transacaoService = TransacaoService();
+  final ConectorService conectorService = ConectorService();
+  final WebSocketService ws = WebSocketService();
 
-  final List<String> conectores = [
-    "Conector Rápido",
-    "Conector Rápido",
-    "Conector Alternado",
-  ];
+  ConectorDTO? conectorRecente;
+  bool carregando = true;
+
+  String idCarregador = "Voltta_15";  //trocar dps
+
+  List<ConectorDTO>conectores = [];
+
+
+  @override
+  void initState() {
+    super.initState();
+
+    carregarConectores();
+
+    ws.conectarCarregador(
+      idCarregador: idCarregador,
+      onMensagem: (msg) {
+
+        print("Atualização recebida");
+
+        carregarConectores();;
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    ws.desconectar();
+    super.dispose();
+  }
+
+  Future<void> carregarConectores() async {
+
+    final recente = await conectorService.buscarConectorRecente();
+
+    if(recente != null){
+      setState(() {
+        conectorRecente = recente;
+        conectores = [];
+        carregando = false;
+      });
+    }  else {
+
+      final lista = await conectorService.listarConectores(idCarregador);
+
+      setState(() {
+        conectorRecente = null;
+        conectores = lista;
+        carregando = false;
+
+      });
+    }
+  }
 
   Future<void> irParaCarregando() async {
 
@@ -84,20 +138,56 @@ class _ConectorescontentState extends State<Conectorescontent> {
                 child: Column(
                   children: [
 
+
                     Expanded(
-                      child: Column(
+
+                      //se for recente mostra somente ele
+                      child: conectorRecente != null ?
+
+                      Column(
+                        children: [
+
+                          ConectorCard(
+                            dto: conectorRecente!,
+                            onPressed: irParaCarregando,
+                          ),
+
+                          SizedBox(height: 180),
+
+                          BotaoRemover(onPressed: () {
+
+                          },
+                          ),
+
+                          SizedBox(height: 20),
+
+
+                          Text(
+                            'Caso o conector fique preso, force a retirada',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ]
+                      )
+
+                      :
+
+                      Column(
                         children: conectores.asMap().entries.map((entry) {
                           int index = entry.key;
-                          String conector = entry.value;
+                          ConectorDTO dto = entry.value;
 
                           return Expanded(
                             child: Padding(
                               padding: EdgeInsets.only(
                                 bottom: index != conectores.length - 1 ? 20 : 0,
                               ),
+
                               child: ConectorCard(
-                                conector: conector,
-                                nome: "Type 2",
+                                dto: dto,
                                 onPressed: irParaCarregando,
                               ),
                             ),

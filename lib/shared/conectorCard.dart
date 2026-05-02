@@ -2,18 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../DTO/ConectorDTO.dart';
 import '../theme/colors.dart';
 
 class ConectorCard extends StatelessWidget {
 
-  final String conector;
-  final String nome;
+
+  final ConectorDTO dto;
   final VoidCallback onPressed;
 
   const ConectorCard({super.key,
-    required this.conector,
-    required this.onPressed,
-    required this.nome});
+    required this.dto,
+    required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -36,15 +36,11 @@ class ConectorCard extends StatelessWidget {
 
                   child: Container(
 
-                    height: altura * 0.1,
-                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                    height: altura * 0.12,
+                    padding: const EdgeInsets.symmetric(),
                     decoration: BoxDecoration(
                         color: AppColors.principal,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(32),
-                          topRight: Radius.circular(32),
-
-                        )
+                        borderRadius: BorderRadius.circular(32)
                     ),
 
 
@@ -61,7 +57,7 @@ class ConectorCard extends StatelessWidget {
 
                             children: [
 
-                              if(conector == "Conector Rápido")
+                              if(dto.tipo == "CC")
 
                                 SvgPicture.asset(
                                     'assets/icons/rapido.svg',
@@ -72,7 +68,7 @@ class ConectorCard extends StatelessWidget {
 
                                 ),
 
-                              if(conector == "Conector Alternado")
+                              if(dto.tipo == "CA")
 
                                 SvgPicture.asset(
                                     'assets/icons/iconoir_ev-plug.svg',
@@ -95,7 +91,7 @@ class ConectorCard extends StatelessWidget {
 
                                   children: [
                                     Text(
-                                      '${conector}',
+                                      dto.tipo == "CC" ? "Corrente Contínua" : "Corrente Alternada",
                                       style: const TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold,
@@ -103,7 +99,7 @@ class ConectorCard extends StatelessWidget {
                                     ),
 
                                     Text(
-                                      '${nome}',
+                                      '${dto.nomeConector}',
                                       style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.normal,
@@ -132,39 +128,6 @@ class ConectorCard extends StatelessWidget {
 
                     ),
 
-                InkWell(
-
-                  onTap: onPressed,
-
-                  child: Container(
-
-                    // height: altura * 0.05,
-                    width: double.infinity,
-
-
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(32),
-                        bottomRight: Radius.circular(32),
-
-                      )
-                    ),
-
-                    child: Center(
-                      child: Text(
-                        "Remover conector",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.normal,
-                        ),
-                    ),
-                  ),
-
-                  )
-
-                )
               ],
             ),
     );

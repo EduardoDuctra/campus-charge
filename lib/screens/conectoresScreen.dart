@@ -35,7 +35,6 @@ class _ConectoresscreenState extends State<Conectoresscreen> {
       switch (currentIndex) {
         case 0:
           return Conectorescontent(usuario: widget.usuario);
-
         case 1:
           return HistoricoTransacoesContent(usuario: widget.usuario);
         case 2:
@@ -50,9 +49,14 @@ class _ConectoresscreenState extends State<Conectoresscreen> {
       currentIndex: currentIndex,
 
       onItemSelecionado: (index) {
-        setState(() {
-          currentIndex = index;
-        });
+
+        if (index == 0) {
+          Navigator.pop(context);
+        } else {
+          setState(() {
+            currentIndex = index;
+          });
+        }
       },
 
       child: getPage(),

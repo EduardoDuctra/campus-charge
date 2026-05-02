@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:projeto_integrador/DTO/TransacaoAtivaDTO.dart';
 import 'package:projeto_integrador/screens/conectoresScreen.dart';
 import 'package:projeto_integrador/shared/carregadorCard.dart';
@@ -65,28 +66,58 @@ class _HomecontentState extends State<Homecontent> {
                 child: Column(
                   children: [
 
-                    SizedBox(height: 20),
+                    SizedBox(height: 30),
+
+
+                    Row(
+
+                      mainAxisAlignment: MainAxisAlignment.center,
+
+                      children: [
+
+                        SvgPicture.asset(
+                            'assets/icons/location.svg',
+                            width: 25,
+                            colorFilter: ColorFilter.mode(
+                                Colors.white,
+                                BlendMode.srcIn)
+
+                        ),
+
+                        SizedBox(width: 20),
+
+                        Text(
+                          'UFSM - Santa Maria',
+                          style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(height: 40),
 
                     Expanded(
-                      child: Column(
-                        children: carregadores.asMap().entries.map((entry) {
-                          int index = entry.key;
-                          String carregador = entry.value;
+                      child: ListView.builder(
+                        itemCount: carregadores.length,
+                        itemBuilder: (context, index) {
 
-                          return Expanded(
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                bottom: index != carregadores.length - 1 ? 20 : 0,
-                              ),
-                              child: CardCarregador(
-                                carregador: carregador,
-                                onPressed: irParaConectores,
-                              ),
+                          final carregador = carregadores[index];
+
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 40),
+                            child: CardCarregador(
+                              carregador: carregador,
+                              onPressed: irParaConectores,
                             ),
                           );
-                        }).toList(),
+                        },
                       ),
                     ),
+
+                    SizedBox(height: 30),
 
                   ],
                 ),
