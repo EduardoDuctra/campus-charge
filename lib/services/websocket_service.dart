@@ -70,6 +70,39 @@ class WebSocketService {
 
     stompClient!.activate();
   }
+
+  void conectarTodosCarregadores({
+    required Function(String) onMensagem,
+  }) {
+
+    stompClient = StompClient(
+      config: StompConfig.SockJS(
+        url: "${Apiservice.urlBase}/ws",
+
+        onConnect: (frame) {
+          print("Conectado WS Carregadores");
+
+          stompClient!.subscribe(
+            destination: '/topic/carregadores',
+            callback: (frame) {
+              if (frame.body != null) {
+                onMensagem(frame.body!);
+              }
+            },
+          );
+        },
+
+        onWebSocketError: (error) {
+          print("Erro WS: $error");
+        },
+      ),
+    );
+
+    stompClient!.activate();
+  }
+
+
+
   void desconectar() {
     stompClient?.deactivate();
   }

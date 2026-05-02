@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:projeto_integrador/DTO/CarregadorDTO.dart';
 import 'package:projeto_integrador/theme/colors.dart';
 
 class CardCarregador extends StatelessWidget {
 
-  final String carregador;
+  final CarregadorDTO carregadorDTO;
   final VoidCallback onPressed;
 
 
 
 
   const CardCarregador({super.key,
-    required this.carregador,
-    required this.onPressed});
+    required this.onPressed,
+    required this.carregadorDTO});
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +60,7 @@ class CardCarregador extends StatelessWidget {
 
                   ),
                   Text(
-                    '${carregador}',
+                    '${carregadorDTO.idCarregador}',
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,

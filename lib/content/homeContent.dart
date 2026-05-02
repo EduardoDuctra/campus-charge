@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:projeto_integrador/DTO/TransacaoAtivaDTO.dart';
 import 'package:projeto_integrador/screens/conectoresScreen.dart';
+import 'package:projeto_integrador/services/carregadorService.dart';
 import 'package:projeto_integrador/shared/carregadorCard.dart';
 import 'package:projeto_integrador/shared/saldoCard.dart';
 
+import '../DTO/CarregadorDTO.dart';
 import '../DTO/UsuarioDTO.dart';
+import '../services/websocket_service.dart';
 import '../shared/topBarWidget.dart';
 
 class Homecontent extends StatefulWidget {
@@ -23,21 +26,52 @@ class Homecontent extends StatefulWidget {
 }
 
 class _HomecontentState extends State<Homecontent> {
+  final CarregadorService carregadorService = CarregadorService();
+  final WebSocketService ws = WebSocketService();
+
+  List<CarregadorDTO> carregadores = [];
 
 
+  @override
+  void initState() {
+    super.initState();
 
-  final List<String> carregadores = [
-    "Carregador 01",
-    "Carregador 02",
-  ];
+    carregarCarregadores();
+
+    ws.conectarTodosCarregadores(
+      onMensagem: (msg) {
+
+        print("Atualização carregadores");
+
+        carregarCarregadores();
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    ws.desconectar();
+    super.dispose();
+  }
+
+  Future<void> carregarCarregadores() async {
+    final lista = await carregadorService.listarCarregadores();
 
 
-  void irParaConectores() {
+    setState(() {
+
+      carregadores = lista;
+
+    });
+  }
+
+  void irParaConectores(String idCarregador) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => Conectoresscreen(
-          usuario: widget.usuario,),
+          usuario: widget.usuario,
+          idCarregador: idCarregador,),
       ),
     );
   }
@@ -109,8 +143,10 @@ class _HomecontentState extends State<Homecontent> {
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 40),
                             child: CardCarregador(
-                              carregador: carregador,
-                              onPressed: irParaConectores,
+                              carregadorDTO: carregador,
+
+                              //so executa quando clicar
+                              onPressed: () => irParaConectores(carregador.idCarregador),
                             ),
                           );
                         },

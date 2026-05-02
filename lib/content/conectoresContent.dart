@@ -16,11 +16,12 @@ import '../shared/topBarWidget.dart';
 
 class Conectorescontent extends StatefulWidget {
   final UsuarioDTO usuario;
+  final String idCarregador;
 
 
 
 
-  const Conectorescontent({super.key, required this.usuario});
+  const Conectorescontent({super.key, required this.usuario, required this.idCarregador});
 
   @override
   State<Conectorescontent> createState() => _ConectorescontentState();
@@ -35,7 +36,6 @@ class _ConectorescontentState extends State<Conectorescontent> {
   ConectorDTO? conectorRecente;
   bool carregando = true;
 
-  String idCarregador = "Voltta_15";  //trocar dps
 
   List<ConectorDTO>conectores = [];
 
@@ -47,7 +47,7 @@ class _ConectorescontentState extends State<Conectorescontent> {
     carregarConectores();
 
     ws.conectarCarregador(
-      idCarregador: idCarregador,
+      idCarregador: widget.idCarregador,
       onMensagem: (msg) {
 
         print("Atualização recebida");
@@ -75,7 +75,7 @@ class _ConectorescontentState extends State<Conectorescontent> {
       });
     }  else {
 
-      final lista = await conectorService.listarConectores(idCarregador);
+      final lista = await conectorService.listarConectores(widget.idCarregador);
 
       setState(() {
         conectorRecente = null;

@@ -12,10 +12,11 @@ import '../shared/navegationBar.dart';
 class Conectoresscreen extends StatefulWidget {
 
   final UsuarioDTO usuario;
+  final String idCarregador;
 
 
 
-  const Conectoresscreen({super.key, required this.usuario});
+  const Conectoresscreen({super.key, required this.usuario, required this.idCarregador});
 
   @override
   State<Conectoresscreen> createState() => _ConectoresscreenState();
@@ -34,7 +35,7 @@ class _ConectoresscreenState extends State<Conectoresscreen> {
     Widget getPage() {
       switch (currentIndex) {
         case 0:
-          return Conectorescontent(usuario: widget.usuario);
+          return Conectorescontent(usuario: widget.usuario, idCarregador: widget.idCarregador,);
         case 1:
           return HistoricoTransacoesContent(usuario: widget.usuario);
         case 2:
