@@ -19,7 +19,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
 
   final WebSocketService webSocketService = WebSocketService();
   final TransacaoService transacaoService = TransacaoService();
@@ -51,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
               transacaoAtiva: transacaoAtiva!,
             );
           } else {
-            return Homecontent(usuario: usuario!);
+            return Homecontent(usuario: usuario!,);
           }
         case 1:
           return HistoricoTransacoesContent(usuario: usuario!);
@@ -80,6 +80,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+
+    WidgetsBinding.instance.addObserver(this);
+
     carregarUsuario();
     carregarTransacaoAtiva();
   }
@@ -87,8 +90,30 @@ class _HomeScreenState extends State<HomeScreen> {
   //desconectar ws
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     webSocketService.desconectar();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      print("App voltou, recarregando usuário...");
+
+      atualizarDados();
+    }
+  }
+
+  Future<void> atualizarDados() async {
+    final usuarioAtualizado = await usuarioservice.buscarUsuarioLogado();
+    final transacao = await transacaoService.listarTransacoesAtiva();
+
+    if (!mounted) return;
+
+    setState(() {
+      usuario = usuarioAtualizado;
+      transacaoAtiva = transacao;
+    });
   }
 
   //busca usuario e atualiza WS sempre que tem mudança
@@ -106,9 +131,22 @@ class _HomeScreenState extends State<HomeScreen> {
         onMensagem: (msg) async {
           print("WS HOME: $msg");
 
+          final valor = double.tryParse(msg);
+          print("VALOR PARSE: $valor");
 
-          final usuarioAtualizado =
-          await Usuarioservice().buscarUsuarioLogado();
+          // 🔥 saldo direto
+          if (valor != null) {
+            if (!mounted) return;
+
+            setState(() {
+              usuario!.saldo = valor;
+            });
+
+            return;
+          }
+
+          // 🔹 outros eventos (sem delay)
+          final usuarioAtualizado = await usuarioservice.buscarUsuarioLogado();
 
           print("SALDO NOVO: ${usuarioAtualizado?.saldo}");
           print("SALDO ANTIGO: ${usuario?.saldo}");
@@ -117,7 +155,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
           final transacao =
           await transacaoService.listarTransacoesAtiva();
-
 
           if (transacaoAtiva != null && transacao == null) {
             Navigator.popUntil(context, (route) => route.isFirst);
@@ -129,6 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         },
       );
+
     }
   }
 

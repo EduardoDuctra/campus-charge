@@ -12,9 +12,11 @@ import '../services/websocket_service.dart';
 import '../shared/conectorCard.dart';
 import '../shared/saldoCard.dart';
 import '../shared/topBarWidget.dart';
+import '../utils/modal_recarga.dart';
 
 class Carregandocontent extends StatefulWidget {
 
+  //recebe usuario e transação ativa
   final UsuarioDTO usuario;
   final TransacaoAtivaDTO transacaoAtiva;
 
@@ -41,6 +43,18 @@ class _CarregandocontentState extends State<Carregandocontent> {
 
   }
 
+  //se mudou -> atualiza
+  @override
+  void didUpdateWidget(covariant Carregandocontent oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.transacaoAtiva != widget.transacaoAtiva) {
+      print("Transação mudou, atualizando tela...");
+      setState(() {});
+    }
+  }
+
+  // =====================  BUILD  =========================== //
 
 
   @override
@@ -57,9 +71,7 @@ class _CarregandocontentState extends State<Carregandocontent> {
 
             SaldoCard(
               saldo: widget.usuario.saldo ?? 0,
-              onPressed: () {
-                print("Carregar");
-              },
+                onPressed: () => abrirModalRecarga(context)
             ),
 
             SizedBox(height: 20,),

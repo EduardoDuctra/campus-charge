@@ -29,13 +29,13 @@ class _VeiculocontentState extends State<Veiculocontent> {
 
             TopBarWidget(usuario: widget.usuario),
 
-            /// PARTE CENTRAL
+
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
 
-                  /// MARCA
+
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                     child: TextFormField(
@@ -50,7 +50,7 @@ class _VeiculocontentState extends State<Veiculocontent> {
                     ),
                   ),
 
-                  /// MODELO
+
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                     child: TextFormField(
@@ -68,7 +68,7 @@ class _VeiculocontentState extends State<Veiculocontent> {
               ),
             ),
 
-            /// BOTÃO EMBAIXO
+
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
               child: SizedBox(

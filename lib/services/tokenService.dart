@@ -2,6 +2,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class TokenService{
 
+  //salva o token na SecureStorage
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
   Future<void> salvarToken(String token) async{

@@ -13,15 +13,19 @@ import '../shared/BotaoRemover.dart';
 import '../shared/carregadorCard.dart';
 import '../shared/saldoCard.dart';
 import '../shared/topBarWidget.dart';
+import '../utils/modal_recarga.dart';
 
 class Conectorescontent extends StatefulWidget {
+
+  //recebe o usuario + idCarregador da tela anterior
   final UsuarioDTO usuario;
   final String idCarregador;
 
 
 
-
-  const Conectorescontent({super.key, required this.usuario, required this.idCarregador});
+  const Conectorescontent({super.key,
+    required this.usuario,
+    required this.idCarregador});
 
   @override
   State<Conectorescontent> createState() => _ConectorescontentState();
@@ -31,8 +35,8 @@ class _ConectorescontentState extends State<Conectorescontent> {
 
   final TransacaoService transacaoService = TransacaoService();
   final ConectorService conectorService = ConectorService();
-  final WebSocketService ws = WebSocketService();
 
+  //usado para ver se tenho resposta na minha API nessa url
   ConectorDTO? conectorRecente;
   bool carregando = true;
 
@@ -46,35 +50,41 @@ class _ConectorescontentState extends State<Conectorescontent> {
 
     carregarConectores();
 
-    ws.conectarCarregador(
-      idCarregador: widget.idCarregador,
-      onMensagem: (msg) {
-
-        print("Atualização recebida");
-
-        carregarConectores();;
-      },
-    );
   }
 
   @override
   void dispose() {
-    ws.desconectar();
     super.dispose();
   }
 
+  //se mudou -> atualiza
+  @override
+  void didUpdateWidget(covariant Conectorescontent oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.usuario.saldo != widget.usuario.saldo) {
+      print("Atualizando conectores por mudança de estado...");
+      carregarConectores();
+    }
+  }
+
+
   Future<void> carregarConectores() async {
 
+    //tem resposta da api?
     final recente = await conectorService.buscarConectorRecente();
 
     if(recente != null){
+
       setState(() {
         conectorRecente = recente;
         conectores = [];
         carregando = false;
       });
+
     }  else {
 
+      //não tem recente -> lista todos disponiveis
       final lista = await conectorService.listarConectores(widget.idCarregador);
 
       setState(() {
@@ -86,6 +96,7 @@ class _ConectorescontentState extends State<Conectorescontent> {
     }
   }
 
+  //redireciona para a tela de carergando. Passa usuário e transacao que está acontecendo/ativa
   Future<void> irParaCarregando() async {
 
     final transacao = await transacaoService.listarTransacoesAtiva();
@@ -102,6 +113,10 @@ class _ConectorescontentState extends State<Conectorescontent> {
     }
   }
 
+
+  // =====================  BUILD  =========================== //
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -115,9 +130,7 @@ class _ConectorescontentState extends State<Conectorescontent> {
 
             SaldoCard(
               saldo: widget.usuario.saldo ?? 0,
-              onPressed: () {
-                print("Carregar");
-              },
+                onPressed: () => abrirModalRecarga(context)
             ),
 
             SizedBox(height: 40),

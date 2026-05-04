@@ -8,6 +8,7 @@ import '../services/websocket_service.dart';
 import '../shared/cardHistoricoRecargas.dart';
 import '../shared/saldoCard.dart';
 import '../shared/topBarWidget.dart';
+import '../utils/modal_recarga.dart';
 
 class HistoricoRecargasContent extends StatefulWidget {
 
@@ -22,36 +23,29 @@ class HistoricoRecargasContent extends StatefulWidget {
 class _HistoricoRecargasContentState extends State<HistoricoRecargasContent> {
 
   final TransacaoService transacaoService = TransacaoService();
-  final WebSocketService webSocketService = WebSocketService();
 
 
   @override
   void initState() {
     super.initState();
-
     carregarTransacoesDebito();
+  }
 
+  @override
+  void didUpdateWidget(covariant HistoricoRecargasContent oldWidget) {
+    super.didUpdateWidget(oldWidget);
 
-    if (widget.usuario.idUsuario == null) {
-      throw Exception("Usuário sem ID");
+    if (oldWidget.usuario.saldo != widget.usuario.saldo) {
+      print("Saldo mudou, atualizando recargas...");
+      carregarTransacoesDebito();
     }
-
-    webSocketService.conectar(
-      userId: widget.usuario.idUsuario!.toString(),
-      onMensagem: (msg) async {
-        print("Recebeu WS: $msg");
-
-
-        await carregarTransacoesDebito();
-
-      },
-    );
   }
 
   List<TransacaoDebitoDTO>historico = [];
 
 
 
+  //lista as transacoes -> coloca elas numa lista
   Future<void>carregarTransacoesDebito() async {
 
     try{
@@ -65,6 +59,10 @@ class _HistoricoRecargasContentState extends State<HistoricoRecargasContent> {
       print("Erro: $e");
     }
   }
+
+
+  // =====================  BUILD  =========================== //
+
 
   @override
   Widget build(BuildContext context) {
@@ -86,9 +84,7 @@ class _HistoricoRecargasContentState extends State<HistoricoRecargasContent> {
 
               SaldoCard(
                 saldo: widget.usuario.saldo ?? 0,
-                onPressed: () {
-                  print("Carregar");
-                },
+                  onPressed: () => abrirModalRecarga(context)
               ),
 
               SizedBox(height: 40),

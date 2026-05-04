@@ -8,13 +8,11 @@ import '../DTO/UsuarioDTO.dart';
 import '../shared/cardHistoricoTransacoes.dart';
 import '../shared/saldoCard.dart';
 import '../shared/topBarWidget.dart';
+import '../utils/modal_recarga.dart';
 
 class HistoricoTransacoesContent extends StatefulWidget {
+
   final UsuarioDTO usuario;
-
-
-
-
 
   const HistoricoTransacoesContent({super.key, required this.usuario});
 
@@ -25,34 +23,31 @@ class HistoricoTransacoesContent extends StatefulWidget {
 class _HistoricoTransacoesContentState extends State<HistoricoTransacoesContent> {
 
   final TransacaoService transacaoService = TransacaoService();
-  final WebSocketService webSocketService = WebSocketService();
 
+  //WS das transações
   @override
   void initState() {
     super.initState();
 
     carregarTransacoes();
 
+  }
 
-    if (widget.usuario.idUsuario == null) {
-      throw Exception("Usuário sem ID");
+  //se mudou -> atualiza
+  @override
+  void didUpdateWidget(covariant HistoricoTransacoesContent oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.usuario.saldo != widget.usuario.saldo) {
+      print("Saldo mudou, atualizando histórico...");
+      carregarTransacoes();
     }
-
-    webSocketService.conectar(
-      userId: widget.usuario.idUsuario!.toString(),
-      onMensagem: (msg) async {
-        print("Recebeu WS: $msg");
-
-
-        await carregarTransacoes();
-
-      },
-    );
   }
 
   List<TransacaoCreditoDTO>historico = [];
 
 
+  //lista as transacoes -> coloca elas numa lista
   Future<void>carregarTransacoes() async {
 
     try{
@@ -66,6 +61,8 @@ class _HistoricoTransacoesContentState extends State<HistoricoTransacoesContent>
       print("Erro: $e");
     }
   }
+
+  // =====================  BUILD  =========================== //
 
   @override
   Widget build(BuildContext context) {
@@ -86,9 +83,7 @@ class _HistoricoTransacoesContentState extends State<HistoricoTransacoesContent>
 
               SaldoCard(
                 saldo: widget.usuario.saldo ?? 0,
-                onPressed: () {
-                  print("Carregar");
-                },
+                  onPressed: () => abrirModalRecarga(context)
               ),
 
               SizedBox(height: 40),

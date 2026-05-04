@@ -99,7 +99,7 @@ class ConectorCard extends StatelessWidget {
                                     ),
 
                                     Text(
-                                      '${dto.nomeConector}',
+                                      '${dto.nomeConector} - R\$ ${dto.valorEnergia}/kWh',
                                       style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.normal,

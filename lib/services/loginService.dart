@@ -15,10 +15,11 @@ class LoginService {
   final Apiservice api = Apiservice();
   final TokenService tokenService = TokenService();
   
-  
+
+  //credencial do app no google
   final GoogleSignIn _googleSignIn = GoogleSignIn(
-    clientId: dotenv.env['GOOGLE_CLIENT_ID'],
-  );
+    clientId: dotenv.env['GOOGLE_CLIENT_ID']);
+
 
   Future<DadosTokenJWTDTO?>efetuarLogin(DadosAutenticacaoDTO dto) async{
 
@@ -45,6 +46,7 @@ class LoginService {
 
   Future<DadosTokenJWTDTO?>loginGoogle() async{
 
+    //retorna a conta do usuário autenticado do google
     final account = await _googleSignIn.signIn();
 
     if(account == null){
@@ -52,6 +54,7 @@ class LoginService {
       return null;
     }
 
+    //obtém os dados de autenticação do Google (incluindo accessToken)
     final auth = await account.authentication;
     final accessToken = auth.accessToken;
 
@@ -62,7 +65,7 @@ class LoginService {
       return null;
     }
 
-
+    // envia o token do Google para o backend validar e gerar o JWT da aplicação
     final response = await api.post("login/google",
         {
           "token": accessToken,

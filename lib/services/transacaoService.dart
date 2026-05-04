@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:projeto_integrador/DTO/TransacaoAtivaDTO.dart';
 import 'package:projeto_integrador/DTO/TransacaoCreditoDTO.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../DTO/TransacaoDebitoDTO.dart';
 import 'apiService.dart';
@@ -84,6 +86,42 @@ class TransacaoService {
       return null;
     }
   }
+
+  Future<String?>criarTransacao(double valor) async {
+
+    DateTime agora = DateTime.now();
+
+    final dto = TransacaoCreditoDTO(valorRecarga: valor, dataInicio: agora);
+
+
+    final response = await api.post("transacao", dto.toJson());
+
+    if(response.statusCode == 200){
+
+      final urlMercadoPago = response.body;
+      print("Transação criada com sucesso");
+
+      return urlMercadoPago;
+
+    } else{
+
+      print("Erro ao criar transação: $response.body");
+      return null;
+
+    }
+
+  }
+
+  Future<void> abrirMercadoPago(BuildContext context, String url) async {
+    final Uri uri = Uri.parse(url);
+
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Não foi possível abrir o pagamento")),
+      );
+    }
+  }
+
 
 
 }

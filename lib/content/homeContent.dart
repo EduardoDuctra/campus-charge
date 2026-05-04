@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:projeto_integrador/DTO/TransacaoAtivaDTO.dart';
 import 'package:projeto_integrador/screens/conectoresScreen.dart';
 import 'package:projeto_integrador/services/carregadorService.dart';
+import 'package:projeto_integrador/services/usuarioService.dart';
 import 'package:projeto_integrador/shared/carregadorCard.dart';
 import 'package:projeto_integrador/shared/saldoCard.dart';
 
@@ -11,9 +12,11 @@ import '../DTO/CarregadorDTO.dart';
 import '../DTO/UsuarioDTO.dart';
 import '../services/websocket_service.dart';
 import '../shared/topBarWidget.dart';
+import '../utils/modal_recarga.dart';
 
 class Homecontent extends StatefulWidget {
 
+  //recebo o usuário
   final UsuarioDTO usuario;
 
 
@@ -25,13 +28,19 @@ class Homecontent extends StatefulWidget {
   State<Homecontent> createState() => _HomecontentState();
 }
 
+
+
 class _HomecontentState extends State<Homecontent> {
+
+
   final CarregadorService carregadorService = CarregadorService();
+  final Usuarioservice usuarioservice = Usuarioservice();
   final WebSocketService ws = WebSocketService();
 
   List<CarregadorDTO> carregadores = [];
 
 
+  //ws
   @override
   void initState() {
     super.initState();
@@ -40,23 +49,28 @@ class _HomecontentState extends State<Homecontent> {
 
     ws.conectarTodosCarregadores(
       onMensagem: (msg) {
-
-        print("Atualização carregadores");
-
+        print("WS carregadores: $msg");
         carregarCarregadores();
       },
     );
   }
 
+
+
+  //se mudou -> atualiza
   @override
-  void dispose() {
-    ws.desconectar();
-    super.dispose();
+  void didUpdateWidget(covariant Homecontent oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.usuario != widget.usuario) {
+      print("Atualizando carregadores...");
+      carregarCarregadores();
+    }
   }
 
+  //lista os carregadores -> coloca eles numa lista
   Future<void> carregarCarregadores() async {
     final lista = await carregadorService.listarCarregadores();
-
 
     setState(() {
 
@@ -65,6 +79,7 @@ class _HomecontentState extends State<Homecontent> {
     });
   }
 
+  //redireciona para a tela dos conectores, passando o idCarregador
   void irParaConectores(String idCarregador) {
     Navigator.push(
       context,
@@ -75,6 +90,10 @@ class _HomecontentState extends State<Homecontent> {
       ),
     );
   }
+
+
+  // =====================  BUILD  =========================== //
+
 
   @override
   Widget build(BuildContext context) {
@@ -90,9 +109,7 @@ class _HomecontentState extends State<Homecontent> {
 
             SaldoCard(
                 saldo: widget.usuario.saldo ?? 0,
-                onPressed: () {
-                print("Carregar");
-              },
+                onPressed: () => abrirModalRecarga(context)
             ),
 
             Expanded(

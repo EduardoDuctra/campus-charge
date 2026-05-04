@@ -49,6 +49,8 @@ dependencies:
 
   stomp_dart_client: ^0.4.4
 
+  url_launcher: ^6.2.5
+
 
 
 

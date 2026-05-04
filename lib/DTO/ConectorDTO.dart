@@ -3,6 +3,7 @@ class ConectorDTO {
   int connectorIdNoCarregador;
   String tipo;
   bool disponivelUso;
+  double valorEnergia;
   String nomeConector;
   String idCarregador;
 
@@ -11,6 +12,7 @@ class ConectorDTO {
     required this.connectorIdNoCarregador,
     required this.tipo,
     required this.disponivelUso,
+    required this.valorEnergia,
     required this.nomeConector,
     required this.idCarregador,
   });
@@ -21,6 +23,7 @@ class ConectorDTO {
       connectorIdNoCarregador: json['connectorIdNoCarregador'],
       tipo: json['tipo'],
       disponivelUso: json['disponivelUso'],
+      valorEnergia: json['valorEnergia'],
       nomeConector: json['nomeConector'],
       idCarregador: json['idCarregador'],
     );
@@ -32,6 +35,7 @@ class ConectorDTO {
       "connectorIdNoCarregador": connectorIdNoCarregador,
       "tipo": tipo,
       "disponivelUso": disponivelUso,
+      "valorEnergia": valorEnergia,
       "nomeConector": nomeConector,
       "idCarregador": idCarregador,
 

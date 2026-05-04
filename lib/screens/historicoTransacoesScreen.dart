@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import '../DTO/UsuarioDTO.dart';
 import '../content/historicoRecargasContent.dart';
 import '../content/historicoTransacoesContent.dart';
+import '../content/homeContent.dart';
 import '../shared/navegationBar.dart';
 
 class HistoricoTransacoesScreen extends StatefulWidget {
@@ -24,7 +25,7 @@ class _HistoricoTransacoesScreenState extends State<HistoricoTransacoesScreen> {
   Widget build(BuildContext context) {
 
     final List<Widget> pages = [
-      HistoricoTransacoesContent(usuario: widget.usuario),
+      Homecontent(usuario: widget.usuario),
       HistoricoTransacoesContent(usuario: widget.usuario),
       HistoricoRecargasContent(usuario: widget.usuario),
     ];
