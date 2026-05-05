@@ -1,17 +1,24 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:projeto_integrador/DTO/TransacaoAtivaDTO.dart';
+import 'package:projeto_integrador/shared/cardFinalizar.dart';
+import 'package:projeto_integrador/shared/carregandoAtivoCard.dart';
+import 'package:projeto_integrador/shared/valorRecargaCard.dart';
+import 'package:projeto_integrador/theme/colors.dart';
 
-import '../DTO/TransacaoAtivaDTO.dart';
 import '../DTO/UsuarioDTO.dart';
-import '../content/carregandoContent.dart';
-import '../content/historicoRecargasContent.dart';
-import '../content/historicoTransacoesContent.dart';
-import '../content/homeContent.dart';
-import '../shared/navegationBar.dart';
+import '../services/transacaoService.dart';
+import '../services/websocket_service.dart';
+import '../shared/conectorCard.dart';
+import '../shared/saldoCard.dart';
+import '../shared/topBarWidget.dart';
+import '../utils/modal_recarga.dart';
 
 class CarregandoScreen extends StatefulWidget {
+
+  //recebe usuario e transação ativa
   final UsuarioDTO usuario;
   final TransacaoAtivaDTO transacaoAtiva;
-
 
   const CarregandoScreen({super.key,
     required this.usuario,
@@ -23,41 +30,151 @@ class CarregandoScreen extends StatefulWidget {
 
 class _CarregandoScreenState extends State<CarregandoScreen> {
 
+  final TransacaoService transacaoService = TransacaoService();
 
-  int currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.usuario.idUsuario == null) {
+      throw Exception("Usuário sem ID");
+    }
+
+  }
+
+  // //se mudou -> atualiza
+  // @override
+  // void didUpdateWidget(covariant CarregandoScreen oldWidget) {
+  //   super.didUpdateWidget(oldWidget);
+  //
+  //   if (oldWidget.transacaoAtiva != widget.transacaoAtiva) {
+  //     print("Transação mudou, atualizando tela...");
+  //     setState(() {});
+  //   }
+  // }
+
+  // =====================  BUILD  =========================== //
 
 
   @override
   Widget build(BuildContext context) {
+    return Container(
+      color: Colors.black,
 
-    Widget getPage() {
-      switch (currentIndex) {
-        case 0:
-          return Carregandocontent(
-            usuario: widget.usuario,
-            transacaoAtiva: widget.transacaoAtiva,
-          );
+      child: SafeArea(
+        child: Column(
+          children: [
 
-        case 1:
-          return HistoricoTransacoesContent(usuario: widget.usuario);
-        case 2:
-          return HistoricoRecargasContent(usuario: widget.usuario);
-        default:
-          return Homecontent(usuario: widget.usuario);
-      }
-    }
 
-    return NavigationBarWidget(
-      usuario: widget.usuario,
-      currentIndex: currentIndex,
+            TopBarWidget(usuario: widget.usuario),
 
-      onItemSelecionado: (index) {
-        setState(() {
-          currentIndex = index;
-        });
-      },
+            SaldoCard(
+              saldo: widget.usuario.saldo ?? 0,
+                onPressed: () => abrirModalRecarga(context)
+            ),
 
-      child: getPage(),
+            SizedBox(height: 20,),
+
+            Valorrecargacard(
+
+              valor: widget.transacaoAtiva.valorRecarga,
+
+              //modal valor
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+
+                    TextEditingController controller = TextEditingController();
+
+                    return AlertDialog(
+                      title: Text("Informe o valor da recarga"),
+
+                      content: TextField(
+                        controller: controller,
+                        keyboardType: TextInputType.number,
+                        autofocus: true,
+                        decoration: InputDecoration(
+                          hintText: "Ex: 20",
+
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: AppColors.principal),
+                          ),
+
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: AppColors.principal,
+                              width: 2
+                            )
+                          )
+                        ),
+                      ),
+
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text("Cancelar",
+                            style: TextStyle(color: Colors.black),
+                          ),
+
+                        ),
+
+                        TextButton(
+                          onPressed: () {
+                            print("Valor digitado: ${controller.text}");
+                            Navigator.pop(context);
+                          },
+                          child: Text("Confirmar",
+                              style: TextStyle(color: Colors.black)),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+
+
+
+            ),
+
+            Expanded(
+              child: Container(
+
+                child: Column(
+                  children: [
+
+
+                    SizedBox(height: 20),
+
+                    Expanded(
+                      child:CarregandoAtivoCard(  transacao: widget.transacaoAtiva),
+                    ),
+
+                    SizedBox(height: 20),
+
+                    Row(
+                      children: [
+                        Expanded(
+                          child: CardFinalizar(
+                            onPressed: () {
+                              print("Finalizar");
+                              },
+                          ),
+                        ),
+                      ],
+                    ),
+
+
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

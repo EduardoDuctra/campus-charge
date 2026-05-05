@@ -1,56 +1,58 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:projeto_integrador/DTO/TransacaoDebitoDTO.dart';
+import 'package:projeto_integrador/DTO/TransacaoCreditoDTO.dart';
+import 'package:projeto_integrador/services/transacaoService.dart';
+import 'package:projeto_integrador/services/websocket_service.dart';
 
 import '../DTO/UsuarioDTO.dart';
-import '../services/transacaoService.dart';
-import '../services/websocket_service.dart';
-import '../shared/cardHistoricoRecargas.dart';
+import '../shared/cardHistoricoTransacoes.dart';
 import '../shared/saldoCard.dart';
 import '../shared/topBarWidget.dart';
 import '../utils/modal_recarga.dart';
 
-class HistoricoRecargasContent extends StatefulWidget {
+class HistoricoTransacoesCreditoScreen extends StatefulWidget {
 
   final UsuarioDTO usuario;
 
-  const HistoricoRecargasContent({super.key, required this.usuario});
+  const HistoricoTransacoesCreditoScreen({super.key, required this.usuario});
 
   @override
-  State<HistoricoRecargasContent> createState() => _HistoricoRecargasContentState();
+  State<HistoricoTransacoesCreditoScreen> createState() => _HistoricoTransacoesCreditoScreenState();
 }
 
-class _HistoricoRecargasContentState extends State<HistoricoRecargasContent> {
+class _HistoricoTransacoesCreditoScreenState extends State<HistoricoTransacoesCreditoScreen> {
 
   final TransacaoService transacaoService = TransacaoService();
 
-
+  //WS das transações
   @override
   void initState() {
     super.initState();
-    carregarTransacoesDebito();
+
+    carregarTransacoes();
+
   }
 
-  @override
-  void didUpdateWidget(covariant HistoricoRecargasContent oldWidget) {
-    super.didUpdateWidget(oldWidget);
+  // //se mudou -> atualiza
+  // @override
+  // void didUpdateWidget(covariant HistoricoTransacoesContent oldWidget) {
+  //   super.didUpdateWidget(oldWidget);
+  //
+  //   if (oldWidget.usuario.saldo != widget.usuario.saldo) {
+  //     print("Saldo mudou, atualizando histórico...");
+  //     carregarTransacoes();
+  //   }
+  // }
 
-    if (oldWidget.usuario.saldo != widget.usuario.saldo) {
-      print("Saldo mudou, atualizando recargas...");
-      carregarTransacoesDebito();
-    }
-  }
-
-  List<TransacaoDebitoDTO>historico = [];
-
+  List<TransacaoCreditoDTO>historico = [];
 
 
   //lista as transacoes -> coloca elas numa lista
-  Future<void>carregarTransacoesDebito() async {
+  Future<void>carregarTransacoes() async {
 
     try{
 
-      final lista = await transacaoService.listarTransacoesDebito();
+      final lista = await transacaoService.listarTransacoesCredito();
 
       setState(() {
         historico = lista;
@@ -60,16 +62,13 @@ class _HistoricoRecargasContentState extends State<HistoricoRecargasContent> {
     }
   }
 
-
   // =====================  BUILD  =========================== //
-
 
   @override
   Widget build(BuildContext context) {
 
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-
 
 
     return Container(
@@ -90,7 +89,7 @@ class _HistoricoRecargasContentState extends State<HistoricoRecargasContent> {
               SizedBox(height: 40),
 
               Text(
-                "Histórico de Recargas",
+                "Histórico de Transações",
                 style: TextStyle(
                   fontSize: height * 0.03,
                   color: Colors.white,
@@ -98,8 +97,6 @@ class _HistoricoRecargasContentState extends State<HistoricoRecargasContent> {
               ),
 
               SizedBox(height: 20),
-
-
 
               Expanded(
                 child: ListView(
@@ -113,11 +110,9 @@ class _HistoricoRecargasContentState extends State<HistoricoRecargasContent> {
                         bottom: index != historico.length - 1 ? 16 : 0,
                       ),
                       child: CardHistoricoRecargas(
-                        tipo: "Débito",
-                        potencia: item.recargaKwh,
+                        tipo: "Crédito",
                         valor: item.valorRecarga,
                         data: item.dataInicio,
-                        modelo: item.modelo,
                       ),
                     );
                   }).toList(),

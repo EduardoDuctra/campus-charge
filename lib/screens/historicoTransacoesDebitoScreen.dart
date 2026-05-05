@@ -1,58 +1,56 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:projeto_integrador/DTO/TransacaoCreditoDTO.dart';
-import 'package:projeto_integrador/services/transacaoService.dart';
-import 'package:projeto_integrador/services/websocket_service.dart';
+import 'package:projeto_integrador/DTO/TransacaoDebitoDTO.dart';
 
 import '../DTO/UsuarioDTO.dart';
-import '../shared/cardHistoricoTransacoes.dart';
+import '../services/transacaoService.dart';
+import '../services/websocket_service.dart';
+import '../shared/cardHistoricoRecargas.dart';
 import '../shared/saldoCard.dart';
 import '../shared/topBarWidget.dart';
 import '../utils/modal_recarga.dart';
 
-class HistoricoTransacoesContent extends StatefulWidget {
+class HistoricoTransacoesDebitoScreen extends StatefulWidget {
 
   final UsuarioDTO usuario;
 
-  const HistoricoTransacoesContent({super.key, required this.usuario});
+  const HistoricoTransacoesDebitoScreen({super.key, required this.usuario});
 
   @override
-  State<HistoricoTransacoesContent> createState() => _HistoricoTransacoesContentState();
+  State<HistoricoTransacoesDebitoScreen> createState() => _HistoricoTransacoesDebitoScreenState();
 }
 
-class _HistoricoTransacoesContentState extends State<HistoricoTransacoesContent> {
+class _HistoricoTransacoesDebitoScreenState extends State<HistoricoTransacoesDebitoScreen> {
 
   final TransacaoService transacaoService = TransacaoService();
 
-  //WS das transações
+
   @override
   void initState() {
     super.initState();
-
-    carregarTransacoes();
-
+    carregarTransacoesDebito();
   }
 
-  //se mudou -> atualiza
   @override
-  void didUpdateWidget(covariant HistoricoTransacoesContent oldWidget) {
+  void didUpdateWidget(covariant HistoricoTransacoesDebitoScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.usuario.saldo != widget.usuario.saldo) {
-      print("Saldo mudou, atualizando histórico...");
-      carregarTransacoes();
+      print("Saldo mudou, atualizando recargas...");
+      carregarTransacoesDebito();
     }
   }
 
-  List<TransacaoCreditoDTO>historico = [];
+  List<TransacaoDebitoDTO>historico = [];
+
 
 
   //lista as transacoes -> coloca elas numa lista
-  Future<void>carregarTransacoes() async {
+  Future<void>carregarTransacoesDebito() async {
 
     try{
 
-      final lista = await transacaoService.listarTransacoesCredito();
+      final lista = await transacaoService.listarTransacoesDebito();
 
       setState(() {
         historico = lista;
@@ -62,13 +60,16 @@ class _HistoricoTransacoesContentState extends State<HistoricoTransacoesContent>
     }
   }
 
+
   // =====================  BUILD  =========================== //
+
 
   @override
   Widget build(BuildContext context) {
 
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+
 
 
     return Container(
@@ -89,7 +90,7 @@ class _HistoricoTransacoesContentState extends State<HistoricoTransacoesContent>
               SizedBox(height: 40),
 
               Text(
-                "Histórico de Transações",
+                "Histórico de Recargas",
                 style: TextStyle(
                   fontSize: height * 0.03,
                   color: Colors.white,
@@ -97,6 +98,8 @@ class _HistoricoTransacoesContentState extends State<HistoricoTransacoesContent>
               ),
 
               SizedBox(height: 20),
+
+
 
               Expanded(
                 child: ListView(
@@ -110,9 +113,11 @@ class _HistoricoTransacoesContentState extends State<HistoricoTransacoesContent>
                         bottom: index != historico.length - 1 ? 16 : 0,
                       ),
                       child: CardHistoricoRecargas(
-                        tipo: "Crédito",
+                        tipo: "Débito",
+                        potencia: item.recargaKwh,
                         valor: item.valorRecarga,
                         data: item.dataInicio,
+                        modelo: item.modelo,
                       ),
                     );
                   }).toList(),

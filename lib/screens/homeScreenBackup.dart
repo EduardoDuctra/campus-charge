@@ -37,15 +37,14 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
 
   late HomeController controller;
 
+  bool wsUsuarioConectado = false;
+
 
   List<CarregadorDTO> carregadores = [];
 
   TransacaoAtivaDTO?transacaoAtiva;
 
   String? idCarregadorSelecionado;
-
-  bool wsUsuarioConectado = false;
-  bool wsCarregadoresConectado = false;
 
 
   int currentIndex = 0;
@@ -68,13 +67,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
       switch (currentIndex) {
         case 0:
 
-          if (transacaoAtiva != null) {
-            return CarregandoScreen(
-              usuario: usuario!,
-              transacaoAtiva: transacaoAtiva!,
-            );
-          }
-
           if (idCarregadorSelecionado != null) {
             return ConectoresSreen(
               usuario: usuario!,
@@ -84,6 +76,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
                   idCarregadorSelecionado = null;
                 });
               },
+            );
+          }
+
+          if (transacaoAtiva != null) {
+            return CarregandoScreen(
+              usuario: usuario!,
+              transacaoAtiva: transacaoAtiva!,
             );
           }
 
@@ -219,8 +218,34 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
       carregadorService: carregadorService,
     );
 
-    carregarTudo(); // 🔥 só isso aqui
+    carregarTudo();
+
+    webSocketService.conectarTodosCarregadores(
+      onMensagem: (msg) {
+        print("WS carregadores: $msg");
+        carregarTudo();
+      },
+    );
   }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //
+  //   WidgetsBinding.instance.addObserver(this);
+  //
+  //   carregarUsuario();
+  //   carregarTransacaoAtiva();
+  //   carregarCarregadores();
+  //
+  //   webSocketService.conectarTodosCarregadores(
+  //     onMensagem: (msg) {
+  //       print("WS carregadores: $msg");
+  //       carregarCarregadores();
+  //     },
+  //   );
+  //
+  // }
 
   //desconectar ws
   @override
@@ -247,30 +272,17 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
     setState(() {
       usuario = state.usuario;
       transacaoAtiva = state.transacaoAtiva;
-      carregadores = [...state.carregadores];
+      carregadores = state.carregadores;
     });
 
-    // 🔌 WS CARREGADORES
-    if (!wsCarregadoresConectado) {
-      wsCarregadoresConectado = true;
-
-      webSocketService.conectarTodosCarregadores(
-        onMensagem: (msg) async {
-          print("⚡ WS carregadores");
-
-          await carregarTudo();
-        },
-      );
-    }
-
-    // 👤 WS USUÁRIO (SOC / transação)
+    // 🔥 AQUI é o que faltava
     if (usuario != null && !wsUsuarioConectado) {
       wsUsuarioConectado = true;
 
       webSocketService.conectarUsuario(
         userId: usuario!.idUsuario.toString(),
         onMensagem: (msg) async {
-          print("🔥 WS USUARIO: $msg");
+          print("WS usuário: $msg");
 
           await carregarTudo();
         },
@@ -278,33 +290,108 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
     }
   }
 
-  // Future<void> carregarTudo() async {
-  //   final state = await controller.carregarDados();
-  //
-  //   if (!mounted) return;
-  //
-  //   setState(() {
-  //     usuario = state.usuario;
-  //     transacaoAtiva = state.transacaoAtiva;
-  //     carregadores = state.carregadores;
-  //   });
-  //
-  //   // 🔥 AGORA SIM funciona
-  //   if (usuario != null && !wsUsuarioConectado) {
-  //     wsUsuarioConectado = true;
-  //
-  //     webSocketService.conectarTodosCarregadores(
-  //       onMensagem: (msg) {
-  //         print("WS carregadores: $msg");
-  //         carregarTudo();
-  //       },
-  //     );
-  //   }
-  // }
-
-
   Future<void> atualizarDados() async {
     await carregarTudo();
   }
 
+  // Future<void> atualizarDados() async {
+  //   final usuarioAtualizado = await usuarioservice.buscarUsuarioLogado();
+  //   final transacao = await transacaoService.listarTransacoesAtiva();
+  //
+  //   if (!mounted) return;
+  //
+  //   setState(() {
+  //     usuario = usuarioAtualizado;
+  //     transacaoAtiva = transacao;
+  //   });
+  // }
+
+  // //busca usuario e atualiza WS sempre que tem mudança
+  // Future<void> carregarUsuario() async {
+  //   final user = await usuarioservice.buscarUsuarioLogado();
+  //
+  //   setState(() {
+  //     usuario = user;
+  //   });
+  //
+  //
+  //   if (usuario?.idUsuario != null) {
+  //     webSocketService.conectar(
+  //       userId: usuario!.idUsuario.toString(),
+  //       onMensagem: (msg) async {
+  //         print("WS HOME: $msg");
+  //
+  //         final valor = double.tryParse(msg);
+  //         print("VALOR PARSE: $valor");
+  //
+  //
+  //         if (valor != null) {
+  //           if (!mounted) return;
+  //
+  //           setState(() {
+  //             usuario!.saldo = valor;
+  //           });
+  //
+  //           return;
+  //         }
+  //
+  //
+  //         final usuarioAtualizado = await usuarioservice.buscarUsuarioLogado();
+  //
+  //         print("SALDO NOVO: ${usuarioAtualizado?.saldo}");
+  //         print("SALDO ANTIGO: ${usuario?.saldo}");
+  //
+  //         if (!mounted) return;
+  //
+  //         final transacao =
+  //         await transacaoService.listarTransacoesAtiva();
+  //
+  //         if (transacaoAtiva != null && transacao == null) {
+  //           Navigator.popUntil(context, (route) => route.isFirst);
+  //         }
+  //
+  //         setState(() {
+  //           usuario = usuarioAtualizado;
+  //           transacaoAtiva = transacao;
+  //         });
+  //       },
+  //     );
+  //
+  //   }
+  // }
+  //
+  // Future<void>carregarTransacaoAtiva() async {
+  //
+  //   final transacao = await transacaoService.listarTransacoesAtiva();
+  //
+  //
+  //   setState(() {
+  //     transacaoAtiva = transacao;
+  //   });
+  //
+  // }
+  //
+  //
+  // //lista os carregadores -> coloca eles numa lista
+  // Future<void> carregarCarregadores() async {
+  //   final lista = await carregadorService.listarCarregadores();
+  //
+  //   setState(() {
+  //
+  //     carregadores = lista;
+  //
+  //   });
+  // }
+
+  // //redireciona para a tela dos conectores, passando o idCarregador
+  // void irParaConectores(String idCarregador) {
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(
+  //       builder: (context) => Conectorescontent(
+  //         usuario: usuario!,
+  //         idCarregador: idCarregador,),
+  //     ),
+  //   );
+  // }
 }

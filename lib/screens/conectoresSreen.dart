@@ -15,23 +15,24 @@ import '../shared/saldoCard.dart';
 import '../shared/topBarWidget.dart';
 import '../utils/modal_recarga.dart';
 
-class Conectorescontent extends StatefulWidget {
+class ConectoresSreen extends StatefulWidget {
 
   //recebe o usuario + idCarregador da tela anterior
   final UsuarioDTO usuario;
   final String idCarregador;
+  final VoidCallback onVoltar;
 
 
-
-  const Conectorescontent({super.key,
+  const ConectoresSreen({super.key,
     required this.usuario,
-    required this.idCarregador});
+    required this.idCarregador,
+    required this.onVoltar});
 
   @override
-  State<Conectorescontent> createState() => _ConectorescontentState();
+  State<ConectoresSreen> createState() => _ConectoresSreenState();
 }
 
-class _ConectorescontentState extends State<Conectorescontent> {
+class _ConectoresSreenState extends State<ConectoresSreen> {
 
   final TransacaoService transacaoService = TransacaoService();
   final ConectorService conectorService = ConectorService();
@@ -50,6 +51,14 @@ class _ConectorescontentState extends State<Conectorescontent> {
 
     carregarConectores();
 
+    WebSocketService().conectarCarregador(
+      idCarregador: widget.idCarregador,
+      onMensagem: (msg) async {
+        print("WS CONECTORES: atualização");
+
+        await carregarConectores(); // 🔥 AQUI resolve
+      },
+    );
   }
 
   @override
@@ -57,22 +66,24 @@ class _ConectorescontentState extends State<Conectorescontent> {
     super.dispose();
   }
 
-  //se mudou -> atualiza
-  @override
-  void didUpdateWidget(covariant Conectorescontent oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    if (oldWidget.usuario.saldo != widget.usuario.saldo) {
-      print("Atualizando conectores por mudança de estado...");
-      carregarConectores();
-    }
-  }
+  //
+  // //se mudou -> atualiza
+  // @override
+  // void didUpdateWidget(covariant ConectoresSreen oldWidget) {
+  //   super.didUpdateWidget(oldWidget);
+  //
+  //   if (oldWidget.usuario.saldo != widget.usuario.saldo) {
+  //     print("Atualizando conectores por mudança de estado...");
+  //     carregarConectores();
+  //   }
+  // }
 
 
   Future<void> carregarConectores() async {
 
-    //tem resposta da api?
     final recente = await conectorService.buscarConectorRecente();
+
+    if (!mounted) return; // 🔥 ESSENCIAL (ANTES de qualquer setState)
 
     if(recente != null){
 
@@ -82,34 +93,17 @@ class _ConectorescontentState extends State<Conectorescontent> {
         carregando = false;
       });
 
-    }  else {
+    } else {
 
-      //não tem recente -> lista todos disponiveis
       final lista = await conectorService.listarConectores(widget.idCarregador);
+
+      if (!mounted) return; // 🔥 aqui também
 
       setState(() {
         conectorRecente = null;
         conectores = lista;
         carregando = false;
-
       });
-    }
-  }
-
-  //redireciona para a tela de carergando. Passa usuário e transacao que está acontecendo/ativa
-  Future<void> irParaCarregando() async {
-
-    final transacao = await transacaoService.listarTransacoesAtiva();
-
-    if(transacao!= null){
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => CarregandoScreen(
-              usuario: widget.usuario, transacaoAtiva: transacao),
-        ),
-      );
     }
   }
 
@@ -119,10 +113,11 @@ class _ConectorescontentState extends State<Conectorescontent> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.black,
+    return Scaffold(
 
-      child: SafeArea(
+      backgroundColor: Colors.black,
+
+      body: SafeArea(
         child: Column(
           children: [
 
@@ -135,13 +130,30 @@ class _ConectorescontentState extends State<Conectorescontent> {
 
             SizedBox(height: 40),
 
-            Text(
-              'Escolha o conector',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.normal,
-              ),
+            Stack(
+              alignment: Alignment.center,
+              children: [
+
+
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: IconButton(
+                    icon: Icon(Icons.arrow_back_ios),
+                    onPressed: widget.onVoltar,
+                    color: Colors.white,
+                    iconSize: 30,
+                  ),
+                ),
+
+
+                Text(
+                  'Escolha o conector',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                  ),
+                ),
+              ],
             ),
 
             SizedBox(height: 40),
@@ -162,10 +174,12 @@ class _ConectorescontentState extends State<Conectorescontent> {
 
                           ConectorCard(
                             dto: conectorRecente!,
-                            onPressed: irParaCarregando,
+                            onPressed: (){
+                              print("Implementar comando");
+                            },
                           ),
 
-                          SizedBox(height: 180),
+                          SizedBox(height: 160),
 
                           BotaoRemover(onPressed: () {
 
@@ -201,7 +215,9 @@ class _ConectorescontentState extends State<Conectorescontent> {
 
                               child: ConectorCard(
                                 dto: dto,
-                                onPressed: irParaCarregando,
+                                onPressed: (){
+                                  print("Implementar comando");
+                                },
                               ),
                             ),
                           );
