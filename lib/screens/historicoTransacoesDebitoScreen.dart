@@ -13,8 +13,9 @@ import '../utils/modal_recarga.dart';
 class HistoricoTransacoesDebitoScreen extends StatefulWidget {
 
   final UsuarioDTO usuario;
-
-  const HistoricoTransacoesDebitoScreen({super.key, required this.usuario});
+  const HistoricoTransacoesDebitoScreen({
+    super.key,
+    required this.usuario});
 
   @override
   State<HistoricoTransacoesDebitoScreen> createState() => _HistoricoTransacoesDebitoScreenState();
@@ -24,25 +25,14 @@ class _HistoricoTransacoesDebitoScreenState extends State<HistoricoTransacoesDeb
 
   final TransacaoService transacaoService = TransacaoService();
 
-
   @override
   void initState() {
     super.initState();
     carregarTransacoesDebito();
   }
 
-  @override
-  void didUpdateWidget(covariant HistoricoTransacoesDebitoScreen oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    if (oldWidget.usuario.saldo != widget.usuario.saldo) {
-      print("Saldo mudou, atualizando recargas...");
-      carregarTransacoesDebito();
-    }
-  }
 
   List<TransacaoDebitoDTO>historico = [];
-
 
 
   //lista as transacoes -> coloca elas numa lista

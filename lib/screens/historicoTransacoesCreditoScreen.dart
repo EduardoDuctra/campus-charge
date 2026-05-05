@@ -14,7 +14,9 @@ class HistoricoTransacoesCreditoScreen extends StatefulWidget {
 
   final UsuarioDTO usuario;
 
-  const HistoricoTransacoesCreditoScreen({super.key, required this.usuario});
+  const HistoricoTransacoesCreditoScreen({
+    super.key,
+    required this.usuario});
 
   @override
   State<HistoricoTransacoesCreditoScreen> createState() => _HistoricoTransacoesCreditoScreenState();
@@ -24,7 +26,7 @@ class _HistoricoTransacoesCreditoScreenState extends State<HistoricoTransacoesCr
 
   final TransacaoService transacaoService = TransacaoService();
 
-  //WS das transações
+
   @override
   void initState() {
     super.initState();
@@ -32,17 +34,6 @@ class _HistoricoTransacoesCreditoScreenState extends State<HistoricoTransacoesCr
     carregarTransacoes();
 
   }
-
-  // //se mudou -> atualiza
-  // @override
-  // void didUpdateWidget(covariant HistoricoTransacoesContent oldWidget) {
-  //   super.didUpdateWidget(oldWidget);
-  //
-  //   if (oldWidget.usuario.saldo != widget.usuario.saldo) {
-  //     print("Saldo mudou, atualizando histórico...");
-  //     carregarTransacoes();
-  //   }
-  // }
 
   List<TransacaoCreditoDTO>historico = [];
 

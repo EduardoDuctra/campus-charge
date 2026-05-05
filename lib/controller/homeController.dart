@@ -4,6 +4,10 @@ import '../services/transacaoService.dart';
 import '../services/usuarioService.dart';
 import 'homeState.dart';
 
+/**
+ * coordena a atualização de dados da tela HOME
+ * intermediário entre interface e services
+ */
 class HomeController {
   final Usuarioservice usuarioservice;
   final TransacaoService transacaoService;
@@ -16,10 +20,7 @@ class HomeController {
   });
 
 
-  Future<List<CarregadorDTO>> carregarCarregadores() async {
-    return await carregadorService.listarCarregadores();
-  }
-
+  //passa para o HomeState as informações atualizadas
   Future<HomeState> carregarDados() async {
     final usuario = await usuarioservice.buscarUsuarioLogado();
     final transacao = await transacaoService.listarTransacoesAtiva();

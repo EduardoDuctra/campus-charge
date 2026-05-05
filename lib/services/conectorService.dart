@@ -51,8 +51,5 @@ class ConectorService {
     }
   }
 
-  Future<List<ConectorDTO>> buscarConectoresParaTela(String idCarregador) async {
-    return await listarConectores(idCarregador);
-  }
 
 }

@@ -20,7 +20,12 @@ import '../shared/saldoCard.dart';
 import '../shared/topBarWidget.dart';
 import '../utils/modal_recarga.dart';
 
-
+/**
+ * TELA PRINCIPAL
+ * RESPONSÁVEL POR:
+ *    -CONSUMIR E MOSTRAR AS INFORMAÇÕES/ATUALIZAÇÕES
+ *    - NAVEGAÇÃO ENTRE TELAS (NAVBAR)
+ */
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -44,6 +49,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
 
   String? idCarregadorSelecionado;
 
+  //variaveis controle WS
   bool wsUsuarioConectado = false;
   bool wsCarregadoresConectado = false;
 
@@ -51,6 +57,92 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
   int currentIndex = 0;
 
   UsuarioDTO? usuario;
+
+
+  @override
+  void initState() {
+    super.initState();
+
+
+    //passo para o controller os services
+    // o controller centraliza a lógica de obtenção e organização dos dados da tela
+    //controller monta os dados no HomeState e a INTERFACE (HomeScreen) só consome os dados do controller
+    controller = HomeController(
+      usuarioservice: usuarioservice,
+      transacaoService: transacaoService,
+      carregadorService: carregadorService,
+    );
+
+    carregarTudo();
+  }
+
+
+  @override
+  void dispose() {
+    webSocketService.desconectar();
+    super.dispose();
+  }
+
+
+  Future<void> carregarTudo() async {
+
+    //solicita ao controller os dados atualizados
+    final dadosAtualizados = await controller.carregarDados();
+
+    /*
+      mounted -> se tem o widgte na tela
+      se não tiver na tela -> return
+     */
+    if (!mounted){
+      return;
+    }
+
+    //atualiza o estado da tela com os dados retornados pelo controller
+    setState(() {
+      usuario = dadosAtualizados.usuario;
+      transacaoAtiva = dadosAtualizados.transacaoAtiva;
+
+      //cria uma copia da lista de carregadores atualizada
+      carregadores = [...dadosAtualizados.carregadores];
+    });
+
+    //WS carregadores
+    if (!wsCarregadoresConectado) {
+      //ws conectou -> não conecta de novo
+      wsCarregadoresConectado = true;
+
+      //ao receber evento do backend, recarrega os dados da tela
+      webSocketService.wbCarregadores(
+        onMensagem: (msg) async {
+          print(" WS carregadores");
+
+          await carregarTudo();
+
+        },
+      );
+    }
+
+    // WS USUÁRIO (SOC/transação)
+
+    if (usuario != null && !wsUsuarioConectado) {
+
+      //ws conectou -> não conecta de novo
+      wsUsuarioConectado = true;
+
+      //ao receber evento do backend, recarrega os dados da tela
+      webSocketService.wbUsuario(
+        userId: usuario!.idUsuario.toString(),
+        onMensagem: (msg) async {
+          print("WS USUARIO: $msg");
+
+          await carregarTudo();
+        },
+      );
+    }
+  }
+
+
+  // =====================  BUILD  =========================== //
 
 
   @override
@@ -63,7 +155,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
     }
 
 
-
+    /**
+     * NAVBAR
+     */
     Widget getPage() {
       switch (currentIndex) {
         case 0:
@@ -101,6 +195,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
     }
 
 
+    //recebe o index da página pela navbar
+    //atualiza a pagina de acordo com o index
     return NavigationBarWidget(
       usuario: usuario!,
       currentIndex: currentIndex,
@@ -204,107 +300,4 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
       ),
     );
   }
-
-
-
-  @override
-  void initState() {
-    super.initState();
-
-    WidgetsBinding.instance.addObserver(this);
-
-    controller = HomeController(
-      usuarioservice: usuarioservice,
-      transacaoService: transacaoService,
-      carregadorService: carregadorService,
-    );
-
-    carregarTudo(); // 🔥 só isso aqui
-  }
-
-  //desconectar ws
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    webSocketService.desconectar();
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      print("App voltou, recarregando usuário...");
-
-      atualizarDados();
-    }
-  }
-
-  Future<void> carregarTudo() async {
-    final state = await controller.carregarDados();
-
-    if (!mounted) return;
-
-    setState(() {
-      usuario = state.usuario;
-      transacaoAtiva = state.transacaoAtiva;
-      carregadores = [...state.carregadores];
-    });
-
-    // 🔌 WS CARREGADORES
-    if (!wsCarregadoresConectado) {
-      wsCarregadoresConectado = true;
-
-      webSocketService.conectarTodosCarregadores(
-        onMensagem: (msg) async {
-          print("⚡ WS carregadores");
-
-          await carregarTudo();
-        },
-      );
-    }
-
-    // 👤 WS USUÁRIO (SOC / transação)
-    if (usuario != null && !wsUsuarioConectado) {
-      wsUsuarioConectado = true;
-
-      webSocketService.conectarUsuario(
-        userId: usuario!.idUsuario.toString(),
-        onMensagem: (msg) async {
-          print("🔥 WS USUARIO: $msg");
-
-          await carregarTudo();
-        },
-      );
-    }
-  }
-
-  // Future<void> carregarTudo() async {
-  //   final state = await controller.carregarDados();
-  //
-  //   if (!mounted) return;
-  //
-  //   setState(() {
-  //     usuario = state.usuario;
-  //     transacaoAtiva = state.transacaoAtiva;
-  //     carregadores = state.carregadores;
-  //   });
-  //
-  //   // 🔥 AGORA SIM funciona
-  //   if (usuario != null && !wsUsuarioConectado) {
-  //     wsUsuarioConectado = true;
-  //
-  //     webSocketService.conectarTodosCarregadores(
-  //       onMensagem: (msg) {
-  //         print("WS carregadores: $msg");
-  //         carregarTudo();
-  //       },
-  //     );
-  //   }
-  // }
-
-
-  Future<void> atualizarDados() async {
-    await carregarTudo();
-  }
-
 }

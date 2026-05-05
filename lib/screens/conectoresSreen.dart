@@ -1,16 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_integrador/DTO/ConectorDTO.dart';
-import 'package:projeto_integrador/screens/carregandoScreen.dart';
 import 'package:projeto_integrador/services/conectorService.dart';
 import 'package:projeto_integrador/services/transacaoService.dart';
 import 'package:projeto_integrador/shared/conectorCard.dart';
 
-import '../DTO/TransacaoAtivaDTO.dart';
 import '../DTO/UsuarioDTO.dart';
 import '../services/websocket_service.dart';
 import '../shared/BotaoRemover.dart';
-import '../shared/carregadorCard.dart';
 import '../shared/saldoCard.dart';
 import '../shared/topBarWidget.dart';
 import '../utils/modal_recarga.dart';
@@ -51,12 +47,13 @@ class _ConectoresSreenState extends State<ConectoresSreen> {
 
     carregarConectores();
 
-    WebSocketService().conectarCarregador(
+    //wb que fica escutando a atualização dos conectores
+    WebSocketService().wbConectores(
       idCarregador: widget.idCarregador,
       onMensagem: (msg) async {
         print("WS CONECTORES: atualização");
 
-        await carregarConectores(); // 🔥 AQUI resolve
+        await carregarConectores();
       },
     );
   }
@@ -66,39 +63,44 @@ class _ConectoresSreenState extends State<ConectoresSreen> {
     super.dispose();
   }
 
-  //
-  // //se mudou -> atualiza
-  // @override
-  // void didUpdateWidget(covariant ConectoresSreen oldWidget) {
-  //   super.didUpdateWidget(oldWidget);
-  //
-  //   if (oldWidget.usuario.saldo != widget.usuario.saldo) {
-  //     print("Atualizando conectores por mudança de estado...");
-  //     carregarConectores();
-  //   }
-  // }
-
 
   Future<void> carregarConectores() async {
 
-    final recente = await conectorService.buscarConectorRecente();
+    //verifica se o backend ta mandando uma transação recente
+    final transacaoRecenteAPI = await conectorService.buscarConectorRecente();
 
-    if (!mounted) return; // 🔥 ESSENCIAL (ANTES de qualquer setState)
+    /*
+    mounted -> se tem o widgte na tela
+    se não tiver na tela -> return
+     */
+    if (!mounted) {
+      return;
+    }
 
-    if(recente != null){
+    //tem transação recente -> atualiza as listas
+    if(transacaoRecenteAPI != null){
 
       setState(() {
-        conectorRecente = recente;
+        //seta a transacao que veio da API
+        conectorRecente = transacaoRecenteAPI;
         conectores = [];
         carregando = false;
       });
 
     } else {
 
+      //não tem transacao recente -> mostra todos os conectores
       final lista = await conectorService.listarConectores(widget.idCarregador);
 
-      if (!mounted) return; // 🔥 aqui também
+      /*
+      mounted -> se tem o widgte na tela
+      se não tiver na tela -> return
+     */
+      if (!mounted){
+        return;
+      }
 
+      //tem transação recente -> atualiza as listas
       setState(() {
         conectorRecente = null;
         conectores = lista;

@@ -20,7 +20,8 @@ class CarregandoScreen extends StatefulWidget {
   final UsuarioDTO usuario;
   final TransacaoAtivaDTO transacaoAtiva;
 
-  const CarregandoScreen({super.key,
+  const CarregandoScreen({
+    super.key,
     required this.usuario,
     required this.transacaoAtiva});
 
@@ -43,16 +44,6 @@ class _CarregandoScreenState extends State<CarregandoScreen> {
 
   }
 
-  // //se mudou -> atualiza
-  // @override
-  // void didUpdateWidget(covariant CarregandoScreen oldWidget) {
-  //   super.didUpdateWidget(oldWidget);
-  //
-  //   if (oldWidget.transacaoAtiva != widget.transacaoAtiva) {
-  //     print("Transação mudou, atualizando tela...");
-  //     setState(() {});
-  //   }
-  // }
 
   // =====================  BUILD  =========================== //
 
