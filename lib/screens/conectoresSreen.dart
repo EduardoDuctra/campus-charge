@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:projeto_integrador/DTO/CarregadorDTO.dart';
 import 'package:projeto_integrador/DTO/ConectorDTO.dart';
 import 'package:projeto_integrador/DTO/ocpp/RemoteStartDTO.dart';
+import 'package:projeto_integrador/DTO/ocpp/UnlockConnectorDTO.dart';
 import 'package:projeto_integrador/services/conectorService.dart';
 import 'package:projeto_integrador/services/ocppService.dart';
 import 'package:projeto_integrador/services/transacaoService.dart';
@@ -126,13 +127,29 @@ class _ConectoresSreenState extends State<ConectoresSreen> {
         charger_id: widget.idCarregador,
       connector_id: dto.connectorIdNoCarregador,);
 
-    String response = await ocppService.RemoteStart(remoteStartDTO);
+    String response = await ocppService.remoteStart(remoteStartDTO);
 
     if(response == "Accepted"){
       aceito = true;
     }
 
     return aceito;
+  }
+
+
+  Future<void> enviarUnlockConector(ConectorDTO dto) async {
+
+
+
+    print("ID carregador: ${widget.idCarregador}");
+    print("ID conector: ${dto.connectorIdNoCarregador}");
+
+    UnlockConnectorDTO unlockDTO = new UnlockConnectorDTO(
+      charger_id: widget.idCarregador,
+      connector_id: dto.connectorIdNoCarregador,);
+
+    await ocppService.unlockConnector(unlockDTO);
+
   }
 
   // =====================  BUILD  =========================== //
@@ -201,8 +218,10 @@ class _ConectoresSreenState extends State<ConectoresSreen> {
 
                           ConectorCard(
                             dto: conectorRecente!,
-                            onPressed: (){
-                              print("Implementar comando");
+                            onPressed: () async {
+
+                              await enviarUnlockConector(conectorRecente!);
+
                             },
                           ),
 

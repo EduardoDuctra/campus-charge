@@ -58,7 +58,7 @@ class _CarregandoScreenState extends State<CarregandoScreen> {
       charger_id: widget.transacaoAtiva.idCarregador,
       transaction_id: widget.transacaoAtiva.idTransacao,);
 
-    String response = await ocppService.RemoteStop(remoteStopDTO);
+    String response = await ocppService.remoteStop(remoteStopDTO);
 
     if(response == "Accepted"){
       aceito = true;

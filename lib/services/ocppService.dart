@@ -1,5 +1,6 @@
 import 'package:projeto_integrador/DTO/ocpp/RemoteStartDTO.dart';
 import 'package:projeto_integrador/DTO/ocpp/RemoteStopDTO.dart';
+import 'package:projeto_integrador/DTO/ocpp/UnlockConnectorDTO.dart';
 
 import 'apiService.dart';
 
@@ -7,7 +8,7 @@ class OcppService{
 
   final Apiservice api = Apiservice();
 
-  Future<String>RemoteStart(RemoteStartDTO dto) async {
+  Future<String>remoteStart(RemoteStartDTO dto) async {
 
     final response = await api.post("carregador/remotestart", dto.toJson());
 
@@ -17,11 +18,21 @@ class OcppService{
 
   }
 
-  Future<String>RemoteStop(RemoteStopDTO dto) async {
+  Future<String>remoteStop(RemoteStopDTO dto) async {
 
     final response = await api.post("carregador/remotestop", dto.toJson());
 
     print("[REMOTE STOP - ]" + response.body);
+
+    return response.body;
+
+  }
+
+  Future<String>unlockConnector(UnlockConnectorDTO dto) async {
+
+    final response = await api.post("carregador/unlockconnector", dto.toJson());
+
+    print("[UNLOCK CONECTOR - ]" + response.body);
 
     return response.body;
 
