@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "574625937194",
+    "project_id": "campuscharge-ad39e",
+    "storage_bucket": "campuscharge-ad39e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:574625937194:android:fb1530af33abf98916d053",
+        "android_client_info": {
+          "package_name": "com.csi.projeto_integrador"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "574625937194-3nkgfk3f0o1hufk2c5dr0kfv7eci3n0c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.csi.projeto_integrador",
+            "certificate_hash": "d0e4851bce4c333ee91b7768cf6d508168a9c850"
+          }
+        },
+        {
+          "client_id": "574625937194-91plt1sst8t94p8vpru5rvo3mr2baet8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCflYxLzBPLKwWXCg__i5SLcfdRbapaRjw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "574625937194-91plt1sst8t94p8vpru5rvo3mr2baet8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
