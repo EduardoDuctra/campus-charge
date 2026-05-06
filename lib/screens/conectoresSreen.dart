@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_integrador/DTO/CarregadorDTO.dart';
 import 'package:projeto_integrador/DTO/ConectorDTO.dart';
+import 'package:projeto_integrador/DTO/ocpp/RemoteStartDTO.dart';
 import 'package:projeto_integrador/services/conectorService.dart';
+import 'package:projeto_integrador/services/ocppService.dart';
 import 'package:projeto_integrador/services/transacaoService.dart';
 import 'package:projeto_integrador/shared/conectorCard.dart';
+import 'package:projeto_integrador/theme/colors.dart';
+import 'package:quickalert/quickalert.dart';
 
 import '../DTO/UsuarioDTO.dart';
 import '../services/websocket_service.dart';
@@ -32,6 +37,7 @@ class _ConectoresSreenState extends State<ConectoresSreen> {
 
   final TransacaoService transacaoService = TransacaoService();
   final ConectorService conectorService = ConectorService();
+  final OcppService ocppService = OcppService();
 
   //usado para ver se tenho resposta na minha API nessa url
   ConectorDTO? conectorRecente;
@@ -109,6 +115,25 @@ class _ConectoresSreenState extends State<ConectoresSreen> {
     }
   }
 
+  Future<bool> enviarRemoteStart(ConectorDTO dto) async {
+
+    bool aceito = false;
+
+    print("ID carregador: ${widget.idCarregador}");
+    print("ID conector: ${dto.connectorIdNoCarregador}");
+
+    RemoteStartDTO remoteStartDTO = new RemoteStartDTO(
+        charger_id: widget.idCarregador,
+      connector_id: dto.connectorIdNoCarregador,);
+
+    String response = await ocppService.RemoteStart(remoteStartDTO);
+
+    if(response == "Accepted"){
+      aceito = true;
+    }
+
+    return aceito;
+  }
 
   // =====================  BUILD  =========================== //
 
@@ -217,8 +242,30 @@ class _ConectoresSreenState extends State<ConectoresSreen> {
 
                               child: ConectorCard(
                                 dto: dto,
-                                onPressed: (){
-                                  print("Implementar comando");
+                                onPressed: () async {
+
+                                  bool response = await enviarRemoteStart(dto);
+
+                                  if(response){
+
+                                    QuickAlert.show(
+                                        context: context,
+                                        type: QuickAlertType.success,
+                                        showConfirmBtn: false,
+                                        autoCloseDuration: Duration(seconds: 3),
+                                    );
+
+                                  } else{
+
+                                    QuickAlert.show(
+                                      context: context,
+                                      type: QuickAlertType.error,
+                                      text: "Transação recusada.",
+                                      showConfirmBtn: false,
+                                      autoCloseDuration: Duration(seconds: 5),
+                                    );
+
+                                  }
                                 },
                               ),
                             ),

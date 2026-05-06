@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_integrador/DTO/TransacaoAtivaDTO.dart';
+import 'package:projeto_integrador/DTO/ocpp/RemoteStopDTO.dart';
+import 'package:projeto_integrador/services/ocppService.dart';
 import 'package:projeto_integrador/shared/cardFinalizar.dart';
 import 'package:projeto_integrador/shared/carregandoAtivoCard.dart';
 import 'package:projeto_integrador/shared/valorRecargaCard.dart';
@@ -32,6 +34,7 @@ class CarregandoScreen extends StatefulWidget {
 class _CarregandoScreenState extends State<CarregandoScreen> {
 
   final TransacaoService transacaoService = TransacaoService();
+  final OcppService ocppService = OcppService();
 
 
   @override
@@ -41,6 +44,27 @@ class _CarregandoScreenState extends State<CarregandoScreen> {
     if (widget.usuario.idUsuario == null) {
       throw Exception("Usuário sem ID");
     }
+
+  }
+
+  Future<bool> enviarRemoteStop() async {
+
+    bool aceito = false;
+
+    print("ID carregador: ${widget.transacaoAtiva.idCarregador}");
+    print("ID Transacao: ${widget.transacaoAtiva.idTransacao}");
+
+    RemoteStopDTO remoteStopDTO = new RemoteStopDTO(
+      charger_id: widget.transacaoAtiva.idCarregador,
+      transaction_id: widget.transacaoAtiva.idTransacao,);
+
+    String response = await ocppService.RemoteStop(remoteStopDTO);
+
+    if(response == "Accepted"){
+      aceito = true;
+    }
+
+    return aceito;
 
   }
 
@@ -150,8 +174,8 @@ class _CarregandoScreenState extends State<CarregandoScreen> {
                       children: [
                         Expanded(
                           child: CardFinalizar(
-                            onPressed: () {
-                              print("Finalizar");
+                            onPressed: () async {
+                              await enviarRemoteStop();
                               },
                           ),
                         ),
