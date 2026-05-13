@@ -43,20 +43,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
   late HomeController controller;
 
 
-  List<CarregadorDTO> carregadores = [];
 
-  TransacaoAtivaDTO?transacaoAtiva;
 
   String? idCarregadorSelecionado;
-
-  //variaveis controle WS
-  bool wsUsuarioConectado = false;
-  bool wsCarregadoresConectado = false;
 
 
   int currentIndex = 0;
 
-  UsuarioDTO? usuario;
 
 
   @override
@@ -65,16 +58,27 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
 
     WidgetsBinding.instance.addObserver(this);
 
-    //passo para o controller os services
-    // o controller centraliza a lógica de obtenção e organização dos dados da tela
-    //controller monta os dados no HomeState e a INTERFACE (HomeScreen) só consome os dados do controller
+    /**
+     * inicializo o controller da Home
+     */
     controller = HomeController(
+      atualizarTela: () {
+
+        //se não tem mudança -> ignora
+        if(mounted){
+          setState(() {});
+        }
+      },
+
       usuarioservice: usuarioservice,
       transacaoService: transacaoService,
       carregadorService: carregadorService,
+      webSocketService: webSocketService,
+
     );
 
-    carregarTudo();
+    //carrego as informações
+    controller.carregarTudo();
   }
 
 
@@ -89,91 +93,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       print("APP VOLTOU - RECARREGANDO DADOS");
-      carregarTudo();
+      controller.carregarTudo();
     }
   }
 
-  Future<void> carregarTudo() async {
 
-    //solicita ao controller os dados atualizados
-    final dadosAtualizados = await controller.carregarDados();
-
-    /*
-      mounted -> se tem o widgte na tela
-      se não tiver na tela -> return
-     */
-    if (!mounted){
-      return;
-    }
-
-    //atualiza o estado da tela com os dados retornados pelo controller
-    setState(() {
-      usuario = dadosAtualizados.usuario;
-      transacaoAtiva = dadosAtualizados.transacaoAtiva;
-
-      //cria uma copia da lista de carregadores atualizada
-      carregadores = [...dadosAtualizados.carregadores];
-    });
-
-    //WS carregadores
-    if (!wsCarregadoresConectado) {
-      //ws conectou -> não conecta de novo
-      wsCarregadoresConectado = true;
-
-      //ao receber evento do backend, recarrega os dados da tela
-      webSocketService.wbCarregadores(
-        onMensagem: (msg) async {
-          print(" WS carregadores");
-
-          await carregarTudo();
-
-        },
-      );
-    }
-
-    // WS USUÁRIO (SOC/transação)
-
-    if (usuario != null && !wsUsuarioConectado) {
-
-      //ws conectou -> não conecta de novo
-      wsUsuarioConectado = true;
-
-      webSocketService.wbUsuario(
-
-        userId: usuario!.idUsuario.toString(),
-
-        //atualizações gerais
-        onMensagem: (msg) async {
-
-          print("WS USUARIO: $msg");
-
-          await carregarTudo();
-        },
-
-        //atualização apenas saldo
-        onSaldo: (novoSaldo) {
-
-          print("NOVO SALDO: $novoSaldo");
-
-          setState(() {
-
-            usuario!.saldo = novoSaldo;
-
-          });
-        },
-      );
-
-      // //ao receber evento do backend, recarrega os dados da tela
-      // webSocketService.wbUsuario(
-      //   userId: usuario!.idUsuario.toString(),
-      //   onMensagem: (msg) async {
-      //     print("WS USUARIO: $msg");
-      //
-      //     await carregarTudo();
-      //   },
-      // );
-    }
-  }
 
   // =====================  BUILD  =========================== //
 
@@ -181,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
   @override
   Widget build(BuildContext context) {
 
-    if (usuario == null) {
+    if (controller.state?.usuario == null) {
       return Scaffold(
         body: Center(child: CircularProgressIndicator()),
       );
@@ -195,16 +119,16 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
       switch (currentIndex) {
         case 0:
 
-          if (transacaoAtiva != null) {
+          if (controller.state?.transacaoAtiva != null) {
             return CarregandoScreen(
-              usuario: usuario!,
-              transacaoAtiva: transacaoAtiva!,
+              usuario: controller.state!.usuario!,
+              transacaoAtiva: controller.state!.transacaoAtiva!,
             );
           }
 
           if (idCarregadorSelecionado != null) {
             return ConectoresSreen(
-              usuario: usuario!,
+              usuario: controller.state!.usuario!,
               idCarregador: idCarregadorSelecionado!,
               onVoltar: () {
                 setState(() {
@@ -217,10 +141,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
           return buildHome();
 
         case 1:
-          return HistoricoTransacoesCreditoScreen(usuario: usuario!);
+          return HistoricoTransacoesCreditoScreen(usuario: controller.state!.usuario!);
 
         case 2:
-          return HistoricoTransacoesDebitoScreen(usuario: usuario!);
+          return HistoricoTransacoesDebitoScreen(usuario: controller.state!.usuario!);
 
         default:
           return buildHome();
@@ -231,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
     //recebe o index da página pela navbar
     //atualiza a pagina de acordo com o index
     return NavigationBarWidget(
-      usuario: usuario!,
+      usuario: controller.state!.usuario!,
       currentIndex: currentIndex,
 
       onItemSelecionado: (index) {
@@ -254,10 +178,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
           children: [
 
 
-            TopBarWidget(usuario: usuario!),
+            TopBarWidget(usuario: controller.state!.usuario!),
 
             SaldoCard(
-                saldo: usuario!.saldo ?? 0,
+                saldo: controller.state!.usuario!.saldo ?? 0,
                 onPressed: () => abrirModalRecarga(context)
             ),
 
@@ -301,10 +225,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
 
                     Expanded(
                       child: ListView.builder(
-                        itemCount: carregadores.length,
+                        itemCount: controller.state!.carregadores.length,
                         itemBuilder: (context, index) {
 
-                          final carregador = carregadores[index];
+                          final carregador = controller.state!.carregadores[index];
 
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 40),
