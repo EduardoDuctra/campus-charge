@@ -4,26 +4,26 @@ import 'package:projeto_integrador/DTO/UsuarioDTO.dart';
 import '../shared/topBarWidget.dart';
 import '../theme/colors.dart';
 
-class VeiculoScreen extends StatefulWidget {
+class CadastrarVeiculoScreen extends StatefulWidget {
   final UsuarioDTO usuario;
 
-  const VeiculoScreen({super.key, required this.usuario});
+  const CadastrarVeiculoScreen({super.key, required this.usuario});
 
   @override
-  State<VeiculoScreen> createState() => _VeiculoScreenState();
+  State<CadastrarVeiculoScreen> createState() => _CadastrarVeiculoScreenState();
 }
 
-class _VeiculoScreenState extends State<VeiculoScreen> {
+class _CadastrarVeiculoScreenState extends State<CadastrarVeiculoScreen> {
 
   String? marcaSelecionada;
   String? modeloSelecionado;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.black,
+    return Scaffold(
+      backgroundColor: Colors.black,
 
-      child: SafeArea(
+      body: SafeArea(
         child: Column(
           children: [
 
