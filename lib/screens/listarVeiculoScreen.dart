@@ -1,26 +1,86 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_integrador/DTO/UsuarioDTO.dart';
+import 'package:projeto_integrador/services/usuarioService.dart';
+import 'package:projeto_integrador/services/veiculoService.dart';
+import 'package:projeto_integrador/shared/botaoAdicionar.dart';
+import 'package:projeto_integrador/shared/botaoCancelar.dart';
+import 'package:projeto_integrador/shared/cardVeiculo.dart';
 
+import '../DTO/VeiculoDTO.dart';
+import '../shared/saldoCard.dart';
 import '../shared/topBarWidget.dart';
 import '../theme/colors.dart';
+import '../utils/modal_recarga.dart';
 
-class CadastrarVeiculoScreen extends StatefulWidget {
+class ListarVeiculoScreen extends StatefulWidget {
+
   final UsuarioDTO usuario;
 
-  const CadastrarVeiculoScreen({super.key, required this.usuario});
+  const ListarVeiculoScreen({super.key, required this.usuario});
 
   @override
-  State<CadastrarVeiculoScreen> createState() => _CadastrarVeiculoScreenState();
+  State<ListarVeiculoScreen> createState() => _ListarVeiculoScreenState();
 }
 
-class _CadastrarVeiculoScreenState extends State<CadastrarVeiculoScreen> {
+class _ListarVeiculoScreenState extends State<ListarVeiculoScreen> {
 
   String? marcaSelecionada;
   String? modeloSelecionado;
 
+
+
+
+
+  final VeiculoService veiculoService = VeiculoService();
+  final Usuarioservice usuarioservice = Usuarioservice();
+
+  List<VeiculoDTO> veiculos = [];
+
+  int indexPrincipal = 0;
+
+
+  @override
+  void initState() {
+    super.initState();
+
+    carregarVeiculos();
+  }
+
+  //ordena com o principal sempre em primeiro
+  Future<void> carregarVeiculos() async {
+
+    final lista = await veiculoService.listarVeiculos();
+
+    int principal = 0;
+
+    for (int i = 0; i < lista.length; i++) {
+
+      if (lista[i].idVeiculo ==
+          widget.usuario.idVeiculoPrincipal) {
+
+        principal = i;
+        break;
+      }
+    }
+
+    // move o veículo principal para primeira posição
+    final veiculoPrincipal = lista.removeAt(principal);
+
+    lista.insert(0, veiculoPrincipal);
+
+    setState(() {
+
+      veiculos = lista;
+
+      indexPrincipal = 0;
+
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       backgroundColor: Colors.black,
 
       body: SafeArea(
@@ -30,68 +90,94 @@ class _CadastrarVeiculoScreenState extends State<CadastrarVeiculoScreen> {
             TopBarWidget(usuario: widget.usuario),
 
 
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+            SaldoCard(
+                saldo: widget.usuario!.saldo ?? 0,
+                onPressed: () => abrirModalRecarga(context)
+            ),
 
+            SizedBox(height: 60,),
 
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        labelText: "Marca",
-                      ),
-                    ),
-                  ),
+            Text(
 
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        labelText: "Modelo",
-                      )
-                    ),
-                  ),
-                ],
+              'Selecione seu veículo principal',
+              style: const TextStyle(
+                fontSize: 20,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
               ),
             ),
 
+            SizedBox(height: 60,),
 
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.principal,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
+            SizedBox(
+
+              height: 260,
+              child: ListView.builder(
+
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,),
+
+                scrollDirection: .horizontal,
+                itemCount: veiculos.length,
+                itemBuilder: (context, index) {
+                  final veiculo = veiculos[index];
+
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: Cardveiculo(
+                      nomeVeiculo: veiculo.modeloCarro,
+                      modeloVeiculo: veiculo.nomeMarca,
+                      cor: index == indexPrincipal ?
+                      AppColors.principal : Colors.white,
+
+                      //troca o veiculo principal
+                      onPressed: () async {
+
+                        await usuarioservice.atualizarVeiculoPrincipal(veiculo.idVeiculo!);
+
+
+                        setState(() async {
+
+                          indexPrincipal = index;
+
+                          widget.usuario.idVeiculoPrincipal = veiculo.idVeiculo;
+
+                          await carregarVeiculos();
+
+                        });
+
+                        print(
+
+                          "Principal: ${veiculo.modeloCarro}",
+
+                        );
+                      },
+
+                      onDelete: () async {
+
+                        await veiculoService.deletar(veiculo.idVeiculo!,);
+
+                        await carregarVeiculos();
+
+                    },
+
                     ),
-                  ),
-                  onPressed: () {},
-                  child: const Text(
-                    "Salvar",
-                    style: TextStyle(fontSize: 18, color: Colors.black),
-                  ),
-                ),
+                  );
+                },
               ),
             ),
+
+            SizedBox(height: 40,),
+
+            BotaoAdicionar(usuarioDTO: widget.usuario,),
+            SizedBox(height: 10,),
+            BotaoCancelar(),
+
           ],
         ),
       ),
+
+
     );
   }
 }

@@ -63,6 +63,24 @@ class Apiservice {
     );
   }
 
+  Future<http.Response> delete(String endpoint, Map dados) async {
+
+    final token = await tokenService.recuperarToken();
+
+    final url = Uri.parse("$urlBase/$endpoint");
+
+    return await http.delete(
+      url,
+      headers: {
+        "Content-Type": "application/json",
+        if (token != null) "Authorization": "Bearer $token",
+      },
+      body: jsonEncode(dados),
+    );
+  }
+
+
+
   //enviar foto
   Future<String?> uploadFoto(XFile imagem) async {
     try {

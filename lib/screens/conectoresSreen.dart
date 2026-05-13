@@ -272,6 +272,7 @@ class _ConectoresSreenState extends State<ConectoresSreen> {
                                         type: QuickAlertType.success,
                                         showConfirmBtn: false,
                                         autoCloseDuration: Duration(seconds: 3),
+
                                     );
 
                                   } else{

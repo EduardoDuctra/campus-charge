@@ -50,6 +50,20 @@ class Usuarioservice {
 
   }
 
+  Future<String>atualizarVeiculoPrincipal(int idVeiculo) async {
+
+    final response = await api.put("usuario/atualizar-veiculo/$idVeiculo", {},);
+
+    if(response.statusCode == 200){
+
+      return response.body;
+
+    } else{
+
+      throw Exception("Erro ao atualizar veículo principal");
+
+    }
+  }
 
 
 }

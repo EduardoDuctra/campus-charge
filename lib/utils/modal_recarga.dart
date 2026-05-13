@@ -18,7 +18,16 @@ void abrirModalRecarga(BuildContext context){
         TextEditingController controller = TextEditingController();
 
         return AlertDialog(
-          title: Text("Informe o valor a ser adicionado na carteira"),
+
+          backgroundColor: AppColors.principal,
+
+          title: Text("Informe o valor a ser adicionado na carteira",
+              textAlign: .center,
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 24,
+                  fontWeight: FontWeight.w500)
+          ),
 
           content: TextField(
             controller: controller,
@@ -27,16 +36,26 @@ void abrirModalRecarga(BuildContext context){
             decoration: InputDecoration(
                 hintText: "Ex: 20",
 
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: AppColors.principal),
-                ),
+              enabledBorder: OutlineInputBorder(
 
-                focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        color: AppColors.principal,
-                        width: 2
-                    )
-                )
+                borderRadius: BorderRadius.circular(20),
+
+                borderSide: BorderSide(
+                  color: Colors.black,
+                  width: 2,
+                ),
+              ),
+
+
+              focusedBorder: OutlineInputBorder(
+
+                borderRadius: BorderRadius.circular(20),
+
+                borderSide: BorderSide(
+                  color: Colors.black,
+                  width: 2,
+                ),
+              ),
             ),
           ),
 
@@ -46,7 +65,11 @@ void abrirModalRecarga(BuildContext context){
                 Navigator.pop(context);
               },
               child: Text("Cancelar",
-                style: TextStyle(color: Colors.black),
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18
+                ),
               ),
 
             ),
@@ -68,7 +91,12 @@ void abrirModalRecarga(BuildContext context){
                 Navigator.pop(context);
               },
               child: Text("Confirmar",
-                  style: TextStyle(color: Colors.black)),
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18
+                  )
+              ),
             ),
           ],
         );

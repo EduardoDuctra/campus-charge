@@ -53,32 +53,53 @@ class WebSocketService {
     stompClient!.activate();
   }
 
+
   /*
-   escuta atualizações do usuário
-   uso para saldo e atualização da recarga
-   */
+ escuta atualizações do usuário
+ uso para saldo e atualização da recarga
+*/
   void wbUsuario({
     required String userId,
+
+    //quando mudar estado/transação
     required Function(String) onMensagem,
+
+    //quando atualizar saldo
+    required Function(double) onSaldo,
   }) {
+
     _connect(() {
+
       print("[USUÁRIO WS]");
 
+      //evento geral usuário
       stompClient!.subscribe(
         destination: '/topic/usuario/$userId',
+
         callback: (frame) {
+
           if (frame.body != null) {
+
             onMensagem(frame.body!);
+
           }
         },
       );
 
+      //evento saldo
       stompClient!.subscribe(
         destination: '/topic/usuario/saldo/$userId',
+
         callback: (frame) {
+
           print("SALDO: ${frame.body}");
+
           if (frame.body != null) {
-            onMensagem(frame.body!);
+
+            final novoSaldo = double.parse(frame.body!);
+
+            onSaldo(novoSaldo);
+
           }
         },
       );

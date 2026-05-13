@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_integrador/DTO/UsuarioDTO.dart';
+import 'package:projeto_integrador/screens/cadastrarVeiculoScreen.dart';
+import 'package:projeto_integrador/screens/listarVeiculoScreen.dart';
 import 'package:projeto_integrador/theme/colors.dart';
 
 import '../screens/cadastroUsuarioScreen.dart';
@@ -81,6 +83,17 @@ class _NavigationBarWidgetState extends State<NavigationBarWidget> {
             ListTile(
               leading: Icon(Icons.directions_car, color: Colors.white),
               title: Text("Meu veículo", style: TextStyle(color: Colors.white)),
+              onTap: () async {
+
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ListarVeiculoScreen(
+                      usuario: widget.usuario,),
+                  ),
+                );
+
+              },
             ),
 
 

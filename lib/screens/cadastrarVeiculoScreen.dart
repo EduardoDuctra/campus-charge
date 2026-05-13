@@ -1,25 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_integrador/DTO/UsuarioDTO.dart';
+import 'package:projeto_integrador/services/veiculoService.dart';
+import 'package:projeto_integrador/shared/botaoCancelar.dart';
 
+import '../DTO/VeiculoDTO.dart';
 import '../shared/topBarWidget.dart';
 import '../theme/colors.dart';
+import 'homeScreen.dart';
 
-class VeiculoScreen extends StatefulWidget {
+class CadastrarVeiculoScreen extends StatefulWidget {
   final UsuarioDTO usuario;
 
-  const VeiculoScreen({super.key, required this.usuario});
+  const CadastrarVeiculoScreen({super.key, required this.usuario});
 
   @override
-  State<VeiculoScreen> createState() => _VeiculoScreenState();
+  State<CadastrarVeiculoScreen> createState() => _CadastrarVeiculoScreenState();
 }
 
-class _VeiculoScreenState extends State<VeiculoScreen> {
+class _CadastrarVeiculoScreenState extends State<CadastrarVeiculoScreen> {
 
-  String? marcaSelecionada;
-  String? modeloSelecionado;
+
+  final VeiculoService veiculoService = VeiculoService();
+  final TextEditingController marcaController = TextEditingController();
+  final TextEditingController modeloController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
+
+    final width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: Colors.black,
 
@@ -39,6 +49,7 @@ class _VeiculoScreenState extends State<VeiculoScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                     child: TextFormField(
+                      controller: marcaController,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
@@ -54,7 +65,8 @@ class _VeiculoScreenState extends State<VeiculoScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                     child: TextFormField(
-                      decoration: InputDecoration(
+                        controller: modeloController,
+                        decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
@@ -72,7 +84,7 @@ class _VeiculoScreenState extends State<VeiculoScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
               child: SizedBox(
-                width: double.infinity,
+                width: width * 0.7,
                 height: 50,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -81,7 +93,26 @@ class _VeiculoScreenState extends State<VeiculoScreen> {
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () async {
+
+                    final veiculoDTO = VeiculoDTO(
+                      nomeMarca: marcaController.text,
+                      modeloCarro: modeloController.text,);
+
+                    final veiculo = await veiculoService.cadastrarVeiculo(veiculoDTO);
+
+                    if(veiculo != null){
+
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HomeScreen(),
+                        ),
+                      );
+                    }
+
+                    },
+
                   child: const Text(
                     "Salvar",
                     style: TextStyle(fontSize: 18, color: Colors.black),
@@ -89,6 +120,8 @@ class _VeiculoScreenState extends State<VeiculoScreen> {
                 ),
               ),
             ),
+
+            BotaoCancelar(),
           ],
         ),
       ),

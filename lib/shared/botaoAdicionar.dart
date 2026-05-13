@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_integrador/DTO/UsuarioDTO.dart';
+import 'package:projeto_integrador/screens/cadastrarVeiculoScreen.dart';
 
-class BotaoCancelar extends StatelessWidget {
-  const BotaoCancelar({super.key});
+class BotaoAdicionar extends StatelessWidget {
+  final UsuarioDTO usuarioDTO;
+
+  const BotaoAdicionar({super.key,
+    required this.usuarioDTO});
 
   @override
   Widget build(BuildContext context) {
@@ -27,11 +32,17 @@ class BotaoCancelar extends StatelessWidget {
           ),
 
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CadastrarVeiculoScreen(
+                    usuario: usuarioDTO),
+              ),
+            );
           },
 
           child: Text(
-            "Cancelar",
+            "Adicionar veículo",
 
             style: TextStyle(
               fontSize: height * 0.02,

@@ -21,6 +21,7 @@ class CardHistoricoRecargas extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     final size = MediaQuery.of(context).size;
     double largura = size.width;
     double altura = size.height;

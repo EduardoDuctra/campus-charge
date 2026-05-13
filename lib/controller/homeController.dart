@@ -23,7 +23,22 @@ class HomeController {
   //passa para o HomeState as informações atualizadas
   Future<HomeState> carregarDados() async {
     final usuario = await usuarioservice.buscarUsuarioLogado();
-    final transacao = await transacaoService.listarTransacoesAtiva();
+
+
+    dynamic transacao;
+
+    try {
+
+      transacao = await transacaoService.listarTransacoesAtiva();
+
+    } catch (e) {
+
+      print("Sem transação ativa");
+
+      transacao = null;
+
+    }
+
     final carregadores = await carregadorService.listarCarregadores();
 
     return HomeState(

@@ -63,6 +63,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
   void initState() {
     super.initState();
 
+    WidgetsBinding.instance.addObserver(this);
 
     //passo para o controller os services
     // o controller centraliza a lógica de obtenção e organização dos dados da tela
@@ -79,10 +80,18 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
 
   @override
   void dispose() {
-    webSocketService.desconectar();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      print("APP VOLTOU - RECARREGANDO DADOS");
+      carregarTudo();
+    }
+  }
 
   Future<void> carregarTudo() async {
 
@@ -129,18 +138,42 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
       //ws conectou -> não conecta de novo
       wsUsuarioConectado = true;
 
-      //ao receber evento do backend, recarrega os dados da tela
       webSocketService.wbUsuario(
+
         userId: usuario!.idUsuario.toString(),
+
+        //atualizações gerais
         onMensagem: (msg) async {
+
           print("WS USUARIO: $msg");
 
           await carregarTudo();
         },
+
+        //atualização apenas saldo
+        onSaldo: (novoSaldo) {
+
+          print("NOVO SALDO: $novoSaldo");
+
+          setState(() {
+
+            usuario!.saldo = novoSaldo;
+
+          });
+        },
       );
+
+      // //ao receber evento do backend, recarrega os dados da tela
+      // webSocketService.wbUsuario(
+      //   userId: usuario!.idUsuario.toString(),
+      //   onMensagem: (msg) async {
+      //     print("WS USUARIO: $msg");
+      //
+      //     await carregarTudo();
+      //   },
+      // );
     }
   }
-
 
   // =====================  BUILD  =========================== //
 

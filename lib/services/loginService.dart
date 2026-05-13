@@ -17,8 +17,7 @@ class LoginService {
   
 
   //credencial do app no google
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
-    clientId: dotenv.env['GOOGLE_CLIENT_ID']);
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
 
   Future<DadosTokenJWTDTO?>efetuarLogin(DadosAutenticacaoDTO dto) async{
