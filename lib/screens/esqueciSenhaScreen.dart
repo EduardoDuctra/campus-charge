@@ -5,6 +5,7 @@ import 'package:projeto_integrador/DTO/EsqueciSenhaDTO.dart';
 import 'package:projeto_integrador/screens/cadastroUsuarioScreen.dart';
 import 'package:projeto_integrador/screens/redefinirSenhaScreen.dart';
 import 'package:projeto_integrador/theme/colors.dart';
+import 'package:quickalert/quickalert.dart';
 
 import '../DTO/DadosAutenticacaoDTO.dart';
 import '../services/loginService.dart';
@@ -103,11 +104,27 @@ class EsqueciSenhaScreen extends StatelessWidget {
 
                         final email = emailController.text;
 
+                        QuickAlert.show(
+                          context: context,
+                          type: QuickAlertType.loading,
+                          title: "Aguarde...",
+                          text: "Estamos enviando o código para o seu email",
+                          showConfirmBtn: false,
+                        );
+
+
                         final mensagem = await loginService.esqueciSenha(
                           EsqueciSenhaDTO(email: email)
                         );
 
+
+                        await Future.delayed(
+                          const Duration(seconds: 5),);
+
+
+
                         if(mensagem != null){
+
 
                           Navigator.push(
                               context,
@@ -122,6 +139,31 @@ class EsqueciSenhaScreen extends StatelessWidget {
                       child: Text(
                         "Enviar",
                         style: TextStyle(fontSize: 18, color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ),
+
+
+                // BOTÃO CANCELAR
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 45,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        "Cancelar",
+                        style: TextStyle(fontSize: 18, color: Colors.black),
                       ),
                     ),
                   ),

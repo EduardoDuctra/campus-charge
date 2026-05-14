@@ -7,6 +7,7 @@ import 'package:projeto_integrador/shared/botaoCancelar.dart';
 import 'package:projeto_integrador/shared/cardVeiculo.dart';
 
 import '../DTO/VeiculoDTO.dart';
+import '../controller/veiculoController.dart';
 import '../shared/saldoCard.dart';
 import '../shared/topBarWidget.dart';
 import '../theme/colors.dart';
@@ -24,58 +25,24 @@ class ListarVeiculoScreen extends StatefulWidget {
 
 class _ListarVeiculoScreenState extends State<ListarVeiculoScreen> {
 
-  String? marcaSelecionada;
-  String? modeloSelecionado;
 
-
-
-
-
-  final VeiculoService veiculoService = VeiculoService();
-  final Usuarioservice usuarioservice = Usuarioservice();
-
-  List<VeiculoDTO> veiculos = [];
-
-  int indexPrincipal = 0;
-
+  final VeiculoController controller = VeiculoController();
 
   @override
   void initState() {
     super.initState();
 
-    carregarVeiculos();
+    carregar();
   }
 
-  //ordena com o principal sempre em primeiro
-  Future<void> carregarVeiculos() async {
+  Future<void> carregar() async {
 
-    final lista = await veiculoService.listarVeiculos();
+    await controller.carregarVeiculos(widget.usuario,);
 
-    int principal = 0;
+    setState(() {});
 
-    for (int i = 0; i < lista.length; i++) {
-
-      if (lista[i].idVeiculo ==
-          widget.usuario.idVeiculoPrincipal) {
-
-        principal = i;
-        break;
-      }
-    }
-
-    // move o veículo principal para primeira posição
-    final veiculoPrincipal = lista.removeAt(principal);
-
-    lista.insert(0, veiculoPrincipal);
-
-    setState(() {
-
-      veiculos = lista;
-
-      indexPrincipal = 0;
-
-    });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -118,33 +85,26 @@ class _ListarVeiculoScreenState extends State<ListarVeiculoScreen> {
                   horizontal: 20,),
 
                 scrollDirection: .horizontal,
-                itemCount: veiculos.length,
+                itemCount: controller.veiculos.length,
                 itemBuilder: (context, index) {
-                  final veiculo = veiculos[index];
+                  final veiculo = controller.veiculos[index];
 
                   return Padding(
                     padding: const EdgeInsets.only(left: 20),
                     child: Cardveiculo(
                       nomeVeiculo: veiculo.modeloCarro,
                       modeloVeiculo: veiculo.nomeMarca,
-                      cor: index == indexPrincipal ?
+                      cor: index == controller.indexPrincipal ?
                       AppColors.principal : Colors.white,
 
                       //troca o veiculo principal
                       onPressed: () async {
 
-                        await usuarioservice.atualizarVeiculoPrincipal(veiculo.idVeiculo!);
+                        await controller.usuarioservice.atualizarVeiculoPrincipal(veiculo.idVeiculo!);
 
+                        widget.usuario.idVeiculoPrincipal = veiculo.idVeiculo;
 
-                        setState(() async {
-
-                          indexPrincipal = index;
-
-                          widget.usuario.idVeiculoPrincipal = veiculo.idVeiculo;
-
-                          await carregarVeiculos();
-
-                        });
+                        await carregar();
 
                         print(
 
@@ -155,9 +115,9 @@ class _ListarVeiculoScreenState extends State<ListarVeiculoScreen> {
 
                       onDelete: () async {
 
-                        await veiculoService.deletar(veiculo.idVeiculo!,);
+                        await controller.veiculoService.deletar(veiculo.idVeiculo!,);
 
-                        await carregarVeiculos();
+                        await controller.carregarVeiculos(widget.usuario);
 
                     },
 

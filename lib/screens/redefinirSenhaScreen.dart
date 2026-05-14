@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:projeto_integrador/DTO/NovaSenhaDTO.dart';
 import 'package:projeto_integrador/screens/cadastroUsuarioScreen.dart';
 import 'package:projeto_integrador/screens/loginScreen.dart';
+import 'package:projeto_integrador/shared/botaoCancelar.dart';
 import 'package:projeto_integrador/theme/colors.dart';
 
 import '../DTO/DadosAutenticacaoDTO.dart';
@@ -167,6 +168,38 @@ class RedefinirSenhaScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+
+                  // BOTÃO CANCELAR
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: 45,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                        onPressed: () {
+
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginScreen())
+                          );
+
+                        },
+                        child: Text(
+                          "Cancelar",
+                          style: TextStyle(fontSize: 18, color: Colors.black),
+                        ),
+                      ),
+                    ),
+                  ),
+
+
 
                 ],
               ),
