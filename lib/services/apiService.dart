@@ -37,11 +37,31 @@ class Apiservice {
     final token = await tokenService.recuperarToken();
 
     final url = Uri.parse("$urlBase/$endpoint");
+
+    print(url);
+
     return await http.post(
       url,
       headers: {
         "Content-Type": "application/json",
         if(token != null) "Authorization": "Bearer $token",
+      },
+      body: jsonEncode(dados),
+    );
+  }
+
+  Future<http.Response> postCadastro(String endpoint, Map dados) async{
+
+    final token = await tokenService.recuperarToken();
+
+    final url = Uri.parse("$urlBase/$endpoint");
+
+    print(url);
+
+    return await http.post(
+      url,
+      headers: {
+        "Content-Type": "application/json",
       },
       body: jsonEncode(dados),
     );

@@ -81,7 +81,6 @@ class LoginScreen extends StatelessWidget {
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(30)
                           ),
-                          labelText: "Informe seu email",
                           hintText: "Insira um email válido"
                       ),
                     )
@@ -111,7 +110,6 @@ class LoginScreen extends StatelessWidget {
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(30)
                           ),
-                          labelText: "Informe sua senha",
                           hintText: "Insira um email válido"
                       ),
                     )
@@ -221,12 +219,12 @@ class LoginScreen extends StatelessWidget {
                     "Novo usuário",
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 12,
+                      fontSize: 16,
                     ),
                   ),
                 ),
           
-                SizedBox(height: 20),
+                SizedBox(height: 8),
           
                 TextButton(
                   onPressed: () {
@@ -241,7 +239,7 @@ class LoginScreen extends StatelessWidget {
                     "Esqueci minha senha",
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 12,
+                      fontSize: 16,
                     ),
                   ),
                 ),

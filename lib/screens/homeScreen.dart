@@ -19,6 +19,7 @@ import '../shared/navegationBar.dart';
 import '../shared/saldoCard.dart';
 import '../shared/topBarWidget.dart';
 import '../utils/modal_recarga.dart';
+import 'lerQRCodeScreen.dart';
 
 /**
  * TELA PRINCIPAL
@@ -145,6 +146,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
 
         case 2:
           return HistoricoTransacoesDebitoScreen(usuario: controller.state!.usuario!);
+
+        case 3:
+          return LerQRCodeScreen(usuario: controller.state!.usuario!);
 
         default:
           return buildHome();

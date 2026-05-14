@@ -18,17 +18,33 @@ class CadastroUsuarioScreen extends StatefulWidget {
 
 class _CadastroUsuarioScreenState extends State<CadastroUsuarioScreen> {
 
+  late TextEditingController nomeController;
+  late TextEditingController cpfController;
+  late TextEditingController telefoneController;
+  late TextEditingController emailController;
+  late TextEditingController senhaController;
+  late TextEditingController confirmarSenhaController;
+
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+
+    nomeController = TextEditingController(text: widget.usuario?.nome ?? "");
+
+    cpfController = TextEditingController(text: widget.usuario?.cpf ?? "");
+
+    telefoneController = TextEditingController(text: widget.usuario?.telefone ?? "");
+
+    emailController = TextEditingController(text: widget.usuario?.email ?? "");
+
+    senhaController = TextEditingController();
+    confirmarSenhaController = TextEditingController();
+  }
+
   @override
   Widget build(BuildContext context) {
-
-    final nomeController = TextEditingController(text: widget.usuario?.nome ?? "");
-    final cpfController  = TextEditingController(text: widget.usuario?.cpf ?? "");
-    final telefoneController  = TextEditingController(text: widget.usuario?.telefone ?? "");
-    final emailController  = TextEditingController(text: widget.usuario?.email ?? "");
-    final senhaController  = TextEditingController();
-    final confirmarSenhaController  = TextEditingController();
-
-    final _formKey = GlobalKey<FormState>();
 
     bool modoEdicao;
 
@@ -38,6 +54,8 @@ class _CadastroUsuarioScreenState extends State<CadastroUsuarioScreen> {
       modoEdicao = false;
     }
 
+
+    print("Modo edição: $modoEdicao");
 
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
@@ -52,7 +70,7 @@ class _CadastroUsuarioScreenState extends State<CadastroUsuarioScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-          
+
               Padding(
                 padding: EdgeInsets.only(
                   top: height * 0.05,
@@ -70,9 +88,9 @@ class _CadastroUsuarioScreenState extends State<CadastroUsuarioScreen> {
                         BlendMode.srcIn,
                       ),
                     ),
-          
+
                     SizedBox(width: width * 0.03),
-          
+
                     Text(
                       'Campus Charge',
                       style: TextStyle(
@@ -84,9 +102,9 @@ class _CadastroUsuarioScreenState extends State<CadastroUsuarioScreen> {
                   ],
                 ),
               ),
-          
+
               SizedBox(height: height * 0.02),
-          
+
               Text(
                 "Dados de Usuário",
                 style: TextStyle(
@@ -95,7 +113,7 @@ class _CadastroUsuarioScreenState extends State<CadastroUsuarioScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-          
+
               SizedBox(height: height * 0.02),
 
               if(modoEdicao)...[
@@ -147,7 +165,7 @@ class _CadastroUsuarioScreenState extends State<CadastroUsuarioScreen> {
 
 
               SizedBox(height: height * 0.015),
-          
+
               // CAMPOS
               buildInput(width, "Nome", nomeController,
 
@@ -159,7 +177,7 @@ class _CadastroUsuarioScreenState extends State<CadastroUsuarioScreen> {
                   return null;
                 },
               ),
-          
+
               buildInput(width, "CPF", cpfController,
                 enabled: !modoEdicao,
                 validator: (value) {
@@ -177,9 +195,9 @@ class _CadastroUsuarioScreenState extends State<CadastroUsuarioScreen> {
                   return null;
                 },
               ),
-          
+
               buildInput(width, "Telefone", telefoneController,
-          
+
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "Telefone obrigatório";
@@ -239,7 +257,7 @@ class _CadastroUsuarioScreenState extends State<CadastroUsuarioScreen> {
 
               SizedBox(height: height * 0.02),
 
-          
+
               // BOTÃO
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: width * 0.1),
@@ -253,13 +271,13 @@ class _CadastroUsuarioScreenState extends State<CadastroUsuarioScreen> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-          
+
                     onPressed: () async {
-          
+
                       if (!_formKey.currentState!.validate()) {
                         return;
                       }
-          
+
                       final usuario = UsuarioDTO(
                         nome: nomeController.text,
                         cpf: cpfController.text,
@@ -268,26 +286,33 @@ class _CadastroUsuarioScreenState extends State<CadastroUsuarioScreen> {
                         senha: senhaController.text,
                       );
 
-                      bool sucesso;
+                      String? erro;
 
                       if(modoEdicao){
-                        sucesso = await Usuarioservice().atualizar(usuario);
-                      } else{
-                        sucesso = await Usuarioservice().cadastrar(usuario);
-                      }
 
-          
-                     if(sucesso){
-                       Navigator.pop(context, usuario);
-                     }else {
-                       print("Erro ao cadastrar");
-                     }
-          
-          
+                        await Usuarioservice().atualizar(usuario);
+                        Navigator.pop(context, usuario);
+
+                      } else{
+
+                        erro = await Usuarioservice().cadastrar(usuario);
+
+                        //sem erro -> redireciona
+                        if(erro ==null){
+                          Navigator.pop(context, usuario);
+                        } else{
+                          //com erro mostra a mensagem
+                          ScaffoldMessenger.of(context).
+                          showSnackBar(
+                              SnackBar(content:
+                              Text(erro),)
+                          );
+                        }
+                      }
                     },
 
                     child: Text(
-                    modoEdicao ? "Atualizar" : "Cadastrar",
+                      modoEdicao ? "Atualizar" : "Cadastrar",
                       style: TextStyle(
                         fontSize: height * 0.02,
                         color: Colors.white,
@@ -296,9 +321,9 @@ class _CadastroUsuarioScreenState extends State<CadastroUsuarioScreen> {
                   ),
                 ),
               ),
-          
+
               SizedBox(height: height * 0.02),
-          
+
               // BOTÃO
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: width * 0.1),
@@ -342,24 +367,24 @@ class _CadastroUsuarioScreenState extends State<CadastroUsuarioScreen> {
         enabled: enabled,
         validator: validator,
         decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.white,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30),
-          ),
+            filled: true,
+            fillColor: Colors.white,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
 
             hintText: label,
 
-          errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30),
-            borderSide: BorderSide(color: Colors.black),
-          ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(30),
+              borderSide: BorderSide(color: Colors.black),
+            ),
 
-          errorStyle: TextStyle(
-            color: Colors.redAccent,
-            fontSize: 12,
-            height: 0.5,
-          )
+            errorStyle: TextStyle(
+              color: Colors.redAccent,
+              fontSize: 12,
+              height: 0.5,
+            )
 
         ),
       ),

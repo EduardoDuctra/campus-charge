@@ -104,11 +104,6 @@ class _NavigationBarWidgetState extends State<NavigationBarWidget> {
 
 
             ListTile(
-              leading: Icon(Icons.phone, color: Colors.white),
-              title: Text("Suporte", style: TextStyle(color: Colors.white)),
-            ),
-
-            ListTile(
               leading: Icon(Icons.logout, color: Colors.white),
               title: Text("Sair", style: TextStyle(color: Colors.white)),
             ),
@@ -166,6 +161,13 @@ class _NavigationBarWidgetState extends State<NavigationBarWidget> {
               selectedIcon: Icon(Icons.history),
               label: "Histórico",
             ),
+
+            NavigationDestination(
+              icon: Icon(Icons.qr_code_2_outlined),
+              selectedIcon: Icon(Icons.qr_code_2_outlined),
+              label: "Ler QR Code",
+            ),
+
           ],
         ),
       ),

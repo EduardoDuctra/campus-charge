@@ -9,14 +9,20 @@ import 'package:projeto_integrador/services/apiService.dart';
 class Usuarioservice {
   final Apiservice api = Apiservice();
 
-  Future <bool> cadastrar(UsuarioDTO usuario) async{
-    final response = await api.post(
+  Future <String?> cadastrar(UsuarioDTO usuario) async{
+    final response = await api.postCadastro(
         "usuario",
         usuario.toJson());
 
     print(response.statusCode);
 
-    return response.statusCode == 201;
+    if(response.statusCode == 201){
+      return null;
+    }
+
+    //retorna o erro
+    final body = jsonDecode(response.body);
+    return body["erro"];
 
   }
 
