@@ -282,6 +282,7 @@ class _CadastroUsuarioScreenState extends State<CadastroUsuarioScreen> {
                         nome: nomeController.text,
                         cpf: cpfController.text,
                         telefone: telefoneController.text,
+                        isCadastroCompleto: true,
                         email: emailController.text,
                         senha: senhaController.text,
                       );

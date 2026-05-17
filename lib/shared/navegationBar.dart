@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_integrador/DTO/UsuarioDTO.dart';
+import 'package:projeto_integrador/screens/atualizarSenhaScreen.dart';
 import 'package:projeto_integrador/screens/cadastrarVeiculoScreen.dart';
 import 'package:projeto_integrador/screens/listarVeiculoScreen.dart';
 import 'package:projeto_integrador/theme/colors.dart';
@@ -100,6 +101,17 @@ class _NavigationBarWidgetState extends State<NavigationBarWidget> {
             ListTile(
               leading: Icon(Icons.lock, color: Colors.white),
               title: Text("Alterar senha", style: TextStyle(color: Colors.white)),
+              onTap: () async {
+
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AtualizarSenhaScreen(
+                      usuario: widget.usuario,),
+                  ),
+                );
+
+              },
             ),
 
 

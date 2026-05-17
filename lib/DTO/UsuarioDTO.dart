@@ -10,6 +10,7 @@ class UsuarioDTO {
   String? fotoUrl;
   double? saldo;
   String? senha;
+  bool isCadastroCompleto;
   int? idVeiculoPrincipal;
   String? modeloVeiculoPrincipal;
 
@@ -23,6 +24,7 @@ class UsuarioDTO {
     this.fotoUrl,
     this.saldo,
     this.senha,
+    required this.isCadastroCompleto,
     this.idVeiculoPrincipal,
     this.modeloVeiculoPrincipal
   });
@@ -37,6 +39,7 @@ class UsuarioDTO {
       fotoUrl: json['fotoUrl'],
       saldo: json['saldo'],
       senha: json['senha'],
+      isCadastroCompleto: json['isCadastroCompleto'],
       idVeiculoPrincipal: json['idVeiculoPrincipal'],
       modeloVeiculoPrincipal: json['modeloVeiculoPrincipal'],
     );

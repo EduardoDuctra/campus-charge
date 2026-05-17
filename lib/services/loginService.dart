@@ -20,7 +20,7 @@ class LoginService {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
 
-  Future<DadosTokenJWTDTO?>efetuarLogin(DadosAutenticacaoDTO dto) async{
+  Future<String?>efetuarLogin(DadosAutenticacaoDTO dto) async{
 
     final response = await api.post("login", dto.toJson(),);
 
@@ -32,12 +32,12 @@ class LoginService {
       print("TOKEN: ${tokenDTO.token}");
 
       await tokenService.salvarToken(tokenDTO.token);
-      return tokenDTO;
+      return null;
 
     }else{
 
-      print("Erro no login");
-      return null;
+      print(response.body);
+      return response.body;
     }
 
   }

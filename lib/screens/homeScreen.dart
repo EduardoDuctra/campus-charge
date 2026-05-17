@@ -8,6 +8,7 @@ import 'package:projeto_integrador/services/transacaoService.dart';
 import '../DTO/CarregadorDTO.dart';
 import '../DTO/UsuarioDTO.dart';
 import '../controller/homeController.dart';
+import 'cadastroUsuarioScreen.dart';
 import 'carregandoScreen.dart';
 import 'historicoTransacoesDebitoScreen.dart';
 import 'historicoTransacoesCreditoScreen.dart';
@@ -100,8 +101,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
 
 
 
-  // =====================  BUILD  =========================== //
-
 
   @override
   Widget build(BuildContext context) {
@@ -186,7 +185,27 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
 
             SaldoCard(
                 saldo: controller.state!.usuario!.saldo ?? 0,
-                onPressed: () => abrirModalRecarga(context)
+                onPressed: () async {
+
+
+                  //cadastro incompleto -> tela atualizar
+                  if (!controller.state!.usuario!.isCadastroCompleto) {
+
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CadastroUsuarioScreen(usuario: controller.state!.usuario!),
+                      ),
+                    );
+
+                    await controller.carregarTudo();
+
+                    return;
+
+                  }
+
+                  abrirModalRecarga(context);
+                }
             ),
 
             Expanded(

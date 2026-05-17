@@ -92,6 +92,7 @@ class LoginScreen extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
                     child: TextFormField(
                       controller: senhaController,
+                      obscureText: true,
                       style: TextStyle(color: Colors.black),
           
                       validator: (value) {
@@ -110,7 +111,7 @@ class LoginScreen extends StatelessWidget {
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(30)
                           ),
-                          hintText: "Insira um email válido"
+                          hintText: "Insira uma senha válida"
                       ),
                     )
                 ),
@@ -130,7 +131,7 @@ class LoginScreen extends StatelessWidget {
                       ),
                       onPressed: () async {
 
-                        final resultado = await loginService.efetuarLogin(
+                        final mensagem = await loginService.efetuarLogin(
 
                           DadosAutenticacaoDTO(
                             email: emailController.text,
@@ -138,13 +139,18 @@ class LoginScreen extends StatelessWidget {
                           ),
                         );
 
-          
-                        if (resultado != null) {
+
+
+                        //nao teve erro
+                        if (mensagem == null) {
                           Navigator.pushReplacement(
                             context, 
                             MaterialPageRoute(
                                 builder: (context) => HomeScreen())
                           );
+                        } else{
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(mensagem)));
                         }
 
                       },

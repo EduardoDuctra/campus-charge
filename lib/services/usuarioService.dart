@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:projeto_integrador/DTO/SenhaAtualizarDTO.dart';
 import 'package:projeto_integrador/DTO/UsuarioDTO.dart';
 import 'package:projeto_integrador/services/apiService.dart';
 
@@ -34,6 +35,21 @@ class Usuarioservice {
     print(response.statusCode);
 
     return response.statusCode == 200;
+
+  }
+
+  Future <String> atualizarSenha(SenhaAtualizarDTO dto) async{
+    final response = await api.put(
+        "usuario/atualizar/senha",
+        dto.toJson());
+
+    print(response.statusCode);
+
+    if(response.statusCode != 200){
+      return "Erro ao atualizar senha";
+    }
+
+    return response.body;
 
   }
   
