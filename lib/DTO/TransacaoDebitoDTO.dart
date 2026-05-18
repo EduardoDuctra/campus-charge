@@ -13,10 +13,11 @@ class TransacaoDebitoDTO {
 
   factory TransacaoDebitoDTO.fromJson(Map<String, dynamic> json) {
     return TransacaoDebitoDTO(
-      valorRecarga: json['valorRecarga'],
-        recargaKwh: json['recargaKwh'],
+      valorRecarga: (json['valorRecarga'] as num).toDouble(),
+      recargaKwh: (json['recargaKwh'] as num).toDouble(),
       dataInicio: DateTime.parse(json['dataInicio']),
       modelo: json['modelo'],
     );
   }
 }
+

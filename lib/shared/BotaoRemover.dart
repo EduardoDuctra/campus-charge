@@ -30,11 +30,12 @@ class BotaoRemover extends StatelessWidget {
 
         child: Container(
 
-          height: altura * 0.07,
+          height: altura * 0.2,
+          width: largura *0.75,
 
           padding: const EdgeInsets.all(0),
           decoration: BoxDecoration(
-              color: AppColors.cinza,
+              color: Colors.white,
               borderRadius: BorderRadius.circular(24)
           ),
 
@@ -49,6 +50,12 @@ class BotaoRemover extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
 
                 children: [
+
+                  Icon(
+                    Icons.car_crash,
+                    size: 80,
+                    color: Colors.black,
+                  ),
 
                   Text(
                     'Forçar retirada',

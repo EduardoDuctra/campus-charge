@@ -41,7 +41,6 @@ class _ConectoresSreenState extends State<ConectoresSreen> {
   final OcppService ocppService = OcppService();
 
   //usado para ver se tenho resposta na minha API nessa url
-  ConectorDTO? conectorRecente;
   bool carregando = true;
 
 
@@ -73,30 +72,8 @@ class _ConectoresSreenState extends State<ConectoresSreen> {
 
   Future<void> carregarConectores() async {
 
-    //verifica se o backend ta mandando uma transação recente
-    final transacaoRecenteAPI = await conectorService.buscarConectorRecente();
 
-    /*
-    mounted -> se tem o widgte na tela
-    se não tiver na tela -> return
-     */
-    if (!mounted) {
-      return;
-    }
-
-    //tem transação recente -> atualiza as listas
-    if(transacaoRecenteAPI != null){
-
-      setState(() {
-        //seta a transacao que veio da API
-        conectorRecente = transacaoRecenteAPI;
-        conectores = [];
-        carregando = false;
-      });
-
-    } else {
-
-      //não tem transacao recente -> mostra todos os conectores
+      //mostra todos os conectores
       final lista = await conectorService.listarConectores(widget.idCarregador);
 
       /*
@@ -109,12 +86,11 @@ class _ConectoresSreenState extends State<ConectoresSreen> {
 
       //tem transação recente -> atualiza as listas
       setState(() {
-        conectorRecente = null;
         conectores = lista;
         carregando = false;
       });
     }
-  }
+
 
   Future<bool> enviarRemoteStart(ConectorDTO dto) async {
 
@@ -136,23 +112,6 @@ class _ConectoresSreenState extends State<ConectoresSreen> {
     return aceito;
   }
 
-
-  Future<void> enviarUnlockConector(ConectorDTO dto) async {
-
-
-
-    print("ID carregador: ${widget.idCarregador}");
-    print("ID conector: ${dto.connectorIdNoCarregador}");
-
-    UnlockConnectorDTO unlockDTO = new UnlockConnectorDTO(
-      charger_id: widget.idCarregador,
-      connector_id: dto.connectorIdNoCarregador,);
-
-    await ocppService.unlockConnector(unlockDTO);
-
-  }
-
-  // =====================  BUILD  =========================== //
 
 
   @override
@@ -210,44 +169,8 @@ class _ConectoresSreenState extends State<ConectoresSreen> {
 
                     Expanded(
 
-                      //se for recente mostra somente ele
-                      child: conectorRecente != null ?
 
-                      Column(
-                        children: [
-
-                          ConectorCard(
-                            dto: conectorRecente!,
-                            onPressed: () async {
-
-                              await enviarUnlockConector(conectorRecente!);
-
-                            },
-                          ),
-
-                          SizedBox(height: 160),
-
-                          BotaoRemover(onPressed: () {
-
-                          },
-                          ),
-
-                          SizedBox(height: 20),
-
-
-                          Text(
-                            'Caso o conector fique preso, force a retirada',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                        ]
-                      )
-
-                      :
-
+                      child:
                       Column(
                         children: conectores.asMap().entries.map((entry) {
                           int index = entry.key;

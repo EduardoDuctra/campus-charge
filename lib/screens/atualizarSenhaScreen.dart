@@ -6,6 +6,7 @@ import 'package:projeto_integrador/shared/botaoCancelar.dart';
 import '../DTO/SenhaAtualizarDTO.dart';
 import '../DTO/VeiculoDTO.dart';
 import '../services/usuarioService.dart';
+import '../shared/appDrawer.dart';
 import '../shared/topBarWidget.dart';
 import '../theme/colors.dart';
 import 'homeScreen.dart';
@@ -69,6 +70,10 @@ class _AtualizarSenhaScreenState extends State<AtualizarSenhaScreen> {
     final height = MediaQuery.of(context).size.height;
 
     return Scaffold(
+
+      drawer: AppDrawer(
+        usuario: widget.usuario,),
+
       backgroundColor: Colors.black,
 
       body: SafeArea(
@@ -77,6 +82,8 @@ class _AtualizarSenhaScreenState extends State<AtualizarSenhaScreen> {
 
           child: Column(
             children: [
+
+
 
               TopBarWidget(usuario: widget.usuario),
 

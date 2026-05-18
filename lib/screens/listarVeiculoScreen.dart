@@ -8,6 +8,7 @@ import 'package:projeto_integrador/shared/cardVeiculo.dart';
 
 import '../DTO/VeiculoDTO.dart';
 import '../controller/veiculoController.dart';
+import '../shared/appDrawer.dart';
 import '../shared/saldoCard.dart';
 import '../shared/topBarWidget.dart';
 import '../theme/colors.dart';
@@ -47,6 +48,9 @@ class _ListarVeiculoScreenState extends State<ListarVeiculoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
+      drawer: AppDrawer(
+        usuario: widget.usuario,),
 
       backgroundColor: Colors.black,
 
