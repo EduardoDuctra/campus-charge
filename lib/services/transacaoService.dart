@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:projeto_integrador/DTO/TransacaoAtivaDTO.dart';
 import 'package:projeto_integrador/DTO/TransacaoCreditoDTO.dart';
+import 'package:projeto_integrador/DTO/ValorMaximoDTO.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../DTO/TransacaoDebitoDTO.dart';
@@ -110,6 +111,20 @@ class TransacaoService {
 
     }
 
+  }
+
+  Future<void> atualizarValorMaximo(int idTransacao, double valorMaximo) async {
+
+    final dto = ValorMaximoDTO(valorMaximo: valorMaximo);
+
+    final response = await api.patch(
+      "transacao/$idTransacao/valor-maximo",
+      dto.toJson(),);
+
+    if(response.statusCode != 200){
+      throw Exception(
+          "Erro ao atualizar valor máximo");
+    }
   }
 
   Future<void> abrirMercadoPago(BuildContext context, String url) async {

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_integrador/DTO/TransacaoAtivaDTO.dart';
 import 'package:projeto_integrador/DTO/ocpp/RemoteStopDTO.dart';
+import 'package:projeto_integrador/services/conectorService.dart';
 import 'package:projeto_integrador/services/ocppService.dart';
 import 'package:projeto_integrador/shared/cardFinalizar.dart';
 import 'package:projeto_integrador/shared/carregandoAtivoCard.dart';
@@ -9,6 +10,7 @@ import 'package:projeto_integrador/shared/valorRecargaCard.dart';
 import 'package:projeto_integrador/theme/colors.dart';
 
 import '../DTO/UsuarioDTO.dart';
+import '../controller/carregadorController.dart';
 import '../services/transacaoService.dart';
 import '../services/websocket_service.dart';
 import '../shared/conectorCard.dart';
@@ -33,13 +35,17 @@ class CarregandoScreen extends StatefulWidget {
 
 class _CarregandoScreenState extends State<CarregandoScreen> {
 
+  late CarregadorController controller;
   final TransacaoService transacaoService = TransacaoService();
-  final OcppService ocppService = OcppService();
-
 
   @override
   void initState() {
     super.initState();
+
+    controller = CarregadorController(
+      ocppService: OcppService(),
+      conectorService: ConectorService()
+    );
 
     if (widget.usuario.idUsuario == null) {
       throw Exception("Usuário sem ID");
@@ -47,29 +53,7 @@ class _CarregandoScreenState extends State<CarregandoScreen> {
 
   }
 
-  Future<bool> enviarRemoteStop() async {
 
-    bool aceito = false;
-
-    print("ID carregador: ${widget.transacaoAtiva.idCarregador}");
-    print("ID Transacao: ${widget.transacaoAtiva.idTransacao}");
-
-    RemoteStopDTO remoteStopDTO = new RemoteStopDTO(
-      charger_id: widget.transacaoAtiva.idCarregador,
-      transaction_id: widget.transacaoAtiva.idTransacao,);
-
-    String response = await ocppService.remoteStop(remoteStopDTO);
-
-    if(response == "Accepted"){
-      aceito = true;
-    }
-
-    return aceito;
-
-  }
-
-
-  // =====================  BUILD  =========================== //
 
 
   @override
@@ -138,8 +122,14 @@ class _CarregandoScreenState extends State<CarregandoScreen> {
                         ),
 
                         TextButton(
-                          onPressed: () {
-                            print("Valor digitado: ${controller.text}");
+                          onPressed: () async {
+
+                            double valorMaximo = double.parse(controller.text);
+                            
+                            await transacaoService.atualizarValorMaximo(widget.transacaoAtiva.idTransacao, valorMaximo);
+
+
+                            print("Valor digitado: ${valorMaximo}");
                             Navigator.pop(context);
                           },
                           child: Text("Confirmar",
@@ -175,7 +165,7 @@ class _CarregandoScreenState extends State<CarregandoScreen> {
                         Expanded(
                           child: CardFinalizar(
                             onPressed: () async {
-                              await enviarRemoteStop();
+                              await controller.enviarRemoteStop(widget.transacaoAtiva);
                               },
                           ),
                         ),

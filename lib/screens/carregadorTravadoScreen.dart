@@ -10,6 +10,7 @@ import 'package:projeto_integrador/shared/cardVeiculo.dart';
 import '../DTO/ConectorDTO.dart';
 import '../DTO/VeiculoDTO.dart';
 import '../DTO/ocpp/UnlockConnectorDTO.dart';
+import '../controller/carregadorController.dart';
 import '../controller/veiculoController.dart';
 import '../services/ocppService.dart';
 import '../shared/BotaoRemover.dart';
@@ -33,49 +34,30 @@ class CarregadorTravadoScreen extends StatefulWidget {
 
 class _CarregadorTravadoScreenState extends State<CarregadorTravadoScreen> {
 
-
-  final ConectorService conectorService = ConectorService();
-  final OcppService ocppService  = OcppService();
-
-  ConectorDTO? conectorRecente;
-  bool carregando = true;
+  late CarregadorController controller;
 
   @override
   void initState() {
     super.initState();
 
-    carregarConectorTravado();
+    controller = CarregadorController(
+        ocppService: OcppService(),
+        conectorService: ConectorService()
+    );
+
+    carregarTela();
 
   }
 
-  Future<void> carregarConectorTravado() async {
+  Future<void> carregarTela() async {
 
-    final response = await conectorService.buscarConectorRecente();
+    await controller.carregarConectorTravado();
 
-
-    if (!mounted) {
-      return;
+    if(mounted){
+      setState(() {});
     }
-
-    setState(() {
-      conectorRecente = response;
-      carregando = false;
-    });
   }
 
-  Future<void> enviarUnlockConector(ConectorDTO dto) async {
-
-
-    print("ID carregador: ${dto.idCarregador}");
-    print("ID conector: ${dto.connectorIdNoCarregador}");
-
-    UnlockConnectorDTO unlockDTO = new UnlockConnectorDTO(
-      charger_id: dto.idCarregador,
-      connector_id: dto.connectorIdNoCarregador,);
-
-    await ocppService.unlockConnector(unlockDTO);
-
-  }
 
 
   @override
@@ -104,10 +86,10 @@ class _CarregadorTravadoScreenState extends State<CarregadorTravadoScreen> {
 
             SizedBox(height: 40),
 
-            if (carregando)
+            if (controller.carregando)
               CircularProgressIndicator(),
 
-            if (!carregando && conectorRecente == null)
+            if (!controller.carregando && controller.conectorRecente == null)
               Text(
                 "Nenhum conector travado",
                 style: TextStyle(
@@ -116,7 +98,7 @@ class _CarregadorTravadoScreenState extends State<CarregadorTravadoScreen> {
                 ),
               ),
 
-            if (conectorRecente != null)
+            if (controller.conectorRecente != null)
 
               Column(
                 children: [
@@ -138,8 +120,8 @@ class _CarregadorTravadoScreenState extends State<CarregadorTravadoScreen> {
                   BotaoRemover(
                     onPressed: () async {
 
-                      await enviarUnlockConector(
-                        conectorRecente!,
+                      await controller.enviarUnlockConector(
+                        controller.conectorRecente!,
                       );
 
                       Navigator.pushAndRemoveUntil(

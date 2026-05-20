@@ -11,6 +11,7 @@ import 'package:projeto_integrador/theme/colors.dart';
 import 'package:quickalert/quickalert.dart';
 
 import '../DTO/UsuarioDTO.dart';
+import '../controller/conectoresController.dart';
 import '../services/websocket_service.dart';
 import '../shared/BotaoRemover.dart';
 import '../shared/saldoCard.dart';
@@ -36,22 +37,21 @@ class ConectoresSreen extends StatefulWidget {
 
 class _ConectoresSreenState extends State<ConectoresSreen> {
 
-  final TransacaoService transacaoService = TransacaoService();
-  final ConectorService conectorService = ConectorService();
-  final OcppService ocppService = OcppService();
-
-  //usado para ver se tenho resposta na minha API nessa url
-  bool carregando = true;
+  late ConectoresController controller;
 
 
-  List<ConectorDTO>conectores = [];
 
 
   @override
   void initState() {
     super.initState();
 
-    carregarConectores();
+    controller = ConectoresController(
+      conectorService: ConectorService(),
+      ocppService: OcppService(),);
+
+
+    carregarTela();
 
     //wb que fica escutando a atualização dos conectores
     WebSocketService().wbConectores(
@@ -59,57 +59,24 @@ class _ConectoresSreenState extends State<ConectoresSreen> {
       onMensagem: (msg) async {
         print("WS CONECTORES: atualização");
 
-        await carregarConectores();
+        await carregarTela();
       },
     );
+  }
+
+  Future<void> carregarTela() async {
+
+    await controller.carregarConectores(
+        widget.idCarregador);
+
+    if(mounted){
+      setState(() {});
+    }
   }
 
   @override
   void dispose() {
     super.dispose();
-  }
-
-
-  Future<void> carregarConectores() async {
-
-
-      //mostra todos os conectores
-      final lista = await conectorService.listarConectores(widget.idCarregador);
-
-      /*
-      mounted -> se tem o widgte na tela
-      se não tiver na tela -> return
-     */
-      if (!mounted){
-        return;
-      }
-
-      //tem transação recente -> atualiza as listas
-      setState(() {
-        conectores = lista;
-        carregando = false;
-      });
-    }
-
-
-  Future<bool> enviarRemoteStart(ConectorDTO dto) async {
-
-    bool aceito = false;
-
-    print("ID carregador: ${widget.idCarregador}");
-    print("ID conector: ${dto.connectorIdNoCarregador}");
-
-    RemoteStartDTO remoteStartDTO = new RemoteStartDTO(
-        charger_id: widget.idCarregador,
-      connector_id: dto.connectorIdNoCarregador,);
-
-    String response = await ocppService.remoteStart(remoteStartDTO);
-
-    if(response == "Accepted"){
-      aceito = true;
-    }
-
-    return aceito;
   }
 
 
@@ -172,21 +139,21 @@ class _ConectoresSreenState extends State<ConectoresSreen> {
 
                       child:
                       Column(
-                        children: conectores.asMap().entries.map((entry) {
+                        children: controller.conectores.asMap().entries.map((entry) {
                           int index = entry.key;
                           ConectorDTO dto = entry.value;
 
                           return Expanded(
                             child: Padding(
                               padding: EdgeInsets.only(
-                                bottom: index != conectores.length - 1 ? 20 : 0,
+                                bottom: index != controller.conectores.length - 1 ? 20 : 0,
                               ),
 
                               child: ConectorCard(
                                 dto: dto,
                                 onPressed: () async {
 
-                                  bool response = await enviarRemoteStart(dto);
+                                  bool response = await controller.enviarRemoteStart(dto);
 
                                   if(response){
 
