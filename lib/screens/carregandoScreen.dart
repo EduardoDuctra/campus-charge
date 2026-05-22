@@ -54,8 +54,6 @@ class _CarregandoScreenState extends State<CarregandoScreen> {
   }
 
 
-
-
   @override
   Widget build(BuildContext context) {
     return Container(

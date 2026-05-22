@@ -1,17 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:projeto_integrador/DTO/TransacaoAtivaDTO.dart';
 import 'package:projeto_integrador/screens/conectoresSreen.dart';
 import 'package:projeto_integrador/services/transacaoService.dart';
 
-import '../DTO/CarregadorDTO.dart';
-import '../DTO/UsuarioDTO.dart';
 import '../controller/homeController.dart';
-import 'cadastroUsuarioScreen.dart';
-import 'carregandoScreen.dart';
-import 'historicoTransacoesDebitoScreen.dart';
-import 'historicoTransacoesCreditoScreen.dart';
 import '../services/carregadorService.dart';
 import '../services/usuarioService.dart';
 import '../services/websocket_service.dart';
@@ -20,6 +12,10 @@ import '../shared/navegationBar.dart';
 import '../shared/saldoCard.dart';
 import '../shared/topBarWidget.dart';
 import '../utils/modal_recarga.dart';
+import 'cadastroUsuarioScreen.dart';
+import 'carregandoScreen.dart';
+import 'historicoTransacoesCreditoScreen.dart';
+import 'historicoTransacoesDebitoScreen.dart';
 import 'lerQRCodeScreen.dart';
 
 /**
@@ -44,11 +40,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
 
   late HomeController controller;
 
-
-
-
   String? idCarregadorSelecionado;
-
 
   int currentIndex = 0;
 

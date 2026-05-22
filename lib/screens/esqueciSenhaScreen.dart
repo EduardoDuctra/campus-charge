@@ -1,15 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:projeto_integrador/DTO/EsqueciSenhaDTO.dart';
-import 'package:projeto_integrador/screens/cadastroUsuarioScreen.dart';
 import 'package:projeto_integrador/screens/redefinirSenhaScreen.dart';
 import 'package:projeto_integrador/theme/colors.dart';
 import 'package:quickalert/quickalert.dart';
 
-import '../DTO/DadosAutenticacaoDTO.dart';
 import '../services/loginService.dart';
-import 'homeScreen.dart';
 
 class EsqueciSenhaScreen extends StatelessWidget {
   EsqueciSenhaScreen({super.key});

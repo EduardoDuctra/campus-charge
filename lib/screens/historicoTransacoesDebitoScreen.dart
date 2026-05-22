@@ -51,8 +51,6 @@ class _HistoricoTransacoesDebitoScreenState extends State<HistoricoTransacoesDeb
   }
 
 
-  // =====================  BUILD  =========================== //
-
 
   @override
   Widget build(BuildContext context) {

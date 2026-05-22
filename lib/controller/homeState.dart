@@ -3,7 +3,11 @@ import '../DTO/TransacaoAtivaDTO.dart';
 import '../DTO/UsuarioDTO.dart';
 
 /**
- * atualiza o estado quando o WS envia uma notificação
+ * representa o estado atual da HomeScreen,
+ * funcionando como um DTO de estado da interface
+ *
+ * O estado é atualizado pelo HomeController
+ * quando eventos websocket ou chamadas da API ocorrem
  */
 class HomeState {
   final UsuarioDTO? usuario;

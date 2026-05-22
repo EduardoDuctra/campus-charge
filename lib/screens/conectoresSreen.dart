@@ -40,8 +40,6 @@ class _ConectoresSreenState extends State<ConectoresSreen> {
   late ConectoresController controller;
 
 
-
-
   @override
   void initState() {
     super.initState();

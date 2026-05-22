@@ -1,24 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_integrador/DTO/UsuarioDTO.dart';
 import 'package:projeto_integrador/services/conectorService.dart';
-import 'package:projeto_integrador/services/usuarioService.dart';
-import 'package:projeto_integrador/services/veiculoService.dart';
-import 'package:projeto_integrador/shared/botaoAdicionar.dart';
 import 'package:projeto_integrador/shared/botaoCancelar.dart';
-import 'package:projeto_integrador/shared/cardVeiculo.dart';
 
-import '../DTO/ConectorDTO.dart';
-import '../DTO/VeiculoDTO.dart';
-import '../DTO/ocpp/UnlockConnectorDTO.dart';
 import '../controller/carregadorController.dart';
-import '../controller/veiculoController.dart';
 import '../services/ocppService.dart';
 import '../shared/BotaoRemover.dart';
 import '../shared/appDrawer.dart';
-import '../shared/conectorCard.dart';
 import '../shared/saldoCard.dart';
 import '../shared/topBarWidget.dart';
-import '../theme/colors.dart';
 import '../utils/modal_recarga.dart';
 import 'homeScreen.dart';
 
@@ -80,7 +70,6 @@ class _CarregadorTravadoScreenState extends State<CarregadorTravadoScreen> {
                 saldo: widget.usuario!.saldo ?? 0,
                 onPressed: () => abrirModalRecarga(context)
             ),
-
 
 
 

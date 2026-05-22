@@ -57,6 +57,7 @@ class WebSocketService {
   /*
  escuta atualizações do usuário
  uso para saldo e atualização da recarga
+ cada usuário está inscrito no seu topico
 */
   void wbUsuario({
     required String userId,

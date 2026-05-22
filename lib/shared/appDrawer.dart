@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_integrador/screens/loginScreen.dart';
+import 'package:projeto_integrador/services/websocket_service.dart';
 
 import '../DTO/UsuarioDTO.dart';
 import '../screens/atualizarSenhaScreen.dart';
 import '../screens/cadastroUsuarioScreen.dart';
 import '../screens/carregadorTravadoScreen.dart';
 import '../screens/listarVeiculoScreen.dart';
+import '../services/tokenService.dart';
 
 class AppDrawer extends StatelessWidget {
 
@@ -189,6 +192,27 @@ class AppDrawer extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
+
+            onTap: () async {
+
+              final navigator = Navigator.of(context);
+
+              final TokenService tokenService = TokenService();
+              final WebSocketService wsService = WebSocketService();
+
+              await tokenService.removerToken();
+
+              wsService.desconectar();
+
+              navigator.pushAndRemoveUntil(
+
+                MaterialPageRoute(
+                  builder: (context) => LoginScreen(),
+                ),
+
+                    (route) => false,
+              );
+            },
           ),
         ],
       ),
