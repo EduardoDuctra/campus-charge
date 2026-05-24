@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+
 import '../DTO/CarregadorDTO.dart';
 import '../services/carregadorService.dart';
 import '../services/transacaoService.dart';
@@ -37,17 +38,19 @@ class HomeController {
   bool wsCarregadoresConectado = false;
 
 
+  String cidade = "Santa Maria";
+
   //passa para o HomeState as informações atualizadas
   Future<HomeState> carregarDados() async {
     final usuario = await usuarioservice.buscarUsuarioLogado();
-
 
     dynamic transacao;
 
     try {
 
       transacao = await transacaoService.listarTransacoesAtiva();
-
+      
+      
     } catch (e) {
 
       print("Sem transação ativa");
@@ -58,11 +61,28 @@ class HomeController {
 
     final carregadores = await carregadorService.listarCarregadores();
 
+    List<CarregadorDTO> carregadoresPorCidade = [];
+
+    for(CarregadorDTO carregador in carregadores){
+      if(carregador.cidade == cidade){
+        carregadoresPorCidade.add(carregador);
+      }
+    }
+    
     return HomeState(
       usuario: usuario,
       transacaoAtiva: transacao,
-      carregadores: carregadores,
+      carregadores: carregadoresPorCidade,
+      cidade: cidade,
     );
+  }
+
+  Future<void> alterarCidade(String cidade) async {
+
+    print("Nova cidade " + cidade);
+    this.cidade = cidade;
+
+    await carregarTudo();
   }
 
 

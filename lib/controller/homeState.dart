@@ -13,10 +13,12 @@ class HomeState {
   final UsuarioDTO? usuario;
   final TransacaoAtivaDTO? transacaoAtiva;
   final List<CarregadorDTO> carregadores;
+  final String cidade;
 
   HomeState({
     required this.usuario,
     required this.transacaoAtiva,
     required this.carregadores,
+    required this.cidade,
   });
 }

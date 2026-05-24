@@ -46,6 +46,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
 
 
 
+
   @override
   void initState() {
     super.initState();
@@ -205,12 +206,22 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
                 child: Column(
                   children: [
 
-                    SizedBox(height: 30),
+                    SizedBox(height: 20),
 
+                    Text(
+                      'Você está em',
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
 
                     Row(
 
                       mainAxisAlignment: MainAxisAlignment.center,
+
+
 
                       children: [
 
@@ -225,18 +236,49 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
 
                         SizedBox(width: 20),
 
-                        Text(
-                          'UFSM - Santa Maria',
+                        DropdownButton<String>(
+                            value: controller.state!.cidade,
+
+                          dropdownColor: Colors.black,
+                          icon: SizedBox.shrink(),
+
                           style: const TextStyle(
-                            fontSize: 20,
                             color: Colors.white,
+                            fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
-                        ),
+
+
+                          underline: Container(),
+
+                          items: const [
+
+                            DropdownMenuItem(
+                              value: "Santa Maria",
+                              child: Text("UFSM - Santa Maria"),
+                            ),
+
+                            DropdownMenuItem(
+                              value: "Cachoeira do Sul",
+                              child: Text("UFSM - Cachoeira do Sul"),
+                            ),
+                          ],
+
+                          onChanged: (value) async {
+                              if(value !=null){
+
+                                await controller.alterarCidade(value);
+
+                              }
+                          },
+
+
+                           )
+
                       ],
                     ),
 
-                    SizedBox(height: 40),
+                    SizedBox(height: 20),
 
                     Expanded(
                       child: ListView.builder(
@@ -246,7 +288,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
                           final carregador = controller.state!.carregadores[index];
 
                           return Padding(
-                            padding: const EdgeInsets.only(bottom: 40),
+                            padding: const EdgeInsets.only(bottom: 20),
                             child: CardCarregador(
                               carregadorDTO: carregador,
 
@@ -261,7 +303,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
                       ),
                     ),
 
-                    SizedBox(height: 30),
 
                   ],
                 ),
