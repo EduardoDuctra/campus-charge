@@ -179,12 +179,10 @@ class _CadastroUsuarioScreenState extends State<CadastroUsuarioScreen> {
               ),
 
               buildInput(width, "CPF", cpfController,
-                enabled: !modoEdicao,
+
+                enabled: widget.usuario?.cpf == null || widget.usuario!.cpf!.isEmpty,
                 validator: (value) {
 
-                  if (modoEdicao) {
-                    return null;
-                  }
 
                   if (value == null || value.isEmpty) {
                     return "CPF obrigatório";
