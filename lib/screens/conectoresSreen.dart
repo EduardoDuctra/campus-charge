@@ -96,7 +96,7 @@ class _ConectoresSreenState extends State<ConectoresSreen> {
                 onPressed: () => abrirModalRecarga(context)
             ),
 
-            SizedBox(height: 40),
+            SizedBox(height: 10),
 
             Stack(
               alignment: Alignment.center,
@@ -124,7 +124,7 @@ class _ConectoresSreenState extends State<ConectoresSreen> {
               ],
             ),
 
-            SizedBox(height: 40),
+            SizedBox(height: 10),
 
             Expanded(
               child: Container(
@@ -144,7 +144,7 @@ class _ConectoresSreenState extends State<ConectoresSreen> {
                           return Expanded(
                             child: Padding(
                               padding: EdgeInsets.only(
-                                bottom: index != controller.conectores.length - 1 ? 20 : 0,
+                                bottom: index != controller.conectores.length - 1 ? 16 : 0,
                               ),
 
                               child: ConectorCard(

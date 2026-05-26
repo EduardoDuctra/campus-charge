@@ -54,28 +54,28 @@ class CardHistoricoRecargas extends StatelessWidget {
 
                     '${potencia.toStringAsFixed(2)}Khw',
                     style: const TextStyle(
-                      fontSize: 30,
+                      fontSize: 26,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     formatarData(data),
                     style: const TextStyle(
-                      fontSize: 18,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     'Veículo: $modelo',
                     style: const TextStyle(
-                      fontSize: 18,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     tipo,
                     style: const TextStyle(
-                      fontSize: 18,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -90,7 +90,7 @@ class CardHistoricoRecargas extends StatelessWidget {
                   Text(
                     'R\$ ${valor.toStringAsFixed(2)}',
                     style: const TextStyle(
-                      fontSize: 30,
+                      fontSize: 26,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
