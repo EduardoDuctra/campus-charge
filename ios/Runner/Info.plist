@@ -75,5 +75,20 @@
 
 
 
+<key>GIDClientID</key>
+<string>574625937194-2g4k7qmq83gkfvi73n61tv7u59016snq.apps.googleusercontent.com</string>
+
+<key>CFBundleURLTypes</key>
+<array>
+  <dict>
+    <key>CFBundleTypeRole</key>
+    <string>Editor</string>
+    <key>CFBundleURLSchemes</key>
+    <array>
+      <string>com.googleusercontent.apps.574625937194-2g4k7qmq83gkfvi73n61tv7u59016snq</string>
+    </array>
+  </dict>
+</array>
+
 </dict>
 </plist>
