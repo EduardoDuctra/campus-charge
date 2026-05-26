@@ -53,7 +53,7 @@ class CardCarregador extends StatelessWidget {
 
                   SvgPicture.asset(
                       'assets/icons/material-symbols_ev-charger-rounded.svg',
-                      width: largura * 0.25,
+                      width: largura * 0.18,
                       colorFilter: ColorFilter.mode(
                           Colors.black,
                           BlendMode.srcIn)
@@ -71,7 +71,7 @@ class CardCarregador extends StatelessWidget {
 
               const Icon(
                 Icons.arrow_forward_ios,
-                size: 80,
+                size: 60,
                 color: Colors.black,
               ),
             ],
