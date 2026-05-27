@@ -103,7 +103,6 @@ class HomeController {
 
         onMensagem: (msg) async {
 
-          print("WS carregadores");
 
           await carregarTudo();
         },
@@ -120,7 +119,6 @@ class HomeController {
 
         onMensagem: (msg) async {
 
-          print("WS usuario");
 
           await carregarTudo();
         },

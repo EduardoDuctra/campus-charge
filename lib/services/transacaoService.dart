@@ -58,6 +58,7 @@ class TransacaoService {
 
 
   Future<TransacaoAtivaDTO?> listarTransacoesAtiva() async {
+
     final response = await api.get("transacao/listar-transacao-ativa");
 
     print("STATUS: ${response.statusCode}");
