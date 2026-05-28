@@ -49,7 +49,7 @@ class CarregandoAtivoCard extends StatelessWidget {
                 
                     SvgPicture.asset(
                         'assets/icons/material-symbols_ev-charger-rounded.svg',
-                        width: largura * 0.25,
+                        width: largura * 0.2,
                         colorFilter: ColorFilter.mode(
                             Colors.black,
                             BlendMode.srcIn)
@@ -72,7 +72,7 @@ class CarregandoAtivoCard extends StatelessWidget {
                       'Seu veículo está ${transacao.socAtual}% carregado',
                       textAlign: TextAlign.center,
                       style: const TextStyle(
-                        fontSize: 24,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

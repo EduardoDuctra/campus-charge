@@ -34,7 +34,7 @@ class CardHistoricoRecargas extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: largura * 0.05),
       child: InkWell(
         child: Container(
-          height: altura * 0.25,
+          height: altura * 0.18,
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: Colors.white,

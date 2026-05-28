@@ -278,7 +278,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
                       ],
                     ),
 
-                    SizedBox(height: 20),
+                    SizedBox(height: 40),
 
                     Expanded(
                       child: ListView.builder(
@@ -288,7 +288,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
                           final carregador = controller.state!.carregadores[index];
 
                           return Padding(
-                            padding: const EdgeInsets.only(bottom: 20),
+                            padding: const EdgeInsets.only(bottom: 40),
                             child: CardCarregador(
                               carregadorDTO: carregador,
 
