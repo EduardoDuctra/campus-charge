@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:projeto_integrador/screens/loginScreen.dart';
 import 'package:projeto_integrador/services/websocket_service.dart';
 
@@ -199,10 +200,16 @@ class AppDrawer extends StatelessWidget {
 
               final TokenService tokenService = TokenService();
               final WebSocketService wsService = WebSocketService();
+              final GoogleSignIn googleSignIn = GoogleSignIn();
 
-              await tokenService.removerToken();
 
               wsService.desconectar();
+
+              await tokenService.removerToken();
+              await googleSignIn.signOut();
+
+              print("Logout com sucesso");
+              print(await tokenService.recuperarToken());
 
               navigator.pushAndRemoveUntil(
 

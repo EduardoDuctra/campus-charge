@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:projeto_integrador/DTO/CarregadorDTO.dart';
 import 'package:projeto_integrador/DTO/ConectorDTO.dart';
 import 'package:projeto_integrador/DTO/ocpp/RemoteStartDTO.dart';
+import 'package:projeto_integrador/DTO/ocpp/RemoteStartResponseDTO.dart';
 import 'package:projeto_integrador/DTO/ocpp/UnlockConnectorDTO.dart';
 import 'package:projeto_integrador/services/conectorService.dart';
 import 'package:projeto_integrador/services/ocppService.dart';
@@ -134,8 +135,24 @@ class _ConectoresSreenState extends State<ConectoresSreen> {
 
                     Expanded(
 
+                      child: widget.usuario.saldo == null ||
+                          widget.usuario.saldo! <= 0
 
-                      child:
+                          ? Center(
+                        child: Text(
+                          "Adicione saldo\n para utilizar os conectores.",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      )
+
+                      :
+
+
                       Column(
                         children: controller.conectores.asMap().entries.map((entry) {
                           int index = entry.key;
@@ -151,9 +168,9 @@ class _ConectoresSreenState extends State<ConectoresSreen> {
                                 dto: dto,
                                 onPressed: () async {
 
-                                  bool response = await controller.enviarRemoteStart(dto);
+                                  RemoteStartResponseDTO response = await controller.enviarRemoteStart(dto);
 
-                                  if(response){
+                                  if(response.aceito){
 
                                     QuickAlert.show(
                                         context: context,
@@ -168,7 +185,7 @@ class _ConectoresSreenState extends State<ConectoresSreen> {
                                     QuickAlert.show(
                                       context: context,
                                       type: QuickAlertType.error,
-                                      text: "Transação recusada.",
+                                      text: response.response,
                                       showConfirmBtn: false,
                                       autoCloseDuration: Duration(seconds: 5),
                                     );

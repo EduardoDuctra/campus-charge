@@ -281,7 +281,21 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
                     SizedBox(height: 40),
 
                     Expanded(
-                      child: ListView.builder(
+                      child: controller.state!.carregadores.isEmpty ?
+                      Center(
+                        child: Text(
+                          "Nenhum carregador disponível.",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      )
+
+                      :
+
+                      ListView.builder(
                         itemCount: controller.state!.carregadores.length,
                         itemBuilder: (context, index) {
 

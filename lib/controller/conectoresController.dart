@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:projeto_integrador/DTO/ocpp/RemoteStartResponseDTO.dart';
+
 import '../DTO/ConectorDTO.dart';
 import '../DTO/ocpp/RemoteStartDTO.dart';
 import '../services/conectorService.dart';
@@ -30,9 +34,8 @@ class ConectoresController {
   }
 
 
-  Future<bool> enviarRemoteStart(ConectorDTO dto) async {
+  Future<RemoteStartResponseDTO> enviarRemoteStart(ConectorDTO dto) async {
 
-    bool aceito = false;
 
     print("ID carregador: ${dto.idCarregador}");
     print("ID conector: ${dto.connectorIdNoCarregador}");
@@ -43,11 +46,15 @@ class ConectoresController {
 
     String response = await ocppService.remoteStart(remoteStartDTO);
 
+
     if(response == "Accepted"){
-      aceito = true;
+      return RemoteStartResponseDTO(response: response, aceito: true);
+
+    } else{
+
+      return RemoteStartResponseDTO.fromJson(jsonDecode(response));
     }
 
-    return aceito;
   }
 
 

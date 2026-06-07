@@ -153,8 +153,11 @@ class WebSocketService {
 
 
   void desconectar() {
+
     stompClient?.deactivate();
+
     stompClient = null;
     _isConnected = false;
   }
+
 }
