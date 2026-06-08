@@ -34,7 +34,7 @@ class Cardveiculo extends StatelessWidget {
         onTap: onPressed,
 
         child: Container(
-          height: altura * 0.30,
+          height: altura * 0.3,
           width: largura * 0.7,
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
@@ -75,26 +75,26 @@ class Cardveiculo extends StatelessWidget {
 
                         SvgPicture.asset(
                             'assets/icons/carro.svg',
-                            width: largura * 0.20,
+                            width: largura * 0.15,
                             colorFilter: ColorFilter.mode(
                                 Colors.black,
                                 BlendMode.srcIn)
 
                         ),
 
-                        SizedBox(height: 15,),
+                        SizedBox(height: 10,),
 
                         Text(
                           nomeVeiculo,
                           style: const TextStyle(
-                            fontSize: 30,
+                            fontSize: 24,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         Text(
                           modeloVeiculo,
                           style: const TextStyle(
-                            fontSize: 16,
+                            fontSize: 14,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

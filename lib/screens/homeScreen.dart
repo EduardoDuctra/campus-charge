@@ -278,7 +278,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
                       ],
                     ),
 
-                    SizedBox(height: 40),
+                    SizedBox(height: 20),
 
                     Expanded(
                       child: controller.state!.carregadores.isEmpty ?
@@ -302,7 +302,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
                           final carregador = controller.state!.carregadores[index];
 
                           return Padding(
-                            padding: const EdgeInsets.only(bottom: 40),
+                            padding: const EdgeInsets.only(bottom: 20),
                             child: CardCarregador(
                               carregadorDTO: carregador,
 

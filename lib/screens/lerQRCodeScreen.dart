@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:projeto_integrador/screens/conectoresSreen.dart';
 
 import '../DTO/UsuarioDTO.dart';
 
@@ -54,8 +55,17 @@ class _LerQRCodeScreenState extends State<LerQRCodeScreen> {
                   leituraRealizada = true;
 
                   print("QR CODE: $codigo");
-
-                  //todo -> redirecionar tela carregadores
+                  
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) =>
+                          ConectoresSreen(
+                              usuario: widget.usuario,
+                              idCarregador: codigo,
+                              onVoltar: (){
+                                Navigator.pop(context);
+                              })
+                      )
+                  );
                   break;
                 }
 

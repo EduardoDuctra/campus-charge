@@ -66,7 +66,7 @@ class _ListarVeiculoScreenState extends State<ListarVeiculoScreen> {
                 onPressed: () => abrirModalRecarga(context)
             ),
 
-            SizedBox(height: 60,),
+            SizedBox(height: 20,),
 
             Text(
 
@@ -78,7 +78,7 @@ class _ListarVeiculoScreenState extends State<ListarVeiculoScreen> {
               ),
             ),
 
-            SizedBox(height: 60,),
+            SizedBox(height: 20,),
 
             SizedBox(
 
@@ -131,7 +131,7 @@ class _ListarVeiculoScreenState extends State<ListarVeiculoScreen> {
               ),
             ),
 
-            SizedBox(height: 40,),
+            SizedBox(height: 20,),
 
             BotaoAdicionar(usuarioDTO: widget.usuario,),
             SizedBox(height: 10,),
