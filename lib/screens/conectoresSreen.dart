@@ -30,7 +30,8 @@ class ConectoresSreen extends StatefulWidget {
   const ConectoresSreen({super.key,
     required this.usuario,
     required this.idCarregador,
-    required this.onVoltar});
+    required this.onVoltar,
+  });
 
   @override
   State<ConectoresSreen> createState() => _ConectoresSreenState();
@@ -51,6 +52,28 @@ class _ConectoresSreenState extends State<ConectoresSreen> {
 
 
     carregarTela();
+
+
+
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.warning,
+        title: "Importante",
+        text: "Certifique-se que o veículo está conectado antes de iniciar a recarga",
+        confirmBtnText: "OK",
+
+        onConfirmBtnTap: () {
+
+          Navigator.pop(context); // fecha o alert
+
+        },
+      );
+
+    });
+
 
     //wb que fica escutando a atualização dos conectores
     WebSocketService().wbConectores(

@@ -36,7 +36,7 @@ class ConectorCard extends StatelessWidget {
 
                   child: Container(
 
-                    height: altura * 0.13,
+                    height: altura * 0.11,
                     padding: const EdgeInsets.symmetric(),
                     decoration: BoxDecoration(
                         color: AppColors.principal,

@@ -1,10 +1,10 @@
 class ConectorDTO {
   int id;
   int connectorIdNoCarregador;
-  String tipo;
+  String? tipo;
   bool disponivelUso;
-  double valorEnergia;
-  String nomeConector;
+  double? valorEnergia;
+  String? nomeConector;
   String idCarregador;
 
   ConectorDTO({

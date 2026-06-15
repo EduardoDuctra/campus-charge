@@ -29,6 +29,10 @@ class ConectoresController {
     conectores  = await conectorService.listarConectores(idCarregador);
 
 
+    //id ZERO é o proprio carregador
+    conectores.removeWhere((c) => c.connectorIdNoCarregador == 0);
+
+
     carregando = false;
 
   }
