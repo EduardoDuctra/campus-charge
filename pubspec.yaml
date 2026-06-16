@@ -55,6 +55,14 @@ dependencies:
 
   mobile_scanner: ^7.0.1
 
+  flutter_launcher_icons: ^0.14.3
+
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/material-symbols_ev-charger-rounded.png"
+
 
 
 
