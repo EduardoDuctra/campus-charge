@@ -29,6 +29,7 @@ class _ListarVeiculoScreenState extends State<ListarVeiculoScreen> {
 
   final VeiculoController controller = VeiculoController();
 
+
   @override
   void initState() {
     super.initState();
@@ -58,7 +59,7 @@ class _ListarVeiculoScreenState extends State<ListarVeiculoScreen> {
         child: Column(
           children: [
 
-            TopBarWidget(usuario: widget.usuario),
+            TopBarWidget(),
 
 
             SaldoCard(
@@ -94,7 +95,7 @@ class _ListarVeiculoScreenState extends State<ListarVeiculoScreen> {
                   final veiculo = controller.veiculos[index];
 
                   return Padding(
-                    padding: const EdgeInsets.only(left: 20),
+                    padding: const EdgeInsets.only(left: 2),
                     child: Cardveiculo(
                       nomeVeiculo: veiculo.modeloCarro,
                       modeloVeiculo: veiculo.nomeMarca,

@@ -21,10 +21,14 @@ class TransacaoService {
 
       final List jsonList = jsonDecode(response.body);
 
-
-      return jsonList
+      final transacoesOrdenadas= jsonList
           .map((item) => TransacaoCreditoDTO.fromJson(item))
           .toList();
+
+      transacoesOrdenadas.sort(
+            (a, b) => b.dataInicio.compareTo(a.dataInicio),);
+
+      return transacoesOrdenadas;
 
     } else if (response.statusCode == 404) {
 
@@ -43,9 +47,15 @@ class TransacaoService {
 
       final List jsonList = jsonDecode(response.body);
 
-      return jsonList
+      final transacoesOrdenadas= jsonList
           .map((item) => TransacaoDebitoDTO.fromJson(item))
           .toList();
+
+      transacoesOrdenadas.sort(
+            (a, b) => b.dataInicio.compareTo(a.dataInicio),);
+
+      return transacoesOrdenadas;
+
 
     } else if (response.statusCode == 404) {
 

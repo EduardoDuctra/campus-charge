@@ -85,7 +85,7 @@ class _AtualizarSenhaScreenState extends State<AtualizarSenhaScreen> {
 
 
 
-              TopBarWidget(usuario: widget.usuario),
+              TopBarWidget(),
 
               Expanded(
                 child: Column(

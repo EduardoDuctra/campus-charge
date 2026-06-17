@@ -64,7 +64,7 @@ class _CarregandoScreenState extends State<CarregandoScreen> {
           children: [
 
 
-            TopBarWidget(usuario: widget.usuario),
+            TopBarWidget(),
 
             SaldoCard(
               saldo: widget.usuario.saldo ?? 0,

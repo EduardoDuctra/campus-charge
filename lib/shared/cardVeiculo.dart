@@ -35,7 +35,7 @@ class Cardveiculo extends StatelessWidget {
 
         child: Container(
           height: altura * 0.3,
-          width: largura * 0.7,
+          width: largura * 0.5,
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: cor,
@@ -59,7 +59,7 @@ class Cardveiculo extends StatelessWidget {
 
                       child: const Icon(
                         Icons.delete,
-                        size: 40,
+                        size: 30,
                         color: Colors.black,
                       ),
                     ),

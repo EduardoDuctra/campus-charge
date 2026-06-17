@@ -37,7 +37,7 @@ class _CadastrarVeiculoScreenState extends State<CadastrarVeiculoScreen> {
         child: Column(
           children: [
 
-            TopBarWidget(usuario: widget.usuario),
+            TopBarWidget(),
 
 
             Expanded(

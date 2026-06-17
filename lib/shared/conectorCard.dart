@@ -36,7 +36,7 @@ class ConectorCard extends StatelessWidget {
 
                   child: Container(
 
-                    height: altura * 0.11,
+                    height: altura * 0.09,
                     padding: const EdgeInsets.symmetric(),
                     decoration: BoxDecoration(
                         color: AppColors.principal,
@@ -61,7 +61,7 @@ class ConectorCard extends StatelessWidget {
 
                                 SvgPicture.asset(
                                     'assets/icons/rapido.svg',
-                                    width: largura * 0.10,
+                                    width: largura * 0.07,
                                     colorFilter: ColorFilter.mode(
                                         Colors.black,
                                         BlendMode.srcIn)
@@ -72,7 +72,7 @@ class ConectorCard extends StatelessWidget {
 
                                 SvgPicture.asset(
                                     'assets/icons/iconoir_ev-plug.svg',
-                                    width: largura * 0.10,
+                                    width: largura * 0.07,
                                     colorFilter: ColorFilter.mode(
                                         Colors.black,
                                         BlendMode.srcIn)
@@ -93,7 +93,7 @@ class ConectorCard extends StatelessWidget {
                                     Text(
                                       dto.tipo == "CC" ? "Corrente Contínua" : "Corrente Alternada",
                                       style: const TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -101,7 +101,7 @@ class ConectorCard extends StatelessWidget {
                                     Text(
                                       '${dto.nomeConector} - R\$ ${dto.valorEnergia}/kWh',
                                       style: const TextStyle(
-                                        fontSize: 16,
+                                        fontSize: 14,
                                         fontWeight: FontWeight.normal,
                                       ),
                                     ),

@@ -5,21 +5,12 @@ import '../DTO/UsuarioDTO.dart';
 
 class TopBarWidget extends StatelessWidget {
 
-  final UsuarioDTO usuario;
 
-
-
-
-
-  const TopBarWidget({
-    super.key, required this.usuario,
-  });
+  const TopBarWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
 
-    final fotoUrl=usuario.fotoUrl;
-    final temFoto = fotoUrl != null && fotoUrl.isNotEmpty;
 
     return Container(
       padding: EdgeInsets.only(
@@ -39,19 +30,10 @@ class TopBarWidget extends StatelessWidget {
               onTap: () {
                 Scaffold.of(context).openDrawer();
               },
-              child: CircleAvatar(
-                radius: 30,
-                backgroundColor: Colors.white,
-
-                backgroundImage: temFoto ? NetworkImage(fotoUrl) : null,
-
-                child: !temFoto
-                    ? Icon(
-                  Icons.person,
-                  size: 40,
-                  color: Colors.black,
-                )
-                    : null,
+              child: Icon(
+                Icons.menu,
+                size: 40,
+                color: Colors.white,
               ),
             ),
           ),

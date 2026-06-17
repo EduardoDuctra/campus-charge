@@ -68,7 +68,7 @@ class _HistoricoTransacoesDebitoScreenState extends State<HistoricoTransacoesDeb
 
             children: [
 
-              TopBarWidget(usuario: widget.usuario),
+              TopBarWidget(),
 
               SaldoCard(
                 saldo: widget.usuario.saldo ?? 0,

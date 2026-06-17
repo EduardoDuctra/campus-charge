@@ -174,7 +174,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
           children: [
 
 
-            TopBarWidget(usuario: controller.state!.usuario!),
+            TopBarWidget(),
 
             SaldoCard(
                 saldo: controller.state!.usuario!.saldo ?? 0,
@@ -209,7 +209,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
                     SizedBox(height: 20),
 
                     Text(
-                      'Você está em',
+                      'Selecione a cidade que você está:',
                       style: const TextStyle(
                         fontSize: 14,
                         color: Colors.white,
@@ -240,7 +240,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
                             value: controller.state!.cidade,
 
                           dropdownColor: Colors.black,
-                          icon: SizedBox.shrink(),
+
+                          icon: const Icon(
+                            Icons.arrow_drop_down,
+                            size: 30,
+                          ),
 
                           style: const TextStyle(
                             color: Colors.white,

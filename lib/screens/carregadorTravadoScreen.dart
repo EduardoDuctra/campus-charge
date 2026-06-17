@@ -63,7 +63,7 @@ class _CarregadorTravadoScreenState extends State<CarregadorTravadoScreen> {
         child: Column(
           children: [
 
-            TopBarWidget(usuario: widget.usuario),
+            TopBarWidget(),
 
 
             SaldoCard(
@@ -104,7 +104,7 @@ class _CarregadorTravadoScreenState extends State<CarregadorTravadoScreen> {
                     ),
                   ),
 
-                  SizedBox(height: 80),
+                  SizedBox(height: 60),
 
                   BotaoRemover(
                     onPressed: () async {
@@ -125,7 +125,7 @@ class _CarregadorTravadoScreenState extends State<CarregadorTravadoScreen> {
                       );
                     },
                   ),
-                  SizedBox(height: 140),
+                  SizedBox(height: 60),
 
 
                 ],

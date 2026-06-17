@@ -7,11 +7,13 @@ import 'package:projeto_integrador/DTO/ocpp/UnlockConnectorDTO.dart';
 import 'package:projeto_integrador/services/conectorService.dart';
 import 'package:projeto_integrador/services/ocppService.dart';
 import 'package:projeto_integrador/services/transacaoService.dart';
+import 'package:projeto_integrador/services/veiculoService.dart';
 import 'package:projeto_integrador/shared/conectorCard.dart';
 import 'package:projeto_integrador/theme/colors.dart';
 import 'package:quickalert/quickalert.dart';
 
 import '../DTO/UsuarioDTO.dart';
+import '../DTO/VeiculoDTO.dart';
 import '../controller/conectoresController.dart';
 import '../services/websocket_service.dart';
 import '../shared/BotaoRemover.dart';
@@ -48,31 +50,12 @@ class _ConectoresSreenState extends State<ConectoresSreen> {
 
     controller = ConectoresController(
       conectorService: ConectorService(),
-      ocppService: OcppService(),);
+      ocppService: OcppService(),
+      veiculoService: VeiculoService()
+    );
 
 
     carregarTela();
-
-
-
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-
-      QuickAlert.show(
-        context: context,
-        type: QuickAlertType.warning,
-        title: "Importante",
-        text: "Certifique-se que o veículo está conectado antes de iniciar a recarga",
-        confirmBtnText: "OK",
-
-        onConfirmBtnTap: () {
-
-          Navigator.pop(context); // fecha o alert
-
-        },
-      );
-
-    });
 
 
     //wb que fica escutando a atualização dos conectores
@@ -91,6 +74,9 @@ class _ConectoresSreenState extends State<ConectoresSreen> {
     await controller.carregarConectores(
         widget.idCarregador);
 
+    await controller.carregarVeiculos(
+      widget.usuario,);
+
     if(mounted){
       setState(() {});
     }
@@ -105,15 +91,15 @@ class _ConectoresSreenState extends State<ConectoresSreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Container(
 
-      backgroundColor: Colors.black,
+      color: Colors.black,
 
-      body: SafeArea(
+      child: SafeArea(
         child: Column(
           children: [
 
-            TopBarWidget(usuario: widget.usuario),
+            TopBarWidget(),
 
             SaldoCard(
               saldo: widget.usuario.saldo ?? 0,
@@ -122,6 +108,7 @@ class _ConectoresSreenState extends State<ConectoresSreen> {
 
             SizedBox(height: 10),
 
+
             Stack(
               alignment: Alignment.center,
               children: [
@@ -129,14 +116,87 @@ class _ConectoresSreenState extends State<ConectoresSreen> {
 
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: IconButton(
-                    icon: Icon(Icons.arrow_back_ios),
-                    onPressed: widget.onVoltar,
-                    color: Colors.white,
-                    iconSize: 30,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: IconButton(
+                      icon: Icon(Icons.arrow_back_ios),
+                      onPressed: widget.onVoltar,
+                      color: Colors.white,
+                      iconSize: 30,
+                    ),
                   ),
                 ),
 
+
+                Text(
+                  'Veículo a ser carregado',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width * 0.05,
+              ),
+
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                ),
+
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: AppColors.principal,
+                    width: 1,
+                  ),
+                  borderRadius: BorderRadius.circular(24),
+                ),
+
+                child: DropdownButton<VeiculoDTO>(
+                  isExpanded: true,
+
+                  value: controller.veiculoSelecionado,
+
+                  dropdownColor: Colors.black,
+
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.normal,
+                  ),
+
+                  underline: const SizedBox(),
+
+                  items: controller.veiculos.map((veiculo) {
+                    return DropdownMenuItem<VeiculoDTO>(
+
+                      alignment: Alignment.center,
+
+                      value: veiculo,
+                      child: Text(
+                        "${veiculo.nomeMarca} - ${veiculo.modeloCarro}",
+                      ),
+                    );
+                  }).toList(),
+
+                  onChanged: (veiculo) {
+                    setState(() {
+                      controller.veiculoSelecionado = veiculo;
+                    });
+                  },
+                ),
+              ),
+            ),
+
+            SizedBox(height: 10),
+
+            Stack(
+              alignment: Alignment.center,
+              children: [
 
                 Text(
                   'Escolha o conector',
@@ -184,7 +244,7 @@ class _ConectoresSreenState extends State<ConectoresSreen> {
                           return Expanded(
                             child: Padding(
                               padding: EdgeInsets.only(
-                                bottom: index != controller.conectores.length - 1 ? 16 : 0,
+                                bottom: index != controller.conectores.length - 1 ? 6 : 0,
                               ),
 
                               child: ConectorCard(

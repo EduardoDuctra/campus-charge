@@ -16,9 +16,15 @@ class CarregadorService {
 
       final List jsonList = jsonDecode(response.body);
 
-      return jsonList
+
+      final carregadoresOrdenados = jsonList
           .map((item) => CarregadorDTO.fromJson(item))
           .toList();
+
+      carregadoresOrdenados.sort(
+            (a, b) => a.idCarregador.compareTo(b.idCarregador),);
+
+      return carregadoresOrdenados;
 
     } else if (response.statusCode == 204) {
 
