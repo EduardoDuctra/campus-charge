@@ -11,6 +11,7 @@ class Cardveiculo extends StatelessWidget {
   final String nomeVeiculo;
   final String modeloVeiculo;
   final Color cor;
+  final bool principal;
 
 
   const Cardveiculo({super.key,
@@ -18,7 +19,8 @@ class Cardveiculo extends StatelessWidget {
     required this.nomeVeiculo,
     required this.modeloVeiculo,
     required this.cor,
-    required this.onDelete});
+    required this.onDelete,
+    required this.principal});
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +74,23 @@ class Cardveiculo extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+
+                        if(principal)
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 10),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 4,
+                            ),
+                            child: const Text(
+                              'Veículo principal',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
 
                         SvgPicture.asset(
                             'assets/icons/carro.svg',

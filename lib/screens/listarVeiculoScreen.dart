@@ -7,7 +7,6 @@ import 'package:projeto_integrador/shared/botaoCancelar.dart';
 import 'package:projeto_integrador/shared/cardVeiculo.dart';
 
 import '../DTO/VeiculoDTO.dart';
-import '../controller/veiculoController.dart';
 import '../shared/appDrawer.dart';
 import '../shared/saldoCard.dart';
 import '../shared/topBarWidget.dart';
@@ -27,7 +26,9 @@ class ListarVeiculoScreen extends StatefulWidget {
 class _ListarVeiculoScreenState extends State<ListarVeiculoScreen> {
 
 
-  final VeiculoController controller = VeiculoController();
+  final VeiculoService veiculoService = VeiculoService();
+  final Usuarioservice usuarioService = Usuarioservice();
+  List<VeiculoDTO> veiculos = [];
 
 
   @override
@@ -39,7 +40,7 @@ class _ListarVeiculoScreenState extends State<ListarVeiculoScreen> {
 
   Future<void> carregar() async {
 
-    await controller.carregarVeiculos(widget.usuario,);
+    veiculos = await veiculoService.listarVeiculos();
 
     setState(() {});
 
@@ -90,22 +91,23 @@ class _ListarVeiculoScreenState extends State<ListarVeiculoScreen> {
                   horizontal: 20,),
 
                 scrollDirection: .horizontal,
-                itemCount: controller.veiculos.length,
+                itemCount: veiculos.length,
                 itemBuilder: (context, index) {
-                  final veiculo = controller.veiculos[index];
+                  final veiculo = veiculos[index];
 
                   return Padding(
                     padding: const EdgeInsets.only(left: 2),
                     child: Cardveiculo(
                       nomeVeiculo: veiculo.modeloCarro,
                       modeloVeiculo: veiculo.nomeMarca,
-                      cor: index == controller.indexPrincipal ?
+                      cor: veiculo.idVeiculo == widget.usuario.idVeiculoPrincipal ?
                       AppColors.principal : Colors.white,
+                      principal: veiculo.idVeiculo == widget.usuario.idVeiculoPrincipal,
 
                       //troca o veiculo principal
                       onPressed: () async {
 
-                        await controller.usuarioservice.atualizarVeiculoPrincipal(veiculo.idVeiculo!);
+                        await usuarioService.atualizarVeiculoPrincipal(veiculo.idVeiculo!);
 
                         widget.usuario.idVeiculoPrincipal = veiculo.idVeiculo;
 
@@ -120,9 +122,9 @@ class _ListarVeiculoScreenState extends State<ListarVeiculoScreen> {
 
                       onDelete: () async {
 
-                        await controller.veiculoService.deletar(veiculo.idVeiculo!,);
+                        await veiculoService.deletar(veiculo.idVeiculo!,);
 
-                        await controller.carregarVeiculos(widget.usuario);
+                        await carregar();
 
                     },
 
