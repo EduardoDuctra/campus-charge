@@ -17,9 +17,15 @@ class ConectorService {
 
       final List jsonList = jsonDecode(response.body);
 
-      return jsonList
+      final conectoresOrdenados = jsonList
           .map((item) => ConectorDTO.fromJson(item))
           .toList();
+
+      conectoresOrdenados.sort(
+            (a, b) => (a.nomeConector ?? '').toLowerCase()
+            .compareTo((b.nomeConector ?? '').toLowerCase()),);
+
+      return conectoresOrdenados;
 
     } else if (response.statusCode == 204) {
 

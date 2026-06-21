@@ -144,6 +144,7 @@ class Apiservice {
       final bytes = await imagem.readAsBytes();
       print("Nome imagem: ${imagem.name}");
       print("Tamanho bytes: ${bytes.length}");
+      print("CONTENT TYPE ENVIADO: ${imagem.mimeType}");
 
       request.files.add(
         http.MultipartFile.fromBytes(
@@ -166,6 +167,9 @@ class Apiservice {
       }
 
       print("Upload falhou!");
+      print("STATUS: ${response.statusCode}");
+      print("BODY: $responseBody");
+
       return null;
 
     } catch (e) {

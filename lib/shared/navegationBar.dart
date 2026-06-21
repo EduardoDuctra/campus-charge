@@ -14,6 +14,9 @@ class NavigationBarWidget extends StatefulWidget {
   final int currentIndex;
   final Widget child;
   final Function(int) onItemSelecionado;
+  final Future<void> Function() onAtualizarUsuario;
+
+
 
   final UsuarioDTO usuario;
 
@@ -23,6 +26,7 @@ class NavigationBarWidget extends StatefulWidget {
     required this.child,
     required this.onItemSelecionado,
     required this.usuario,
+    required this.onAtualizarUsuario,
   });
 
   @override
@@ -35,7 +39,9 @@ class _NavigationBarWidgetState extends State<NavigationBarWidget> {
     return Scaffold(
 
       drawer: AppDrawer(
-        usuario: widget.usuario,),
+        usuario: widget.usuario,
+        onAtualizarUsuario: widget.onAtualizarUsuario,
+      ),
 
       body: KeyedSubtree(
         key: ValueKey(widget.usuario.saldo),

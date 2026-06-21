@@ -52,7 +52,8 @@ class _ListarVeiculoScreenState extends State<ListarVeiculoScreen> {
     return Scaffold(
 
       drawer: AppDrawer(
-        usuario: widget.usuario,),
+        usuario: widget.usuario,
+        onAtualizarUsuario: () async {},),
 
       backgroundColor: Colors.black,
 

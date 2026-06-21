@@ -60,7 +60,7 @@ class CardCarregador extends StatelessWidget {
 
                   ),
                   Text(
-                    '${carregadorDTO.idCarregador}',
+                    '${carregadorDTO.descricao}',
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,

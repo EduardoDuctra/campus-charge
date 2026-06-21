@@ -22,7 +22,8 @@ class CarregadorService {
           .toList();
 
       carregadoresOrdenados.sort(
-            (a, b) => a.idCarregador.compareTo(b.idCarregador),);
+            (a, b) => (a.descricao ?? '').toLowerCase()
+            .compareTo((b.descricao ?? '').toLowerCase()),);
 
       return carregadoresOrdenados;
 

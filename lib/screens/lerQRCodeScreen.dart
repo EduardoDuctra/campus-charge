@@ -55,17 +55,26 @@ class _LerQRCodeScreenState extends State<LerQRCodeScreen> {
                   leituraRealizada = true;
 
                   print("QR CODE: $codigo");
-                  
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) =>
-                          ConectoresSreen(
-                              usuario: widget.usuario,
-                              idCarregador: codigo,
-                              onVoltar: (){
-                                Navigator.pop(context);
-                              })
-                      )
-                  );
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ConectoresSreen(
+                        usuario: widget.usuario,
+                        idCarregador: codigo,
+                        onVoltar: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ),
+                  ).then((_) {
+                    if (mounted) {
+                      setState(() {
+                        leituraRealizada = false;
+                      });
+                    }
+                  });
+
                   break;
                 }
 

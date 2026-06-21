@@ -55,7 +55,8 @@ class _CarregadorTravadoScreenState extends State<CarregadorTravadoScreen> {
     return Scaffold(
 
       drawer: AppDrawer(
-        usuario: widget.usuario,),
+        usuario: widget.usuario,
+        onAtualizarUsuario: () async {},),
 
       backgroundColor: Colors.black,
 

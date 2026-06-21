@@ -91,11 +91,11 @@ class _ConectoresSreenState extends State<ConectoresSreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Scaffold(
 
-      color: Colors.black,
+      backgroundColor: Colors.black,
 
-      child: SafeArea(
+      body: SafeArea(
         child: Column(
           children: [
 

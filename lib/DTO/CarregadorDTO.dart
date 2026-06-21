@@ -2,12 +2,14 @@ class CarregadorDTO {
   String idCarregador;
   String statusCarregador;
   String? cidade;
+  String? descricao;
 
 
   CarregadorDTO({
     required this.idCarregador,
     required this.statusCarregador,
     this.cidade,
+    this.descricao
   });
 
 
@@ -15,7 +17,8 @@ class CarregadorDTO {
     return CarregadorDTO(
       idCarregador: json['idCarregador'],
       statusCarregador: json['statusCarregador'],
-      cidade: json['cidade']
+      cidade: json['cidade'],
+      descricao:json['descricao'],
     );
   }
 
@@ -23,7 +26,8 @@ class CarregadorDTO {
     return {
       "idCarregador": idCarregador,
       "statusCarregador": statusCarregador,
-      "cidade": cidade
+      "cidade": cidade,
+      "descricao": descricao
 
     };
   }

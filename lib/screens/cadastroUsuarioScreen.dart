@@ -290,7 +290,7 @@ class _CadastroUsuarioScreenState extends State<CadastroUsuarioScreen> {
                       if(modoEdicao){
 
                         await Usuarioservice().atualizar(usuario);
-                        Navigator.pop(context, usuario);
+                        Navigator.pop(context, true);
 
                       } else{
 
@@ -298,7 +298,7 @@ class _CadastroUsuarioScreenState extends State<CadastroUsuarioScreen> {
 
                         //sem erro -> redireciona
                         if(erro ==null){
-                          Navigator.pop(context, usuario);
+                          Navigator.pop(context, true);
                         } else{
                           //com erro mostra a mensagem
                           ScaffoldMessenger.of(context).

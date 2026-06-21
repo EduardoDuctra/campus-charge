@@ -160,6 +160,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver  {
         });
       },
 
+      onAtualizarUsuario: () async {
+        print("RECARREGANDO USUARIO...");
+        await controller.carregarTudo();
+      },
+
         child: getPage(),
     );
   }

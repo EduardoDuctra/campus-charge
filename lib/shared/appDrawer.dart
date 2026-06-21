@@ -13,10 +13,13 @@ import '../services/tokenService.dart';
 class AppDrawer extends StatelessWidget {
 
   final UsuarioDTO usuario;
+  final Future<void> Function() onAtualizarUsuario;
+
 
   const AppDrawer({
     super.key,
     required this.usuario,
+    required this.onAtualizarUsuario,
   });
 
   @override
@@ -74,9 +77,8 @@ class AppDrawer extends StatelessWidget {
 
               Navigator.pop(context);
 
-              await Navigator.push(
+              final atualizou = await Navigator.push(
                 context,
-
                 MaterialPageRoute(
                   builder: (context) =>
                       CadastroUsuarioScreen(
@@ -84,6 +86,14 @@ class AppDrawer extends StatelessWidget {
                       ),
                 ),
               );
+
+              print("ATUALIZOU: $atualizou");
+
+              if (atualizou == true) {
+                await onAtualizarUsuario();
+              }
+
+
             },
           ),
 
